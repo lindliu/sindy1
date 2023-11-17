@@ -7,6 +7,62 @@ Created on Thu Nov 16 15:51:23 2023
 """
 import numpy as np
 
+from sklearn.linear_model import ridge_regression, LinearRegression, SGDRegressor
+
+def SLS(Theta, DXdt, threshold, alpha=.05):
+    n_feature = DXdt.shape[1]
+    Xi = ridge_regression(Theta,DXdt, alpha=alpha).T
+    # Xi = np.linalg.lstsq(Theta,DXdt, rcond=None)[0]
+    # Xi = solve_minnonzero(Theta,DXdt)
+    Xi[np.abs(Xi)<threshold] = 0
+    # print(Xi)
+    for _ in range(20):
+        smallinds = np.abs(Xi)<threshold
+        Xi[smallinds] = 0
+        for ind in range(n_feature):
+            
+            if Xi[:,ind].sum()==0:
+                break
+            
+            biginds = ~smallinds[:,ind]
+            Xi[biginds,ind] = ridge_regression(Theta[:,biginds], DXdt[:,ind], alpha=alpha).T
+            # Xi[biginds,ind] = np.linalg.lstsq(Theta[:,biginds],DXdt[:,ind], rcond=None)[0]
+            # Xi[biginds,ind] = solve_minnonzero(Theta[:,biginds],DXdt[:,ind])
+    
+    threshold = 1e-3
+    
+    # reg = LinearRegression(fit_intercept=False)
+    # ind_ = np.abs(Xi.T) > 1e-14
+    # ind_[:,:num_traj] = True
+    # num_basis = ind_.sum()
+    # while True:
+    #     coef = np.zeros((DXdt.shape[1], Theta.shape[1]))
+    #     for i in range(ind_.shape[0]):
+    #         if np.any(ind_[i]):
+    #             coef[i, ind_[i]] = reg.fit(Theta[:, ind_[i]], DXdt[:, i]).coef_
+                
+    #             ind_[i, np.abs(coef[i,:])<threshold] = False
+    #             ind_[i,:num_traj] = True
+        
+    #     if num_basis==ind_.sum():
+    #         break
+    #     num_basis = ind_.sum()
+        
+    # Xi = coef.T
+    # Xi[np.abs(Xi)<threshold] = 0
+
+
+    reg = LinearRegression(fit_intercept=False)
+    ind_ = np.abs(Xi.T) > 1e-14
+    coef = np.zeros((DXdt.shape[1], Theta.shape[1]))
+    for i in range(ind_.shape[0]):
+        if np.any(ind_[i]):
+            coef[i, ind_[i]] = reg.fit(Theta[:, ind_[i]], DXdt[:, i]).coef_
+    Xi = coef.T
+    Xi[np.abs(Xi)<threshold] = 0
+
+    return Xi
+
 def func1(x, t, a):
     """
     P179, differential equations, dynamical systems, and an introduction to chaos
@@ -23,6 +79,14 @@ def func2(x, t, a):
     dxdt = [.2 + a*x1**2, -x2]
     return dxdt
 
+def func12_(x, t, a, b):
+    """
+    P179, differential equations, dynamical systems, and an introduction to chaos
+    """
+    x1, x2 = x
+    dxdt = [a + b*x1**2, -x2]
+    return dxdt
+
 def func3(x, t, a):
     """
     P81, Hopf Bifurcation, differential equations, dynamical systems, and an introduction to chaos
@@ -35,6 +99,20 @@ def func3(x, t, a):
     """
     x1, x2 = x
     dxdt = [a*x1**2-x2-x1*(x1**2+x2**2), x1+a*x2-x2*(x1**2+x2**2)]
+    return dxdt
+
+def func3_(x, t, a, b):
+    """
+    P81, Hopf Bifurcation, differential equations, dynamical systems, and an introduction to chaos
+    
+    dxdt = a*x^2 - y - x*(x^2 + y^2) =      -y + a*x^2 - x^3 - xy^2
+    dydt = x + a*y - y*(x^2 + y^2)   = x + a*y                      - x^2y - y^3
+    
+    [0, 0, -1, a, 0, 0, -1,  0, -1,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 1, a,  0, 0, 0,  0, -1,  0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    """
+    x1, x2 = x
+    dxdt = [b*x2+a*x1**2-x1**3-x1*x2**2, x1+a*x2+b*x2*x1**2-x2**3]
     return dxdt
 
 def func4(x, t, a):
@@ -52,6 +130,28 @@ def func4(x, t, a):
     """
     # c0, c1, c2, c3 = 1, -1, -1, 1
     c1, c2 = -1, -1
+    c0 = a
+    c3 = a
+    x1, x2 = x
+    dxdt = [c0*x1 + c1*x1*x2, c2*x2 + c3*x1*x2]
+    return dxdt
+
+def func4_(x, t, a, b):
+    """
+    SINDy-SA: prey-predator model
+    
+    dxdt = c0*x + c1*x*y
+    dydt = c2*y + c3*x*y
+    
+    c0=1, c1=-1, c2=-1, c3=1.
+    x0, y0 = 4, 1
+    
+    [0, c0, 0,  0, c1, 0, ...]
+    [0, 0,  c2, 0, c3, 0, ...]
+    """
+    # c0, c1, c2, c3 = 1, -1, -1, 1
+    c1 = b
+    c2 = b
     c0 = a
     c3 = a
     x1, x2 = x
@@ -112,7 +212,7 @@ def func7(x, t, a):
 from scipy.integrate import odeint
 def get_sol_deriv(func, x0, t, a, step=1):
     ###https://github.com/florisvb/PyNumDiff/blob/master/examples/1_basic_tutorial.ipynb
-    sol1 = odeint(func, x0, t, args=(a,))
+    sol1 = odeint(func, x0, t, args=a)
     # sol1 = sol1 + .01*np.random.randn(*sol1.shape)
     
     sol1_deriv = np.zeros_like(sol1)
