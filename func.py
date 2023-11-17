@@ -134,6 +134,15 @@ def get_sol_deriv(func, x0, t, a, step=1):
 
     return sol1, sol1_deriv, t
 
+# def get_sol_deriv(func, x0, t, a, step=1):
+#     sol1 = odeint(func, x0, t, args=(a,))
+#     # sol1 = sol1 + .01*np.random.randn(*sol1.shape)
+    
+#     from pysindy.differentiation import FiniteDifference
+#     fd = FiniteDifference()
+#     sol1_deriv = fd._differentiate(sol1, t)
+
+#     return sol1, sol1_deriv, t
 
 def monomial_poly(x):
     x1 = x[:,[0]]
@@ -152,8 +161,8 @@ def monomial_trig(x):
     x1 = x[:,[0]]
     x2 = x[:,[1]]
     return np.c_[np.ones([x1.shape[0],1]), x1, x2, \
-                 np.sin(x1), np.cos(x1), np.sin(x2), np.cos(x2)]
+                 np.sin(x1), np.sin(x2), np.cos(x1), np.cos(x2)]
         
-monomial_trig_name = np.array(['1', 'x', 'y', 'sin(x)', 'cos(x)', 'sin(y)', 'cos(y)'])
+monomial_trig_name = np.array(['1', 'x', 'y', 'sin(x)', 'sin(y)',  'cos(x)', 'cos(y)'])
 
 

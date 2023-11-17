@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon Oct 30 16:42:52 2023
+Created on Thu Nov 16 23:20:58 2023
 
 @author: dliu
 """
-
 
 
 from scipy.integrate import odeint
@@ -40,12 +39,10 @@ def SLS(Theta, DXdt, threshold):
             # Xi[biginds,ind] = np.linalg.lstsq(Theta[:,biginds],DXdt[:,ind], rcond=None)[0]
             # Xi[biginds,ind] = solve_minnonzero(Theta[:,biginds],DXdt[:,ind])
     
-    
     threshold = 1e-3
     
-    
     # reg = LinearRegression(fit_intercept=False)
-    # ind_ = np.abs(Xi.T) > 1e-10
+    # ind_ = np.abs(Xi.T) > 1e-14
     # ind_[:,:num_traj] = True
     # num_basis = ind_.sum()
     # while True:
@@ -66,7 +63,7 @@ def SLS(Theta, DXdt, threshold):
 
 
     reg = LinearRegression(fit_intercept=False)
-    ind_ = np.abs(Xi.T) > 1e-10
+    ind_ = np.abs(Xi.T) > 1e-14
     coef = np.zeros((DXdt.shape[1], Theta.shape[1]))
     for i in range(ind_.shape[0]):
         if np.any(ind_[i]):
@@ -87,24 +84,6 @@ def SLS_multi(theta0_, sol_deriv0, threshold):
     theta0_ = [ele[:,ind] for ele in theta0_]
     
     return ind, theta0_
-
-# def get_one_hot_theta(theta0_, sol_deriv0, feature_idx=None):
-#     if feature_idx is None:
-#         return theta0_, sol_deriv0
-    
-#     i = feature_idx[0]
-#     num_traj = len(theta0_)
-#     Theta_ = []
-#     for j in range(num_traj): ###each trajectory
-#         head = np.zeros([theta0_[j].shape[0], num_traj])
-#         head[:,[j]] = theta0_[j][:,[i]]
-        
-#         theta_telda_ = np.c_[head, theta0_[j][:,:i], theta0_[j][:,i+1:]]
-        
-#         Theta_.append(theta_telda_)
-#     Theta = np.vstack(Theta_)
-#     DXdt = np.vstack(sol_deriv0)
-#     return Theta, DXdt
 
 
 def get_one_hot_theta(theta0_, sol_deriv0, feature_idx=None):
@@ -176,16 +155,16 @@ def select_diff_feature_idx(theta0_, sol_deriv0, n=1):
 
 
 # dt = .01   ## 0,3
-# t = np.arange(0,1.2,dt)
+# t = np.arange(0,1.5,dt)
 # x0 = [.5, 1]
-# a = [.15, .3, .5]
+# a = [.12, .16, .2]
 # func = func1
 # monomial = monomial_poly
 # monomial_name = monomial_poly_name
 # real0 = "x'=a + x^2"
 # real1 = "y'=-y"
+# threshold0 = 1e-1
 # threshold1 = 1e-1
-# threshold2 = 1e-1
 
 # dt = .01
 # t = np.arange(0,2,dt)
@@ -196,8 +175,8 @@ def select_diff_feature_idx(theta0_, sol_deriv0, n=1):
 # monomial_name = monomial_poly_name
 # real0 = "x'=.2 + a*x^2"
 # real1 = "y'=-y"
+# threshold0 = 1e-1
 # threshold1 = 1e-1
-# threshold2 = 1e-1
 
 # dt = .01      ## 2,3,6,8;     1,2,7,9
 # t = np.arange(0,8,dt)
@@ -208,8 +187,8 @@ def select_diff_feature_idx(theta0_, sol_deriv0, n=1):
 # monomial_name = monomial_poly_name
 # real0 = "x'=-y + a*x^2 - x^3 - xy^2"
 # real1 = "y'=x + a*y - x^2y - y^3"    
+# threshold0 = 1e-1
 # threshold1 = 1e-1
-# threshold2 = 1e-1
 
 # dt = .01    ## 1,4    2,4
 # t = np.arange(0,5,dt)
@@ -220,8 +199,8 @@ def select_diff_feature_idx(theta0_, sol_deriv0, n=1):
 # monomial_name = monomial_poly_name
 # real0 = "x'=a*x - xy"
 # real1 = "y'=-y + a*xy"    
+# threshold0 = 1e-1
 # threshold1 = 1e-1
-# threshold2 = 1e-1
 
 # dt = .005
 # t = np.arange(0,300,dt)
@@ -230,33 +209,33 @@ def select_diff_feature_idx(theta0_, sol_deriv0, n=1):
 # func = func5
 # monomial = monomial_poly
 # monomial_name = monomial_poly_name
-# threshold1 = 1e-7
-# threshold2 = 1e-7
-
-dt = .1
-t = np.arange(0,3.2,dt)
-x0 = [np.pi-.1, 0]
-a = [-.25, -.35]
-func = func6
-monomial = monomial_trig
-monomial_name = monomial_trig_name
-real0 = "x'=y"
-real1 = "y'=a*y-5sin(x)"
-threshold1 = 1e-1
-threshold2 = 1e-1
+# threshold0 = 1e-1
+# threshold1 = 1e-1
 
 # dt = .1
-# t = np.arange(0,16,dt)
+# t = np.arange(0,3.3,dt)
 # x0 = [np.pi-.1, 0]
-# # a = [-5, -6]
-# a = [-.15, -.2]
-# func = func7
+# a = [-.25, -.35]
+# func = func6
 # monomial = monomial_trig
 # monomial_name = monomial_trig_name
 # real0 = "x'=y"
-# real1 = "y'=-0.25y+a*sin(x)"
+# real1 = "y'=a*y-5sin(x)"
+# threshold0 = 1e-1
 # threshold1 = 1e-1
-# threshold2 = 1e-1
+
+dt = .1
+t = np.arange(0,16,dt)
+x0 = [np.pi-.1, 0]
+# a = [-5, -6]
+a = [-.15, -.2]
+func = func7
+monomial = monomial_trig
+monomial_name = monomial_trig_name
+real0 = "x'=y"
+real1 = "y'=-0.25y+a*sin(x)"
+threshold0 = 1e-1
+threshold1 = 1e-1
 
 
 
@@ -286,11 +265,14 @@ monomial_num = theta0[0].shape[1]
 ##########################
 
 ### increase threshold until find one basis that has much lower loss than other basis
+# ind_num0, theta0_ = select_features_of_multi_trajectory(theta0, sol_deriv0, threshold=threshold1)
+# i_min0, dist0 = select_diff_feature_idx(theta0_, sol_deriv0, n=1)
+
 i_diff = None
 dist0_list = []
-for threshold1_ in np.arange(1e-2, 1e-1, 1e-2):
+for threshold0_ in np.arange(1e-2, threshold0, 1e-2):
     ### increase threshold until find one a clear i_min0
-    ind_num0, theta0_ = select_features_of_multi_trajectory(theta0, sol_deriv0, threshold1_)
+    ind_num0, theta0_ = select_features_of_multi_trajectory(theta0, sol_deriv0, threshold0_)
     i_min0, dist0 = select_diff_feature_idx(theta0_, sol_deriv0, n=1)
     
     dist0_list.append(dist0)
@@ -303,6 +285,9 @@ for threshold1_ in np.arange(1e-2, 1e-1, 1e-2):
         i_diff = i_min0
         break
 Theta0, DXdt0 = get_one_hot_theta(theta0_, sol_deriv0, i_min0)
+Xi0 = SLS(Theta0, DXdt0, threshold0).squeeze()
+
+
 num_diff = len(i_min0)
 
 num_feature = theta0_[0].shape[1]
@@ -312,7 +297,6 @@ i_diff = i_min0
 i_same[i_diff] = False    
     
 
-Xi0 = SLS(Theta0, DXdt0, threshold1).squeeze()
 Xi0_ = np.zeros([len(ind_num0), num_traj])
 for j in range(num_traj):
     Xi0_[i_min0,[j]] = Xi0[j*num_diff:(j+1)*num_diff]
@@ -321,7 +305,7 @@ for j in range(num_traj):
     # Xi0_[:,[j]] = np.r_[Xi0[num_traj:i_min0+num_traj], Xi0[[j]], Xi0[i_min0+num_traj:]]
     
     dist_norm = MSE(theta0_[j]@Xi0_[:,[j]]-sol_deriv0[j])
-    print(f'L2 for trajectory {i}: {dist_norm:3E}')
+    print(f'L2 for trajectory {j}: {dist_norm:3E}')
     
 
 ##########################
@@ -329,10 +313,13 @@ for j in range(num_traj):
 ##########################
 
 ### increase threshold until find one basis that has much lower loss than other basis
+# ind_num1, theta1_ = select_features_of_multi_trajectory(theta1, sol_deriv1, threshold=threshold2)
+# i_min1, dist1 = select_diff_feature_idx(theta1_, sol_deriv1, n=1)
+    
 dist1_list = []
-for threshold2_ in np.arange(1e-2, 1e-1, 1e-2):
+for threshold1_ in np.arange(1e-2, threshold1, 1e-2):
     ### increase threshold until find one a clear i_min0
-    ind_num1, theta1_ = select_features_of_multi_trajectory(theta1, sol_deriv1, threshold2_)
+    ind_num1, theta1_ = select_features_of_multi_trajectory(theta1, sol_deriv1, threshold1_)
     i_min1, dist1 = select_diff_feature_idx(theta1_, sol_deriv1, n=1)
     
     dist1_list.append(dist1)
@@ -344,6 +331,9 @@ for threshold2_ in np.arange(1e-2, 1e-1, 1e-2):
     if dist1[0]/dist1[1]<=1e-2:
         break
 Theta1, DXdt1 = get_one_hot_theta(theta1_, sol_deriv1, i_min1)   
+Xi1 = SLS(Theta1, DXdt1, threshold1).squeeze()
+
+
 num_diff = len(i_min1)
 
 num_feature = theta1_[0].shape[1]
@@ -352,7 +342,6 @@ i_same = np.ones(num_feature, dtype=bool)
 i_diff = i_min1
 i_same[i_diff] = False     
 
-Xi1 = SLS(Theta1, DXdt1, threshold2).squeeze()
 Xi1_ = np.zeros([len(ind_num1), num_traj])
 for j in range(num_traj):
     Xi1_[i_min1,[j]] = Xi1[j*num_diff:(j+1)*num_diff]
@@ -361,7 +350,7 @@ for j in range(num_traj):
     # Xi1_[:,[i]] = np.r_[Xi1[num_traj:i_min1+num_traj], Xi1[[i]], Xi1[i_min1+num_traj:]]
 
     dist_norm = MSE(theta1_[i]@Xi1_[:,[i]]-sol_deriv1[i])
-    print(f'L2 for trajectory {i}: {dist_norm:3E}')
+    print(f'L2 for trajectory {j}: {dist_norm:3E}')
 
 
 print('*'*50)
@@ -377,7 +366,9 @@ print(f'feature 1: \n {Xi1_[Xi1_.any(axis=1)]} \n {np.array([monomial_name[i] fo
 import pysindy as ps
 
 if func.__name__ not in ['func6', 'func7']:
-    model = ps.SINDy(feature_names=["x", "y"])
+    from pysindy.feature_library import GeneralizedLibrary, PolynomialLibrary
+    lib_generalized = PolynomialLibrary(degree=5)
+    model = ps.SINDy(feature_names=["x", "y"], feature_library=lib_generalized)
     for i in range(len(a)):
         sol_, sol1_deriv_, t_ = get_sol_deriv(func, x0, t, a[i])
     
@@ -389,18 +380,20 @@ if func.__name__ not in ['func6', 'func7']:
         # print(SLS(theta_, sol1_deriv_, 1e-1))
         
 else:
-    from pysindy.feature_library import FourierLibrary, CustomLibrary
+    from pysindy.feature_library import FourierLibrary, CustomLibrary, IdentityLibrary, PolynomialLibrary
     from pysindy.feature_library import GeneralizedLibrary
-    functions = [lambda x : 1, lambda x : x, lambda x: np.sin(x), lambda x: np.cos(x)]
+    # lib_fourier = FourierLibrary()
+    lib_poly = PolynomialLibrary(degree=0)
+    lib_identity = IdentityLibrary()
+    functions = [lambda x: np.sin(x), lambda x: np.cos(x)]
     lib_custom = CustomLibrary(library_functions=functions)
-    lib_fourier = FourierLibrary()
     # lib_generalized = GeneralizedLibrary([lib_custom, lib_fourier])
-    lib_generalized = GeneralizedLibrary([lib_custom])
+    lib_generalized = GeneralizedLibrary([lib_poly, lib_identity, lib_custom])
     # x = np.array([[0.,-1],[1.,0.],[2.,-1.]])
     # lib_generalized.fit(x)
     # lib_generalized.transform(x)
     
-    model = ps.SINDy(feature_names=["x", "y"],feature_library=lib_generalized)
+    model = ps.SINDy(feature_names=["x", "y"], feature_library=lib_generalized)
     for i in range(len(a)):
         sol_, sol1_deriv_, t_ = get_sol_deriv(func, x0, t, a[i])
     
