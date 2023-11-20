@@ -9,60 +9,6 @@ import numpy as np
 
 from sklearn.linear_model import ridge_regression, LinearRegression, SGDRegressor
 
-def SLS(Theta, DXdt, threshold, alpha=.05):
-    n_feature = DXdt.shape[1]
-    Xi = ridge_regression(Theta,DXdt, alpha=alpha).T
-    # Xi = np.linalg.lstsq(Theta,DXdt, rcond=None)[0]
-    # Xi = solve_minnonzero(Theta,DXdt)
-    Xi[np.abs(Xi)<threshold] = 0
-    # print(Xi)
-    for _ in range(20):
-        smallinds = np.abs(Xi)<threshold
-        Xi[smallinds] = 0
-        for ind in range(n_feature):
-            
-            if Xi[:,ind].sum()==0:
-                break
-            
-            biginds = ~smallinds[:,ind]
-            Xi[biginds,ind] = ridge_regression(Theta[:,biginds], DXdt[:,ind], alpha=alpha).T
-            # Xi[biginds,ind] = np.linalg.lstsq(Theta[:,biginds],DXdt[:,ind], rcond=None)[0]
-            # Xi[biginds,ind] = solve_minnonzero(Theta[:,biginds],DXdt[:,ind])
-    
-    threshold = 1e-3
-    
-    # reg = LinearRegression(fit_intercept=False)
-    # ind_ = np.abs(Xi.T) > 1e-14
-    # ind_[:,:num_traj] = True
-    # num_basis = ind_.sum()
-    # while True:
-    #     coef = np.zeros((DXdt.shape[1], Theta.shape[1]))
-    #     for i in range(ind_.shape[0]):
-    #         if np.any(ind_[i]):
-    #             coef[i, ind_[i]] = reg.fit(Theta[:, ind_[i]], DXdt[:, i]).coef_
-                
-    #             ind_[i, np.abs(coef[i,:])<threshold] = False
-    #             ind_[i,:num_traj] = True
-        
-    #     if num_basis==ind_.sum():
-    #         break
-    #     num_basis = ind_.sum()
-        
-    # Xi = coef.T
-    # Xi[np.abs(Xi)<threshold] = 0
-
-
-    reg = LinearRegression(fit_intercept=False)
-    ind_ = np.abs(Xi.T) > 1e-14
-    coef = np.zeros((DXdt.shape[1], Theta.shape[1]))
-    for i in range(ind_.shape[0]):
-        if np.any(ind_[i]):
-            coef[i, ind_[i]] = reg.fit(Theta[:, ind_[i]], DXdt[:, i]).coef_
-    Xi = coef.T
-    Xi[np.abs(Xi)<threshold] = 0
-
-    return Xi
-
 def func1(x, t, a):
     """
     P179, differential equations, dynamical systems, and an introduction to chaos
