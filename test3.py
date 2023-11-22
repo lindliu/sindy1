@@ -136,8 +136,8 @@ def select_diff_feature_idx(theta0_, sol_deriv0, n=1):
     num_feature = theta0_[0].shape[1]
     sgd = LinearRegression(fit_intercept=False)
     
-    dist = []
-    i_min0, i_val0 = None, float('Inf')
+    i0, dist = [], []
+    # i_min0, i_val0 = None, float('Inf')
     for i in combinations(np.arange(num_feature), n):
         Theta0, DXdt0 = get_one_hot_theta(theta0_, sol_deriv0, i)
         Xi0 = sgd.fit(Theta0, DXdt0).coef_.T
@@ -145,13 +145,15 @@ def select_diff_feature_idx(theta0_, sol_deriv0, n=1):
         distance0 = MSE(Theta0@Xi0-DXdt0)
         # print(f'L2 distance of {i}: {distance0:3E}')
         dist.append(distance0)
-        
-        if i_val0>distance0:
-            i_val0 = distance0
-            i_min0 = i
-            
-    print(f'index {i_min0} has lowest error')
-    return list(i_min0), dist
+        i0.append(i)
+        # if i_val0>distance0:
+        #     i_val0 = distance0
+        #     i_min0 = i
+
+    # print(f'index {i_min0} has lowest error')
+    # return list(i_min0), i_val0, dist
+
+    return list(i0[np.argmin(dist)]), i0, dist
 
 from func import func12_, func3_, func4_
 
@@ -181,7 +183,7 @@ from func import func12_, func3_, func4_
 # threshold0 = 1e-1
 # threshold1 = 1e-1
 
-# alpha = .005
+# alpha = .1
 # dt = .01    ## 1,4    2,4
 # t = np.arange(0,5,dt)
 # x0 = [4, 1]
@@ -190,12 +192,12 @@ from func import func12_, func3_, func4_
 # monomial = monomial_poly
 # monomial_name = monomial_poly_name
 # real0 = "x'=a*x + b*xy"
-# real1 = "y'=b*y + a*xy"    
+# real1 = "y'=b*y + a*xy"
 # threshold0 = 1e-1
 # threshold1 = 1e-1
 
 
-################### 1 variable ####################
+# ################### 1 variable ####################
 # alpha = .05
 # dt = .01   ## 0,3
 # t = np.arange(0,1.5,dt)
@@ -222,21 +224,21 @@ from func import func12_, func3_, func4_
 # threshold0 = 1e-1
 # threshold1 = 1e-1
 
-# alpha = .05
-# dt = .01      ## 2,3,6,8;     1,2,7,9
-# t = np.arange(0,8,dt)
-# x0 = [.5, 1]
-# a = [(.2,), (.4,), (.6,)]
-# func = func3
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=-y + a*x^2 - x^3 - xy^2"
-# real1 = "y'=x + a*y - x^2y - y^3"    
-# threshold0 = 1e-1
-# threshold1 = 1e-1
+alpha = .05
+dt = .01      ## 2,3,6,8;     1,2,7,9
+t = np.arange(0,8,dt)
+x0 = [.5, 1]
+a = [(.2,), (.4,), (.6,)]
+func = func3
+monomial = monomial_poly
+monomial_name = monomial_poly_name
+real0 = "x'=-y + a*x^2 - x^3 - xy^2"
+real1 = "y'=x + a*y - x^2y - y^3"    
+threshold0 = 1e-1
+threshold1 = 1e-1
 
 # alpha = .05
-# dt = .01    ## 1,4    2,4
+# dt = .1    ## 1,4    2,4
 # t = np.arange(0,5,dt)
 # x0 = [4, 1]
 # a = [(.7,), (1,)]
@@ -261,19 +263,19 @@ from func import func12_, func3_, func4_
 # threshold0 = 1e-1
 # threshold1 = 1e-1
 
-alpha = .05
-dt = .1
-t = np.arange(0,17,dt)
-x0 = [np.pi-.1, 0]
-# a = [-5, -6]
-a = [(-.15,), (-.2,)]
-func = func7
-monomial = monomial_trig
-monomial_name = monomial_trig_name
-real0 = "x'=y"
-real1 = "y'=-0.25y+a*sin(x)"
-threshold0 = 1e-1
-threshold1 = 1e-1
+# alpha = .05
+# dt = .1
+# t = np.arange(0,5,dt)
+# x0 = [np.pi-.1, 0]
+# # a = [-5, -6]
+# a = [(-.15,), (-1,), (-2,)]
+# func = func7
+# monomial = monomial_trig
+# monomial_name = monomial_trig_name
+# real0 = "x'=y"
+# real1 = "y'=-0.25y+a*sin(x)"
+# threshold0 = 1e-1
+# threshold1 = 1e-1
 
 
 
@@ -303,36 +305,58 @@ monomial_num = theta0[0].shape[1]
 
 ### increase threshold until find one basis that has much lower loss than other basis
 # ind_num0, theta0_ = select_features_of_multi_trajectory(theta0, sol_deriv0, threshold=threshold1)
-# i_min0, dist0 = select_diff_feature_idx(theta0_, sol_deriv0, n=1)
+# i_min0, i0_list, dist0 = select_diff_feature_idx(theta0_, sol_deriv0, n=1)
 
-n0_list, threshold0_list = [], []
-dist0_list = []
+i0_list, n0_list, threshold0_list = [], [], []
+dist0_list, dist0_list_ = [], []
 for threshold0_ in np.arange(1e-2, threshold0+1e-10, 1e-2):
     ### increase threshold until find one a clear i_min0
     ind_num0, theta0_ = select_features_of_multi_trajectory(theta0, sol_deriv0, threshold0_)
     for n_ in range(1, min(len(ind_num0)+1, 3)):
-        i_min0, dist0 = select_diff_feature_idx(theta0_, sol_deriv0, n=n_)
-        
+        # i_min0, i_val0, dist0 = select_diff_feature_idx(theta0_, sol_deriv0, n=n_)
+        i_min0, i0, dist0 = select_diff_feature_idx(theta0_, sol_deriv0, n=n_)
+
         # dist0_list.append(dist0)
         dist0 = np.sort(dist0)
         if dist0.shape[0]<=1:
             n0_list.append(n_)
             threshold0_list.append(threshold0_)
+            i0_list.extend(i0)
+            dist0_list_.extend(dist0)
+
             dist0_list.append(dist0[0])
             break
         
         n0_list.append(n_)
         threshold0_list.append(threshold0_)
-
+        i0_list.extend(i0)
+        dist0_list_.extend(dist0)
+        
         dist_ratio = dist0[0]/dist0[1]
         dist0_list.append(dist_ratio)
         print(f'dist ratio: {dist_ratio}')
         # if dist_ratio<=1e-2:
         #     break
-        
+
+# idx_dist = [[] for _ in range(monomial_num)]
+# for idx, dist in zip(i0_list,dist0_list_):
+#     for idx_ in idx:
+#         idx_dist[idx_].append(dist)
+
+
+# for i in range(monomial_num):
+#     plt.plot(idx_dist[i],'o', markersize=1, label=i)
+# plt.legend()
+
+# for i in range(monomial_num):
+#     print(len(idx_dist[i]))
+
+
+
+
 ii0 = np.argmin(dist0_list)
 ind_num0, theta0_ = select_features_of_multi_trajectory(theta0, sol_deriv0, threshold0_list[ii0])
-i_min0, dist0 = select_diff_feature_idx(theta0_, sol_deriv0, n=n0_list[ii0])
+i_min0, i0, dist0 = select_diff_feature_idx(theta0_, sol_deriv0, n=n0_list[ii0])
         
 Theta0, DXdt0 = get_one_hot_theta(theta0_, sol_deriv0, i_min0)
 Xi0 = SLS(Theta0, DXdt0, threshold0, alpha=alpha).squeeze()
@@ -364,15 +388,15 @@ for j in range(num_traj):
 
 ### increase threshold until find one basis that has much lower loss than other basis
 # ind_num1, theta1_ = select_features_of_multi_trajectory(theta1, sol_deriv1, threshold=threshold2)
-# i_min1, dist1 = select_diff_feature_idx(theta1_, sol_deriv1, n=1)
+# i_min1, i_val1, dist1 = select_diff_feature_idx(theta1_, sol_deriv1, n=1)
     
-n1_list, threshold1_list = [], []
+i1_list, n1_list, threshold1_list = [], [], []
 dist1_list = []
 for threshold1_ in np.arange(1e-2, threshold1+1e-10, 1e-2):
     ### increase threshold until find one a clear i_min0
     ind_num1, theta1_ = select_features_of_multi_trajectory(theta1, sol_deriv1, threshold1_)
     for n_ in range(1, min(len(ind_num1)+1, 3)):
-        i_min1, dist1 = select_diff_feature_idx(theta1_, sol_deriv1, n=n_)
+        i_min1, i1, dist1 = select_diff_feature_idx(theta1_, sol_deriv1, n=n_)
         
         # dist1_list.append(dist1)
         dist1 = np.sort(dist1)
@@ -384,7 +408,8 @@ for threshold1_ in np.arange(1e-2, threshold1+1e-10, 1e-2):
         
         n1_list.append(n_)
         threshold1_list.append(threshold1_)
-
+        i1_list.append(i1)
+        
         dist_ratio = dist1[0]/dist1[1]
         dist1_list.append(dist_ratio)
         print(f'dist ratio: {dist_ratio}')
@@ -392,7 +417,7 @@ for threshold1_ in np.arange(1e-2, threshold1+1e-10, 1e-2):
         #     break
 ii1 = np.argmin(dist1_list)
 ind_num1, theta1_ = select_features_of_multi_trajectory(theta1, sol_deriv1, threshold1_list[ii1])
-i_min1, dist1 = select_diff_feature_idx(theta1_, sol_deriv1, n=n0_list[ii1])
+i_min1, i1, dist1 = select_diff_feature_idx(theta1_, sol_deriv1, n=n0_list[ii1])
         
 Theta1, DXdt1 = get_one_hot_theta(theta1_, sol_deriv1, i_min1)   
 Xi1 = SLS(Theta1, DXdt1, threshold1, alpha=alpha).squeeze()
