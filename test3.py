@@ -6,7 +6,7 @@ Created on Thu Nov 16 23:20:58 2023
 @author: dliu
 """
 
-
+# %%
 from scipy.integrate import odeint
 import numpy as np
 import matplotlib.pyplot as plt
@@ -280,7 +280,7 @@ threshold1 = 1e-1
 
 
 # num_feature = len(x0)
-
+#%%
 num_traj = len(a)
 sol0, theta0, sol_deriv0 = [], [], []
 sol1, theta1, sol_deriv1 = [], [], []
@@ -299,6 +299,7 @@ for i in range(num_traj):
     plt.plot(t, sol_, 'o', markersize=1)
 monomial_num = theta0[0].shape[1]
 
+#%%
 ##########################
 ####### feature 0 ########
 ##########################
