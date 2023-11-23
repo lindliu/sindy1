@@ -43,35 +43,35 @@ def SLS(Theta, DXdt, threshold, alpha=.05):
     
     threshold = tol
     
-    reg = LinearRegression(fit_intercept=False)
-    ind_ = np.abs(Xi.T) > 1e-14
-    ind_[:,:num_traj] = True
-    num_basis = ind_.sum()
-    while True:
-        coef = np.zeros((DXdt.shape[1], Theta.shape[1]))
-        for i in range(ind_.shape[0]):
-            if np.any(ind_[i]):
-                coef[i, ind_[i]] = reg.fit(Theta[:, ind_[i]], DXdt[:, i]).coef_
-                
-                ind_[i, np.abs(coef[i,:])<threshold] = False
-                ind_[i,:num_traj] = True
-        
-        if num_basis==ind_.sum():
-            break
-        num_basis = ind_.sum()
-        
-    Xi = coef.T
-    Xi[np.abs(Xi)<threshold] = 0
-
-
     # reg = LinearRegression(fit_intercept=False)
     # ind_ = np.abs(Xi.T) > 1e-14
-    # coef = np.zeros((DXdt.shape[1], Theta.shape[1]))
-    # for i in range(ind_.shape[0]):
-    #     if np.any(ind_[i]):
-    #         coef[i, ind_[i]] = reg.fit(Theta[:, ind_[i]], DXdt[:, i]).coef_
+    # ind_[:,:num_traj] = True
+    # num_basis = ind_.sum()
+    # while True:
+    #     coef = np.zeros((DXdt.shape[1], Theta.shape[1]))
+    #     for i in range(ind_.shape[0]):
+    #         if np.any(ind_[i]):
+    #             coef[i, ind_[i]] = reg.fit(Theta[:, ind_[i]], DXdt[:, i]).coef_
+                
+    #             ind_[i, np.abs(coef[i,:])<threshold] = False
+    #             ind_[i,:num_traj] = True
+        
+    #     if num_basis==ind_.sum():
+    #         break
+    #     num_basis = ind_.sum()
+        
     # Xi = coef.T
     # Xi[np.abs(Xi)<threshold] = 0
+
+
+    reg = LinearRegression(fit_intercept=False)
+    ind_ = np.abs(Xi.T) > 1e-14
+    coef = np.zeros((DXdt.shape[1], Theta.shape[1]))
+    for i in range(ind_.shape[0]):
+        if np.any(ind_[i]):
+            coef[i, ind_[i]] = reg.fit(Theta[:, ind_[i]], DXdt[:, i]).coef_
+    Xi = coef.T
+    Xi[np.abs(Xi)<threshold] = 0
 
     return Xi
 
@@ -161,7 +161,17 @@ def select_diff_feature_idx(theta0_, sol_deriv0, n=1):
 
     return list(i0[np.argmin(dist)]), i0, dist
 
+def data_interp(x_new, x, y):
+    from scipy import interpolate
+    
+    f = interpolate.interp1d(x, y, kind='cubic')
+    fd1 = f._spline.derivative(nu=1)
+    return f(x_new), fd1(x_new)
+# data_interp(np.linspace(0,t[-1]), t, sol0[2].squeeze())
+
 from func import func12_, func3_, func4_
+
+threshold_sindy=threshold0=threshold1=4e-2
 
 # alpha = .01
 # dt = .01   ## 0,3
@@ -189,31 +199,31 @@ from func import func12_, func3_, func4_
 # threshold0 = 1e-1
 # threshold1 = 1e-1
 
-alpha = .1
-dt = .01    ## 1,4    2,4
-t = np.arange(0,5,dt)
-x0 = [4, 1]
-a = [(.7,-.8), (1,-1)]
-func = func4_
-monomial = monomial_poly
-monomial_name = monomial_poly_name
-real0 = "x'=a*x + b*xy"
-real1 = "y'=b*y + a*xy"
-threshold0 = 1e-1
-threshold1 = 1e-1
+# alpha = .1
+# dt = .01    ## 1,4    2,4
+# t = np.arange(0,5,dt)
+# x0 = [4, 1]
+# a = [(.7,-.8), (1,-1)]
+# func = func4_
+# monomial = monomial_poly
+# monomial_name = monomial_poly_name
+# real0 = "x'=a*x + b*xy"
+# real1 = "y'=b*y + a*xy"
+# # threshold0 = 1e-1
+# # threshold1 = 1e-1
 
 
 # ################### 1 variable ####################
-# alpha = .05
-# dt = .01   ## 0,3
-# t = np.arange(0,1.5,dt)
-# x0 = [.5, 1]
-# a = [(.12,), (.16,), (.2,)]
-# func = func1
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=a + x^2"
-# real1 = "y'=-y"
+alpha = .05
+dt = .005   ## 0,3
+t = np.arange(0,1.5,dt)
+x0 = [.5, 1]
+a = [(.12,), (.16,), (.2,)]
+func = func1
+monomial = monomial_poly
+monomial_name = monomial_poly_name
+real0 = "x'=a + x^2"
+real1 = "y'=-y"
 # threshold0 = 1e-1
 # threshold1 = 1e-1
 
@@ -227,8 +237,8 @@ threshold1 = 1e-1
 # monomial_name = monomial_poly_name
 # real0 = "x'=.2 + a*x^2"
 # real1 = "y'=-y"
-# threshold0 = 1e-1
-# threshold1 = 1e-1
+# # threshold0 = 1e-1
+# # threshold1 = 1e-1
 
 # alpha = .05
 # dt = .01      ## 2,3,6,8;     1,2,7,9
@@ -240,8 +250,8 @@ threshold1 = 1e-1
 # monomial_name = monomial_poly_name
 # real0 = "x'=-y + a*x^2 - x^3 - xy^2"
 # real1 = "y'=x + a*y - x^2y - y^3"    
-# threshold0 = 1e-1
-# threshold1 = 1e-1
+# # threshold0 = 1e-1
+# # threshold1 = 1e-1
 
 # alpha = .05
 # dt = .01    ## 1,4    2,4
@@ -253,8 +263,8 @@ threshold1 = 1e-1
 # monomial_name = monomial_poly_name
 # real0 = "x'=a*x - xy"
 # real1 = "y'=-y + a*xy"    
-# threshold0 = 1e-1
-# threshold1 = 1e-1
+# # threshold0 = 1e-1
+# # threshold1 = 1e-1
 
 # alpha = .05
 # dt = .1
@@ -266,8 +276,8 @@ threshold1 = 1e-1
 # monomial_name = monomial_trig_name
 # real0 = "x'=y"
 # real1 = "y'=a*y-5sin(x)"
-# threshold0 = 1e-1
-# threshold1 = 1e-1
+# # threshold0 = 1e-1
+# # threshold1 = 1e-1
 
 # alpha = .05
 # dt = .1
@@ -280,8 +290,8 @@ threshold1 = 1e-1
 # monomial_name = monomial_trig_name
 # real0 = "x'=y"
 # real1 = "y'=-0.25y+a*sin(x)"
-# threshold0 = 1e-1
-# threshold1 = 1e-1
+# # threshold0 = 1e-1
+# # threshold1 = 1e-1
 
 
 
@@ -291,18 +301,25 @@ num_traj = len(a)
 sol0, theta0, sol_deriv0 = [], [], []
 sol1, theta1, sol_deriv1 = [], [], []
 for i in range(num_traj):
-    sol_, sol1_deriv_, t_ = get_sol_deriv(func, x0, t, a[i], step=1)
+    sol_, sol_deriv_, t_ = get_sol_deriv(func, x0, t, a[i], step=1)
+    
+    # t_ = np.linspace(0,t[-1])
+    # sol0_, sol0_deriv_ = data_interp(t_, t, sol_[:,0])
+    # sol1_, sol1_deriv_ = data_interp(t_, t, sol_[:,1])
+    # sol_ = np.c_[sol0_,sol1_]
+    # sol_deriv_ = np.c_[sol0_deriv_, sol1_deriv_]
+    
     theta_ = monomial(sol_)
 
     sol0.append(sol_[:,[0]])
     theta0.append(theta_)
-    sol_deriv0.append(sol1_deriv_[:,[0]])
+    sol_deriv0.append(sol_deriv_[:,[0]])
     
     sol1.append(sol_[:,[1]])
     theta1.append(theta_)
-    sol_deriv1.append(sol1_deriv_[:,[1]])
+    sol_deriv1.append(sol_deriv_[:,[1]])
     
-    plt.plot(t, sol_, 'o', markersize=1)
+    plt.plot(t_, sol_, 'o', markersize=1)
 monomial_num = theta0[0].shape[1]
 
 #%%
@@ -316,7 +333,8 @@ monomial_num = theta0[0].shape[1]
 
 i_min0_list, i0_list, n0_list, threshold0_list = [], [], [], []
 dist0_list, dist0_list_ = [], []
-for threshold0_ in np.arange(1e-2, threshold0+1e-10, 1e-2):
+# for threshold0_ in np.arange(1e-2, threshold0+1e-10, 1e-2):
+for threshold0_ in [threshold0]:
     ### increase threshold until find one a clear i_min0
     ind_num0, theta0_ = select_features_of_multi_trajectory(theta0, sol_deriv0, threshold0_)
     for n_ in range(0, min(len(ind_num0)+1, 3)):
@@ -341,7 +359,7 @@ for threshold0_ in np.arange(1e-2, threshold0+1e-10, 1e-2):
             i0_list.extend(i0)
             dist0_list_.extend(dist0)
             
-            dist_ratio = dist0[0]/dist0[1]
+            dist_ratio = dist0[0]#/dist0[1]
             dist0_list.append(dist_ratio)
             print(f'dist ratio: {dist_ratio}')
             # if dist_ratio<=1e-2:
@@ -388,7 +406,7 @@ for j in range(num_traj):
     # Xi0_[:,[j]] = np.r_[Xi0[num_traj:i_min0+num_traj], Xi0[[j]], Xi0[i_min0+num_traj:]]
     
     dist_norm = MSE(theta0_[j]@Xi0_[:,[j]]-sol_deriv0[j])
-    print(f'L2 for trajectory {j}: {dist_norm:3E}')
+    print(f'feature 0 for trajectory {j}: {dist_norm:3E}')
     
 
 ##########################
@@ -402,9 +420,10 @@ for j in range(num_traj):
 i1_list, n1_list, threshold1_list = [], [], []
 dist1_list = []
 for threshold1_ in np.arange(1e-2, threshold1+1e-10, 1e-2):
+# for threshold1_ in [threshold1]:
     ### increase threshold until find one a clear i_min0
     ind_num1, theta1_ = select_features_of_multi_trajectory(theta1, sol_deriv1, threshold1_)
-    for n_ in range(1, min(len(ind_num1)+1, 3)):
+    for n_ in range(0, min(len(ind_num1)+1, 3)):
         i_min1, i1, dist1 = select_diff_feature_idx(theta1_, sol_deriv1, n=n_)
         
         # dist1_list.append(dist1)
@@ -448,7 +467,7 @@ for j in range(num_traj):
     # Xi1_[:,[i]] = np.r_[Xi1[num_traj:i_min1+num_traj], Xi1[[i]], Xi1[i_min1+num_traj:]]
 
     dist_norm = MSE(theta1_[i]@Xi1_[:,[i]]-sol_deriv1[i])
-    print(f'L2 for trajectory {j}: {dist_norm:3E}')
+    print(f'feature 1 for trajectory {j}: {dist_norm:3E}')
 
 
 print('*'*50)
@@ -464,46 +483,67 @@ print(f'feature 1 with n={n1_list[ii1]}: \n {Xi1_[Xi1_.any(axis=1)]} \n {np.arra
 import pysindy as ps
 
 if func.__name__ not in ['func6', 'func7']:
-    from pysindy.feature_library import GeneralizedLibrary, PolynomialLibrary
-    lib_generalized = PolynomialLibrary(degree=5)
+    from pysindy.feature_library import GeneralizedLibrary, PolynomialLibrary, CustomLibrary
+    # lib_generalized = PolynomialLibrary(degree=5)
+    functions = [lambda x,y: 1, \
+            lambda x,y: x, lambda x,y: y, \
+            lambda x,y: x**2, lambda x,y: x*y, lambda x,y: y**2, \
+            lambda x,y: x**3, lambda x,y: x**2*y, lambda x,y: x*y**2, lambda x,y: y**3, \
+            lambda x,y: x**4, lambda x,y: x**3*y, lambda x,y: x**2*y**2, lambda x,y: x*y**3, lambda x,y: y**4, \
+            lambda x,y: x**5, lambda x,y: x**4*y, lambda x,y: x**3*y**2, lambda x,y: x**2*y**3, lambda x,y: x*y**4, lambda x,y: y**5]
+    names = [lambda x,y: '1', \
+            lambda x,y: 'x', lambda x,y: 'y', \
+            lambda x,y: 'x^2', lambda x,y: 'xy', lambda x,y: 'y^2', \
+            lambda x,y: 'x^3', lambda x,y: 'x^2y', lambda x,y: 'xy^2', lambda x,y: 'y^3', \
+            lambda x,y: 'x^4', lambda x,y: 'x^3y', lambda x,y: 'x^2y^2', lambda x,y: 'xy^3', lambda x,y: 'y^4', \
+            lambda x,y: 'x^5', lambda x,y: 'x^4y', lambda x,y: 'x^3y^2', lambda x,y: 'x^2y^3', lambda x,y: 'xy^4', lambda x,y: 'y^5']
+    lib_custom = CustomLibrary(library_functions=functions, function_names=names)
+    lib_generalized = GeneralizedLibrary([lib_custom])
+
     from pysindy.optimizers import STLSQ
-    optimizer = STLSQ(threshold=0.1, alpha=alpha)
+    optimizer = STLSQ(threshold=threshold_sindy, alpha=alpha)
     model = ps.SINDy(feature_names=["x", "y"], feature_library=lib_generalized, optimizer=optimizer)
     for i in range(len(a)):
-        sol_, sol1_deriv_, t_ = get_sol_deriv(func, x0, t, a[i])
+        sol_, sol_deriv_, t_ = get_sol_deriv(func, x0, t, a[i])
     
-        model.fit(sol_, t=t)#, ensemble=True, quiet=True)
+        # t_ = np.linspace(0,t[-1])
+        # sol0_, sol0_deriv_ = data_interp(t_, t, sol_[:,0])
+        # sol1_, sol1_deriv_ = data_interp(t_, t, sol_[:,1])
+        # sol_ = np.c_[sol0_,sol1_]
+        # sol_deriv_ = np.c_[sol0_deriv_, sol1_deriv_]
+        
+        model.fit(sol_, t=t_)#, ensemble=True, quiet=True)
         model.print()
         # model.coefficients()
         
         # theta_ = monomial(sol_)
-        # print(SLS(theta_, sol1_deriv_, 1e-1))
+        # print(SLS(theta_, sol_deriv_, 1e-1))
         
 else:
-    from pysindy.feature_library import FourierLibrary, CustomLibrary, IdentityLibrary, PolynomialLibrary
+    from pysindy.feature_library import FourierLibrary, CustomLibrary
     from pysindy.feature_library import GeneralizedLibrary
-    # lib_fourier = FourierLibrary()
-    lib_poly = PolynomialLibrary(degree=0)
-    lib_identity = IdentityLibrary()
-    functions = [lambda x: np.sin(x), lambda x: np.cos(x)]
-    lib_custom = CustomLibrary(library_functions=functions)
+    functions = [lambda x,y: 1, lambda x,y: x, lambda x,y: y, lambda x,y: np.sin(x), lambda x,y: np.sin(y), \
+                 lambda x,y: np.cos(x), lambda x,y: np.cos(y)]
+    names = [lambda x,y: '1', lambda x,y: 'x', lambda x,y: 'y', lambda x,y: 'sin(x)', lambda x,y: 'sin(y)', \
+             lambda x,y: 'cos(x)', lambda x,y: 'cos(y)']
+    lib_custom = CustomLibrary(library_functions=functions, function_names=names)
     # lib_generalized = GeneralizedLibrary([lib_custom, lib_fourier])
-    lib_generalized = GeneralizedLibrary([lib_poly, lib_identity, lib_custom])
+    lib_generalized = GeneralizedLibrary([lib_custom])
     # x = np.array([[0.,-1],[1.,0.],[2.,-1.]])
     # lib_generalized.fit(x)
     # lib_generalized.transform(x)
     from pysindy.optimizers import STLSQ
-    optimizer = STLSQ(alpha=alpha)
+    optimizer = STLSQ(threshold=threshold_sindy, alpha=alpha)
     
     model = ps.SINDy(feature_names=["x", "y"], feature_library=lib_generalized, optimizer=optimizer)
     for i in range(len(a)):
-        sol_, sol1_deriv_, t_ = get_sol_deriv(func, x0, t, a[i])
+        sol_, sol_deriv_, t_ = get_sol_deriv(func, x0, t, a[i])
     
         model.fit(sol_, t=t_)
         model.print()
         
         # theta_ = monomial(sol_)
-        # print(SLS(theta_, sol1_deriv_, 1e-1))
+        # print(SLS(theta_, sol_deriv_, 1e-1))
         
         
         

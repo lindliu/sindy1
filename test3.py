@@ -42,35 +42,35 @@ def SLS(Theta, DXdt, threshold, alpha=.05):
     
     threshold = tol
     
-    reg = LinearRegression(fit_intercept=False)
-    ind_ = np.abs(Xi.T) > 1e-14
-    ind_[:,:num_traj] = True
-    num_basis = ind_.sum()
-    while True:
-        coef = np.zeros((DXdt.shape[1], Theta.shape[1]))
-        for i in range(ind_.shape[0]):
-            if np.any(ind_[i]):
-                coef[i, ind_[i]] = reg.fit(Theta[:, ind_[i]], DXdt[:, i]).coef_
-                
-                ind_[i, np.abs(coef[i,:])<threshold] = False
-                ind_[i,:num_traj] = True
-        
-        if num_basis==ind_.sum():
-            break
-        num_basis = ind_.sum()
-        
-    Xi = coef.T
-    Xi[np.abs(Xi)<threshold] = 0
-
-
     # reg = LinearRegression(fit_intercept=False)
     # ind_ = np.abs(Xi.T) > 1e-14
-    # coef = np.zeros((DXdt.shape[1], Theta.shape[1]))
-    # for i in range(ind_.shape[0]):
-    #     if np.any(ind_[i]):
-    #         coef[i, ind_[i]] = reg.fit(Theta[:, ind_[i]], DXdt[:, i]).coef_
+    # ind_[:,:num_traj] = True
+    # num_basis = ind_.sum()
+    # while True:
+    #     coef = np.zeros((DXdt.shape[1], Theta.shape[1]))
+    #     for i in range(ind_.shape[0]):
+    #         if np.any(ind_[i]):
+    #             coef[i, ind_[i]] = reg.fit(Theta[:, ind_[i]], DXdt[:, i]).coef_
+                
+    #             ind_[i, np.abs(coef[i,:])<threshold] = False
+    #             ind_[i,:num_traj] = True
+        
+    #     if num_basis==ind_.sum():
+    #         break
+    #     num_basis = ind_.sum()
+        
     # Xi = coef.T
     # Xi[np.abs(Xi)<threshold] = 0
+
+
+    reg = LinearRegression(fit_intercept=False)
+    ind_ = np.abs(Xi.T) > 1e-14
+    coef = np.zeros((DXdt.shape[1], Theta.shape[1]))
+    for i in range(ind_.shape[0]):
+        if np.any(ind_[i]):
+            coef[i, ind_[i]] = reg.fit(Theta[:, ind_[i]], DXdt[:, i]).coef_
+    Xi = coef.T
+    Xi[np.abs(Xi)<threshold] = 0
 
     return Xi
 
@@ -188,33 +188,33 @@ from func import func12_, func3_, func4_
 # threshold0 = 1e-1
 # threshold1 = 1e-1
 
-alpha = .1
-dt = .01    ## 1,4    2,4
-t = np.arange(0,5,dt)
-x0 = [4, 1]
-a = [(.7,-.8), (1,-1)]
-func = func4_
-monomial = monomial_poly
-monomial_name = monomial_poly_name
-real0 = "x'=a*x + b*xy"
-real1 = "y'=b*y + a*xy"
-threshold0 = 1e-1
-threshold1 = 1e-1
+# alpha = .1
+# dt = .01    ## 1,4    2,4
+# t = np.arange(0,5,dt)
+# x0 = [4, 1]
+# a = [(.7,-.8), (1,-1)]
+# func = func4_
+# monomial = monomial_poly
+# monomial_name = monomial_poly_name
+# real0 = "x'=a*x + b*xy"
+# real1 = "y'=b*y + a*xy"
+# threshold0 = 1e-1
+# threshold1 = 1e-1
 
 
 # ################### 1 variable ####################
-# alpha = .05
-# dt = .01   ## 0,3
-# t = np.arange(0,1.5,dt)
-# x0 = [.5, 1]
-# a = [(.12,), (.16,), (.2,)]
-# func = func1
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=a + x^2"
-# real1 = "y'=-y"
-# threshold0 = 1e-1
-# threshold1 = 1e-1
+alpha = .05
+dt = .005   ## 0,3
+t = np.arange(0,1.5,dt)
+x0 = [.5, 1]
+a = [(.12,), (.16,), (.2,)]
+func = func1
+monomial = monomial_poly
+monomial_name = monomial_poly_name
+real0 = "x'=a + x^2"
+real1 = "y'=-y"
+threshold0 = 1e-1
+threshold1 = 1e-1
 
 # alpha = .05
 # dt = .01
