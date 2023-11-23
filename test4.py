@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu Nov 16 23:20:58 2023
+Created on Thu Nov 23 15:42:07 2023
 
 @author: dliu
 """
+
 
 # %%
 from scipy.integrate import odeint
@@ -313,12 +314,12 @@ monomial_num = theta0[0].shape[1]
 # ind_num0, theta0_ = select_features_of_multi_trajectory(theta0, sol_deriv0, threshold=threshold1)
 # i_min0, i0_list, dist0 = select_diff_feature_idx(theta0_, sol_deriv0, n=1)
 
-i0_list, n0_list, threshold0_list = [], [], []
+i_min0_list, i0_list, n0_list, threshold0_list = [], [], [], []
 dist0_list, dist0_list_ = [], []
 for threshold0_ in np.arange(1e-2, threshold0+1e-10, 1e-2):
     ### increase threshold until find one a clear i_min0
     ind_num0, theta0_ = select_features_of_multi_trajectory(theta0, sol_deriv0, threshold0_)
-    for n_ in range(1, min(len(ind_num0)+1, 3)):
+    for n_ in range(0, min(len(ind_num0)+1, 3)):
         # i_min0, i_val0, dist0 = select_diff_feature_idx(theta0_, sol_deriv0, n=n_)
         i_min0, i0, dist0 = select_diff_feature_idx(theta0_, sol_deriv0, n=n_)
 
@@ -327,14 +328,16 @@ for threshold0_ in np.arange(1e-2, threshold0+1e-10, 1e-2):
         if dist0.shape[0]<=1:
             n0_list.append(n_)
             threshold0_list.append(threshold0_)
+            i_min0_list.append(ind_num0[i_min0])
             i0_list.extend(i0)
             dist0_list_.extend(dist0)
 
             dist0_list.append(dist0[0])
-            
+            #break
         else:
             n0_list.append(n_)
             threshold0_list.append(threshold0_)
+            i_min0_list.append(ind_num0[i_min0])
             i0_list.extend(i0)
             dist0_list_.extend(dist0)
             
@@ -410,16 +413,17 @@ for threshold1_ in np.arange(1e-2, threshold1+1e-10, 1e-2):
             n1_list.append(n_)
             threshold1_list.append(threshold1_)
             dist1_list.append(dist1[0])
-        else:
-            n1_list.append(n_)
-            threshold1_list.append(threshold1_)
-            i1_list.append(i1)
-            
-            dist_ratio = dist1[0]/dist1[1]
-            dist1_list.append(dist_ratio)
-            print(f'dist ratio: {dist_ratio}')
-            # if dist_ratio<=1e-2:
-            #     break
+            break
+        
+        n1_list.append(n_)
+        threshold1_list.append(threshold1_)
+        i1_list.append(i1)
+        
+        dist_ratio = dist1[0]/dist1[1]
+        dist1_list.append(dist_ratio)
+        print(f'dist ratio: {dist_ratio}')
+        # if dist_ratio<=1e-2:
+        #     break
 ii1 = np.argmin(dist1_list)
 ind_num1, theta1_ = select_features_of_multi_trajectory(theta1, sol_deriv1, threshold1_list[ii1])
 i_min1, i1, dist1 = select_diff_feature_idx(theta1_, sol_deriv1, n=n1_list[ii1])
@@ -468,7 +472,7 @@ if func.__name__ not in ['func6', 'func7']:
     for i in range(len(a)):
         sol_, sol1_deriv_, t_ = get_sol_deriv(func, x0, t, a[i])
     
-        model.fit(sol_, t=t)
+        model.fit(sol_, t=t)#, ensemble=True, quiet=True)
         model.print()
         # model.coefficients()
         
