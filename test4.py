@@ -171,7 +171,7 @@ def data_interp(x_new, x, y):
 
 from func import func12_, func3_, func4_
 
-threshold_sindy=threshold0=threshold1=4e-2
+threshold_sindy=threshold0=threshold1=1e-1
 
 # alpha = .01
 # dt = .01   ## 0,3
@@ -214,31 +214,31 @@ threshold_sindy=threshold0=threshold1=4e-2
 
 
 # ################### 1 variable ####################
-alpha = .05
-dt = .005   ## 0,3
-t = np.arange(0,1.5,dt)
-x0 = [.5, 1]
-a = [(.12,), (.16,), (.2,)]
-func = func1
-monomial = monomial_poly
-monomial_name = monomial_poly_name
-real0 = "x'=a + x^2"
-real1 = "y'=-y"
-# threshold0 = 1e-1
-# threshold1 = 1e-1
-
 # alpha = .05
-# dt = .01
-# t = np.arange(0,2,dt)
+# dt = .005   ## 0,3
+# t = np.arange(0,1.5,dt)
 # x0 = [.5, 1]
-# a = [(.25,), (.5,)]
-# func = func2
+# a = [(.12,), (.16,), (.2,)]
+# func = func1
 # monomial = monomial_poly
 # monomial_name = monomial_poly_name
-# real0 = "x'=.2 + a*x^2"
+# real0 = "x'=a + x^2"
 # real1 = "y'=-y"
 # # threshold0 = 1e-1
 # # threshold1 = 1e-1
+
+alpha = .05
+dt = .01
+t = np.arange(0,2,dt)
+x0 = [.5, 1]
+a = [(.25,), (.5,)]
+func = func2
+monomial = monomial_poly
+monomial_name = monomial_poly_name
+real0 = "x'=.2 + a*x^2"
+real1 = "y'=-y"
+# threshold0 = 1e-1
+# threshold1 = 1e-1
 
 # alpha = .05
 # dt = .01      ## 2,3,6,8;     1,2,7,9
@@ -321,6 +321,148 @@ for i in range(num_traj):
     
     plt.plot(t_, sol_, 'o', markersize=1)
 monomial_num = theta0[0].shape[1]
+
+
+
+#%%
+
+def get_one_hot_theta(theta0, sol0_deriv, num_traj, i_diff=None):
+    if i_diff is None:
+        theta0_ = theta0.reshape([num_traj, -1, *theta0.shape[1:]])
+        Theta = np.vstack(theta0_.transpose(0,2,1,3)).transpose(1,0,2)
+        
+        sol0_deriv_ = sol0_deriv.reshape([num_traj, -1, *sol0_deriv.shape[1:]])
+        DXdt = np.vstack(sol0_deriv_.transpose(0,2,1,3)).transpose(1,0,2)
+        return Theta, DXdt
+    
+    #num traj, num series, length series, monomial num
+    theta0_ = theta0.reshape([num_traj, -1, *theta0.shape[1:]])
+    sol0_deriv_ = sol0_deriv.reshape([num_traj, -1, *sol0_deriv.shape[1:]])
+
+    _, num_series, length_series, num_feature = theta0_.shape
+    
+    i_diff = list(i_diff)
+    num_diff = len(i_diff)
+    i_same = np.ones(num_feature, dtype=bool)
+    i_same[i_diff] = False
+
+    Theta_diff, Theta_same = [], []
+    for j in range(num_traj): ###each trajectory
+        Theta_diff_ = np.zeros([num_series, length_series, num_traj*num_diff])
+        Theta_diff_[:,:,j*num_diff:(j+1)*num_diff] = theta0_[j][:,:,i_diff]
+        
+        Theta_diff.append(Theta_diff_.transpose(1,0,2))
+        Theta_same.append(theta0_[j][:,:,i_same].transpose(1,0,2))
+    
+    Theta_diff = np.vstack(Theta_diff).transpose(1,0,2)
+    Theta_same = np.vstack(Theta_same).transpose(1,0,2)
+    
+    Theta = np.c_[Theta_diff,Theta_same]
+    DXdt = np.vstack(sol0_deriv_.transpose(0,2,1,3)).transpose(1,0,2)
+    return Theta, DXdt
+
+
+### get data
+per = .7
+length = t[-1]-t[0]
+length_sub = length*per
+
+num_series = int(100*(1-per))
+theta0, theta1 = [], []   ### num_series, length
+sol0_deriv, sol1_deriv = [], [] ### num_series, length
+Xi0_list_, Xi1_list_ = [], []
+for k in range(num_traj):
+    for i in range(num_series):
+        sol0_, sol0_deriv_ = data_interp(np.linspace(length*(i*.01),length*(per+i*.01),num=int(length_sub//dt)), t, sol0[k].squeeze())
+        sol1_, sol1_deriv_ = data_interp(np.linspace(length*(i*.01),length*(per+i*.01),num=int(length_sub//dt)), t, sol1[k].squeeze())
+
+        theta_ = monomial(np.c_[sol0_,sol1_])
+        theta0.append(theta_)
+        theta1.append(theta_)
+        sol0_deriv.append(sol0_deriv_)
+        sol1_deriv.append(sol1_deriv_)
+
+theta0 = np.c_[theta0]
+theta1 = np.c_[theta1]
+sol0_deriv = np.c_[sol0_deriv]
+sol1_deriv = np.c_[sol1_deriv]
+
+# SLS(scipy.linalg.block_diag(theta0[0], theta0[30]), np.r_[sol0_deriv[0],sol0_deriv[30]], threshold_sindy)
+
+### first iter
+_, length_series, monomial_num = theta0.shape  #num_traj*num_series, length of each series, monomial num
+
+idx_basis = np.arange(monomial_num)
+idx_act = np.ones([monomial_num],dtype=bool)
+
+threshold_sindy = 3e-2
+Xi0_list = np.zeros([num_traj*num_series, monomial_num])
+Xi1_list = np.zeros([num_traj*num_series, monomial_num])
+for i in range(num_traj*num_series):
+    Xi0_list[i,:] = SLS(theta0[i][:,idx_act], sol0_deriv[i], threshold_sindy, alpha=.05).squeeze()
+    Xi1_list[i,:] = SLS(theta1[i][:,idx_act], sol1_deriv[i], threshold_sindy, alpha=.05).squeeze()
+    
+
+Xi0_list_traj = Xi0_list.reshape([num_traj, num_series, monomial_num])
+
+fig, ax = plt.subplots(5,5,figsize=(12,12))
+ax = ax.flatten()
+for i in range(monomial_num):
+    ax[i].hist(Xi0_list_traj[0,:,i], color='g', alpha = 0.5, label=monomial_poly_name[i])
+    ax[i].hist(Xi0_list_traj[1,:,i], color='r', alpha = 0.5)
+    ax[i].legend()
+    
+
+idx_act_ = np.zeros([monomial_num],dtype=bool)
+for k in range(num_traj):
+    idx_act_ = np.logical_or(idx_act_, np.abs(Xi0_list_traj[k].mean(0))>threshold_sindy)
+
+# updatd active basis
+idx_act = np.logical_and(idx_act, idx_act_)
+
+
+
+
+
+from itertools import combinations
+from scipy.stats import wasserstein_distance
+
+radius = np.zeros(monomial_num)
+for k in idx_basis[idx_act]:
+    radius_ = []
+    for i,j in combinations(np.arange(num_traj), 2):
+        radius_.append(wasserstein_distance(Xi0_list_traj[i][:,k],Xi0_list_traj[j][:,k]))
+    radius[k] = max(radius_)
+    
+idx_same_ = np.argmin(radius[idx_act])
+idx_same = idx_basis[idx_act][idx_same_]
+
+i_diff = np.delete(np.arange(idx_act.sum()), [idx_same_])
+Theta, DXdt = get_one_hot_theta(theta0[:,:,idx_act], sol0_deriv, num_traj, i_diff)
+
+
+threshold_sindy = 3e-2
+Xi0_list = np.zeros([num_series, Theta.shape[-1]])
+# Xi1_list = np.zeros([num_series, monomial_num])
+for i in range(num_series):
+    Xi0_list[i,:] = SLS(Theta[i][:,:], DXdt[i], threshold_sindy, alpha=.05).squeeze()
+    # Xi1_list[i,:] = SLS(theta1[i][:,idx_act], sol1_deriv[i], threshold_sindy, alpha=.05).squeeze()
+    
+
+fig, ax = plt.subplots(5,5,figsize=(12,12))
+ax = ax.flatten()
+for i in range(7):
+    ax[i].hist(Xi0_list[:,i], color='g', alpha = 0.5)
+    ax[i].hist(Xi0_list[:,i+7], color='r', alpha = 0.5)
+
+    
+
+
+# scipy.linalg.block_diag(Xi0_list_traj)
+
+# for p in range(21):  
+#     print(np.std(Xi0_list[k][:,p])/np.mean(Xi0_list[k][:,p]))
+
 
 #%%
 ##########################
@@ -517,7 +659,7 @@ if func.__name__ not in ['func6', 'func7']:
         # model.coefficients()
         
         # theta_ = monomial(sol_)
-        # print(SLS(theta_, sol_deriv_, 1e-1))
+        # print(SLS(theta_, sol_deriv_, threshold_sindy))
         
 else:
     from pysindy.feature_library import FourierLibrary, CustomLibrary
@@ -543,7 +685,7 @@ else:
         model.print()
         
         # theta_ = monomial(sol_)
-        # print(SLS(theta_, sol_deriv_, 1e-1))
+        # print(SLS(theta_, sol_deriv_, threshold_sindy))
         
         
         
