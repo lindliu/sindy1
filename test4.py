@@ -367,6 +367,7 @@ per = .7
 length = t[-1]-t[0]
 length_sub = length*per
 
+threshold_sindy = 2e-2
 num_series = int(100*(1-per))
 theta0, theta1 = [], []   ### num_series, length
 sol0_deriv, sol1_deriv = [], [] ### num_series, length
@@ -386,6 +387,123 @@ theta0 = np.c_[theta0]
 theta1 = np.c_[theta1]
 sol0_deriv = np.c_[sol0_deriv]
 sol1_deriv = np.c_[sol1_deriv]
+
+theta0 = theta0.reshape(num_traj, -1, *theta0.shape[1:])
+theta1 = theta1.reshape(num_traj, -1, *theta1.shape[1:])
+sol0_deriv = sol0_deriv.reshape(num_traj, -1, *sol0_deriv.shape[1:])
+sol1_deriv = sol1_deriv.reshape(num_traj, -1, *sol1_deriv.shape[1:])
+
+sol0_deriv = np.vstack(sol0_deriv.transpose(0,2,1,3)).transpose(1,0,2)
+sol1_deriv = np.vstack(sol1_deriv.transpose(0,2,1,3)).transpose(1,0,2)
+
+num_traj, num_series, length_series, monomial_num = theta0.shape
+
+
+import scipy
+def block_diag(A, B):
+    return scipy.linalg.block_diag(A,B)
+
+def block_diag_multi_traj(A):
+    if len(A)<=1:
+        return A
+    
+    block = scipy.linalg.block_diag(A[0], A[1])
+    for i in range(2, len(A)):
+        block = block_diag(block, A[i])
+    return block
+
+
+
+idx_basis = np.arange(monomial_num)
+idx_activ = np.ones([monomial_num],dtype=bool)
+
+idx_same_activ = np.zeros_like(idx_activ,dtype=bool)
+idx_diff_activ = np.ones_like(idx_activ,dtype=bool)
+
+Xi0_group = np.zeros([num_traj, num_series, monomial_num])
+for j in range(num_series):
+    block_list = [block_[j][:,idx_diff_activ] for block_ in theta0]
+    block = block_diag_multi_traj(block_list)
+    
+    sol0_deriv_ = sol0_deriv[j]
+
+    Xi0_ = SLS(block, sol0_deriv_, threshold_sindy).squeeze()
+    Xi0_group[:,j,:] = Xi0_.reshape([num_traj, -1])
+    
+
+
+
+
+
+
+idx_selected = (np.abs(Xi0_group.mean(1))>threshold_sindy).any(0)
+idx_activ = np.logical_and(idx_activ, idx_selected)
+
+idx_same_activ = np.logical_and(idx_activ, idx_same_activ)
+idx_diff_activ = copy.deepcopy(idx_activ)
+idx_diff_activ[idx_same_activ] = False
+
+num_feature = idx_activ.sum()
+from itertools import combinations
+from scipy.stats import wasserstein_distance
+radius = []
+for k in idx_basis[idx_diff_activ]:
+    radius_ = []
+    for i,j in combinations(np.arange(num_traj), 2):
+        radius_.append(wasserstein_distance(Xi0_group[i][:,k],Xi0_group[j][:,k]))
+    radius.append(max(radius_))
+radius = np.array(radius)
+
+idx_similar = np.where(radius<1e-1)
+idx_same = idx_basis[idx_activ][idx_similar]
+idx_same_activ[idx_same] = True
+idx_diff_activ[idx_same] = False
+
+
+assert (np.logical_or(idx_diff_activ, idx_same_activ) == idx_activ).any(0)
+
+
+
+
+Xi0_group = np.zeros([num_traj, num_series, monomial_num])
+for j in range(num_series):
+    block_diff_list = [block_[j][:,idx_diff_activ] for block_ in theta0]
+    block_diff = block_diag_multi_traj(block_diff_list)
+    
+    block_same_list = [block_[j][:,idx_same_activ] for block_ in theta0]
+    block_same = np.vstack(block_same_list)
+
+    Theta = np.c_[block_diff, block_same]
+    dXdt = sol0_deriv[j]
+
+    Xi0_ = SLS(Theta, dXdt, threshold_sindy).squeeze()
+    
+    num_diff_ = idx_diff_activ.sum()*num_traj
+    Xi0_group[:,j,idx_diff_activ] = Xi0_[:num_diff_].reshape([num_traj,-1])
+    Xi0_group[:,j,idx_same_activ] = Xi0_[num_diff_:]
+    
+    
+    
+    
+    
+
+
+fig, ax = plt.subplots(5,5,figsize=(12,12))
+ax = ax.flatten()
+for i in idx_basis[idx_activ]:
+    ax[i].hist(Xi0_group[0,:,i], color='g', alpha = 0.5, label=monomial_poly_name[i])
+    ax[i].hist(Xi0_group[1,:,i], color='r', alpha = 0.5)
+    ax[i].legend()
+    
+
+
+
+
+
+
+
+
+
 
 # SLS(scipy.linalg.block_diag(theta0[0], theta0[30]), np.r_[sol0_deriv[0],sol0_deriv[30]], threshold_sindy)
 
