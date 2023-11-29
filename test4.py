@@ -94,17 +94,17 @@ from func import func12_, func3_, func4_
 
 
 
-alpha = .01
-dt = .01   ## 0,3
-t = np.arange(0,1.5,dt)
-x0 = [.5, 1]
-a = [(.16, .25), (.3, .4), (.3, .5)]
-func = func12_
-monomial = monomial_poly
-monomial_name = monomial_poly_name
-real0 = "x'=a + b*x^2"
-real1 = "y'=-y"
-threshold_sindy=7e-2
+# alpha = .01
+# dt = .01   ## 0,3
+# t = np.arange(0,1.5,dt)
+# x0 = [.5, 1]
+# a = [(.16, .25), (.3, .4), (.3, .5)]
+# func = func12_
+# monomial = monomial_poly
+# monomial_name = monomial_poly_name
+# real0 = "x'=a + b*x^2"
+# real1 = "y'=-y"
+# threshold_sindy=7e-2
 
 # alpha = .05
 # dt = .01      ## 2,3,6,8;     1,2,7,9
@@ -193,18 +193,18 @@ threshold_sindy=7e-2
 # real1 = "y'=a*y-5sin(x)"
 # threshold_sindy=1e-2
 
-# alpha = .05
-# dt = .1
-# t = np.arange(0,6,dt)
-# x0 = [np.pi-.1, 0]
-# # a = [-5, -6]
-# a = [(-.15,), (-1,), (-2,), (-5,)]
-# func = func7
-# monomial = monomial_trig
-# monomial_name = monomial_trig_name
-# real0 = "x'=y"
-# real1 = "y'=-0.25y+a*sin(x)"
-# threshold_sindy=1e-2
+alpha = .05
+dt = .1
+t = np.arange(0,6,dt)
+x0 = [np.pi-.1, 0]
+# a = [-5, -6]
+a = [(-.15,), (-1,), (-2,), (-5,)]
+func = func7
+monomial = monomial_trig
+monomial_name = monomial_trig_name
+real0 = "x'=y"
+real1 = "y'=-0.25*y+a*sin(x)"
+threshold_sindy=1e-2
 
 
 
@@ -361,7 +361,9 @@ for nth_feature, (theta_, sol_deriv_) in enumerate(zip([theta0, theta1], [sol0_d
             radius_ = []
             for i,j in combinations(np.arange(num_traj), 2):
                 radius_.append(wasserstein_distance(Xi0_group[i,:,k],Xi0_group[j,:,k]))
-            radius.append(max(radius_))
+            # radius.append(np.max(radius_))
+            # radius.append(np.mean(radius_))
+            radius.append(np.median(radius_))
         radius = np.array(radius)
         
         idx_similar = np.where(radius<1e-3)   #####
