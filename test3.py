@@ -188,33 +188,33 @@ from func import func12_, func3_, func4_
 # threshold0 = 1e-1
 # threshold1 = 1e-1
 
-# alpha = .1
-# dt = .01    ## 1,4    2,4
-# t = np.arange(0,5,dt)
-# x0 = [4, 1]
-# a = [(.7,-.8), (1,-1)]
-# func = func4_
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=a*x + b*xy"
-# real1 = "y'=b*y + a*xy"
-# threshold0 = 1e-1
-# threshold1 = 1e-1
+alpha = .1
+dt = .01    ## 1,4    2,4
+t = np.arange(0,5,dt)
+x0 = [4, 1]
+a = [(.7,-.8), (1,-1)]
+func = func4_
+monomial = monomial_poly
+monomial_name = monomial_poly_name
+real0 = "x'=a*x + b*xy"
+real1 = "y'=b*y + a*xy"
+threshold0 = 1e-1
+threshold1 = 1e-1
 
 
 # ################### 1 variable ####################
-alpha = .05
-dt = .005   ## 0,3
-t = np.arange(0,1.5,dt)
-x0 = [.5, 1]
-a = [(.12,), (.16,), (.2,)]
-func = func1
-monomial = monomial_poly
-monomial_name = monomial_poly_name
-real0 = "x'=a + x^2"
-real1 = "y'=-y"
-threshold0 = 1e-1
-threshold1 = 1e-1
+# alpha = .05
+# dt = .005   ## 0,3
+# t = np.arange(0,1.5,dt)
+# x0 = [.5, 1]
+# a = [(.12,), (.16,), (.2,)]
+# func = func1
+# monomial = monomial_poly
+# monomial_name = monomial_poly_name
+# real0 = "x'=a + x^2"
+# real1 = "y'=-y"
+# threshold0 = 1e-1
+# threshold1 = 1e-1
 
 # alpha = .05
 # dt = .01
