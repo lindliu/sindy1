@@ -338,17 +338,17 @@ for nth_feature, (theta_, sol_deriv_) in enumerate(zip([theta0, theta1], [sol0_d
         
         # idx_selected = (np.abs(Xi0_group.mean(1))>threshold_sindy).any(0)
         # idx_activ = np.logical_and(idx_activ, idx_selected)
-        tail = int(num_series*.05)
+        tail = int(num_series*.1)
         Xi0_group = np.sort(Xi0_group, axis=1)[:,tail:-tail,:]
         # plt.plot(Xi0_group[:,:,4].T)
         idx_activ = (np.abs(Xi0_group.mean(0).mean(0))>threshold_sindy)
         
-        # ###### Xi0_group normalization!!! #####
-        # ###########for calculate distance of distributions###########
-        # Xi0_group[:,:,~idx_activ] = 0
-        # norm_each_coef = np.linalg.norm(np.vstack(Xi0_group),axis=0)
-        # Xi0_group[:,:,idx_activ] = Xi0_group[:,:,idx_activ]/norm_each_coef[idx_activ]
-        # ######################################        
+        ###### Xi0_group normalization #####
+        ###########for calculate distance of distributions###########
+        Xi0_group[:,:,~idx_activ] = 0
+        norm_each_coef = np.linalg.norm(np.vstack(Xi0_group),axis=0)
+        Xi0_group[:,:,idx_activ] = Xi0_group[:,:,idx_activ]/norm_each_coef[idx_activ]
+        ######################################        
 
         idx_same_activ = np.logical_and(idx_activ, idx_same_activ)
         idx_diff_activ = copy.deepcopy(idx_activ)
@@ -358,12 +358,14 @@ for nth_feature, (theta_, sol_deriv_) in enumerate(zip([theta0, theta1], [sol0_d
         from scipy.stats import wasserstein_distance
         radius = []
         for k in idx_basis[idx_diff_activ]:
-            radius_ = []
+            radius_ = np.zeros([num_traj, num_traj])
             for i,j in combinations(np.arange(num_traj), 2):
-                radius_.append(wasserstein_distance(Xi0_group[i,:,k],Xi0_group[j,:,k]))
-            # radius.append(np.max(radius_))
-            # radius.append(np.mean(radius_))
-            radius.append(np.median(radius_))
+                # radius_.append(wasserstein_distance(Xi0_group[i,:,k],Xi0_group[j,:,k]))
+                radius_[i,j] = wasserstein_distance(Xi0_group[i,:,k],Xi0_group[j,:,k])
+                radius_[j,i] = wasserstein_distance(Xi0_group[i,:,k],Xi0_group[j,:,k])
+            # radius.append(np.max(radius_.mean(1)))
+            radius.append(np.mean(radius_.mean(1)))
+            # radius.append(np.median(radius_.mean(1)))
         radius = np.array(radius)
         
         idx_similar = np.where(radius<1e-3)   #####
