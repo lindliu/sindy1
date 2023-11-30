@@ -358,14 +358,14 @@ for nth_feature, (theta_, sol_deriv_) in enumerate(zip([theta0, theta1], [sol0_d
         from scipy.stats import wasserstein_distance
         radius = []
         for k in idx_basis[idx_diff_activ]:
-            radius_ = np.zeros([num_traj, num_traj])
+            # radius_ = np.zeros([num_traj, num_traj])
+            radius_ = []
             for i,j in combinations(np.arange(num_traj), 2):
-                # radius_.append(wasserstein_distance(Xi0_group[i,:,k],Xi0_group[j,:,k]))
-                radius_[i,j] = wasserstein_distance(Xi0_group[i,:,k],Xi0_group[j,:,k])
-                radius_[j,i] = wasserstein_distance(Xi0_group[i,:,k],Xi0_group[j,:,k])
-            # radius.append(np.max(radius_.mean(1)))
-            radius.append(np.mean(radius_.mean(1)))
-            # radius.append(np.median(radius_.mean(1)))
+                radius_.append(wasserstein_distance(Xi0_group[i,:,k],Xi0_group[j,:,k]))
+            dist_ = scipy.cluster.hierarchy.linkage(radius_, method='single')[:,2]
+            # radius.append(np.max(dist_))
+            # radius.append(np.mean(dist_))
+            radius.append(np.median(dist_))
         radius = np.array(radius)
         
         idx_similar = np.where(radius<1e-3)   #####
