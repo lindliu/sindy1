@@ -156,7 +156,7 @@ def func7(x, t, a):
 
 
 from scipy.integrate import odeint
-def get_sol_deriv(func, x0, t, a, step=1):
+def get_sol_deriv(func, x0, t, a, step=1, deriv_spline=True):
     ###https://github.com/florisvb/PyNumDiff/blob/master/examples/1_basic_tutorial.ipynb
     sol1 = odeint(func, x0, t, args=a)
     # sol1 = sol1 + .01*np.random.randn(*sol1.shape)
@@ -164,21 +164,26 @@ def get_sol_deriv(func, x0, t, a, step=1):
     sol1_deriv = np.zeros_like(sol1)
     dt = t[1]-t[0]
     
-    import pynumdiff
+    if deriv_spline:
+        from scipy import interpolate
+        f = interpolate.interp1d(t, sol1.T, kind='cubic')
+        fd1 = f._spline.derivative(nu=1)
+        return f(t).T, fd1(t), t
+    else:
+        import pynumdiff
+        for i in range(sol1.shape[1]):
+            # x_hat, dxdt_hat = pynumdiff.finite_difference.first_order(sol1[:,i], dt)
+            x_hat, dxdt_hat = pynumdiff.finite_difference.second_order(sol1[:,i], dt)
+            # x_hat, dxdt_hat = pynumdiff.finite_difference.first_order(sol1[:,i], dt, params=[50], options={'iterate': True})
+            # x_hat, dxdt_hat = pynumdiff.smooth_finite_difference.gaussiandiff(sol1[:,i], dt, params=[20], options={'iterate': False})
+            # x_hat, dxdt_hat = pynumdiff.smooth_finite_difference.friedrichsdiff(sol1[:,i], dt, params=10, options={'iterate': False})
+            # x_hat, dxdt_hat = pynumdiff.smooth_finite_difference.butterdiff(sol1[:,i], dt, params=[3, 0.09], options={'iterate': False})
+            # x_hat, dxdt_hat = pynumdiff.linear_model.spectraldiff(sol1[:,i], dt, params=[0.05])
+            # x_hat, dxdt_hat = pynumdiff.linear_model.savgoldiff(sol1[:,i], dt, params=[2, 10, 10])
     
-    for i in range(sol1.shape[1]):
-        # x_hat, dxdt_hat = pynumdiff.finite_difference.first_order(sol1[:,i], dt)
-        x_hat, dxdt_hat = pynumdiff.finite_difference.second_order(sol1[:,i], dt)
-        # x_hat, dxdt_hat = pynumdiff.finite_difference.first_order(sol1[:,i], dt, params=[50], options={'iterate': True})
-        # x_hat, dxdt_hat = pynumdiff.smooth_finite_difference.gaussiandiff(sol1[:,i], dt, params=[20], options={'iterate': False})
-        # x_hat, dxdt_hat = pynumdiff.smooth_finite_difference.friedrichsdiff(sol1[:,i], dt, params=10, options={'iterate': False})
-        # x_hat, dxdt_hat = pynumdiff.smooth_finite_difference.butterdiff(sol1[:,i], dt, params=[3, 0.09], options={'iterate': False})
-        # x_hat, dxdt_hat = pynumdiff.linear_model.spectraldiff(sol1[:,i], dt, params=[0.05])
-        # x_hat, dxdt_hat = pynumdiff.linear_model.savgoldiff(sol1[:,i], dt, params=[2, 10, 10])
-
-        sol1_deriv[:,i] = dxdt_hat
-
-    return sol1, sol1_deriv, t
+            sol1_deriv[:,i] = dxdt_hat
+        
+        return sol1, sol1_deriv, t
 
 # def get_sol_deriv(func, x0, t, a, step=1):
 #     sol1 = odeint(func, x0, t, args=(a,))

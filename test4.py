@@ -19,7 +19,7 @@ from func import func1, func2, func3, func4, func5, func6, func7, \
 
 MSE = lambda x: (np.array(x)**2).mean()
 # MSE = lambda x: np.linalg.norm(x)
-tol = 1e-3
+threshold_tol = 1e-3
 
 def SLS(Theta, DXdt, threshold, alpha=.05):
     n_feature = DXdt.shape[1]
@@ -40,9 +40,7 @@ def SLS(Theta, DXdt, threshold, alpha=.05):
             Xi[biginds,ind] = ridge_regression(Theta[:,biginds], DXdt[:,ind], alpha=alpha).T
             # Xi[biginds,ind] = np.linalg.lstsq(Theta[:,biginds],DXdt[:,ind], rcond=None)[0]
             # Xi[biginds,ind] = solve_minnonzero(Theta[:,biginds],DXdt[:,ind])
-    
-    threshold = tol
-    
+        
     # reg = LinearRegression(fit_intercept=False)
     # ind_ = np.abs(Xi.T) > 1e-14
     # ind_[:,:num_traj] = True
@@ -53,7 +51,7 @@ def SLS(Theta, DXdt, threshold, alpha=.05):
     #         if np.any(ind_[i]):
     #             coef[i, ind_[i]] = reg.fit(Theta[:, ind_[i]], DXdt[:, i]).coef_
                 
-    #             ind_[i, np.abs(coef[i,:])<threshold] = False
+    #             ind_[i, np.abs(coef[i,:])<threshold_tol] = False
     #             ind_[i,:num_traj] = True
         
     #     if num_basis==ind_.sum():
@@ -61,7 +59,7 @@ def SLS(Theta, DXdt, threshold, alpha=.05):
     #     num_basis = ind_.sum()
         
     # Xi = coef.T
-    # Xi[np.abs(Xi)<threshold] = 0
+    # Xi[np.abs(Xi)<threshold_tol] = 0
 
 
     reg = LinearRegression(fit_intercept=False)
@@ -71,7 +69,7 @@ def SLS(Theta, DXdt, threshold, alpha=.05):
         if np.any(ind_[i]):
             coef[i, ind_[i]] = reg.fit(Theta[:, ind_[i]], DXdt[:, i]).coef_
     Xi = coef.T
-    Xi[np.abs(Xi)<threshold] = 0
+    Xi[np.abs(Xi)<threshold_tol] = 0
 
     return Xi
 
@@ -87,15 +85,15 @@ def data_interp(x_new, x, y, deriv_spline=True):
         y_new = f(x_new)
         dx_new = x_new[1]-x_new[0]
         y_hat, dydx_hat = pynumdiff.finite_difference.second_order(y_new, dx_new)
-        return y_new, dydx_hat
+        return y_new, dydx_hat.reshape([-1,1])
 # data_interp(np.linspace(0,t[-1]), t, sol0[2].squeeze())
 
 from func import func12_, func3_, func4_
 
 
 
-# alpha = .01
-# dt = .01   ## 0,3
+# alpha = .05
+# dt = .1   ## 0,3
 # t = np.arange(0,1.5,dt)
 # x0 = [.5, 1]
 # a = [(.16, .25), (.3, .4), (.3, .5)]
@@ -105,9 +103,10 @@ from func import func12_, func3_, func4_
 # real0 = "x'=a + b*x^2"
 # real1 = "y'=-y"
 # threshold_sindy=7e-2
+# threshold_similarity = 1e-3
 
 # alpha = .05
-# dt = .01      ## 2,3,6,8;     1,2,7,9
+# dt = .02      ## 2,3,6,8;     1,2,7,9
 # t = np.arange(0,8,dt)
 # x0 = [.5, 1]
 # a = [(.2, -.6), (.4, -.8), (.6, -1)]
@@ -117,9 +116,10 @@ from func import func12_, func3_, func4_
 # real0 = "x'=b*y + a*x^2 - x^3 - xy^2"
 # real1 = "y'=x + a*y + b*x^2y - y^3"    
 # threshold_sindy=1e-2
+# threshold_similarity = 1e-3
 
-# alpha = .1
-# dt = .05    ## 1,4    2,4
+# alpha = .05
+# dt = .01    ## 1,4    2,4
 # t = np.arange(0,5,dt)
 # x0 = [4, 1]
 # a = [(.7,-.8), (1,-1), (.5,-.6), (1.5,-1.5)]
@@ -129,20 +129,22 @@ from func import func12_, func3_, func4_
 # real0 = "x'=a*x + b*xy"
 # real1 = "y'=b*y + a*xy"
 # threshold_sindy=1e-2
+# threshold_similarity = 1e-3
 
 
 ################### 1 variable ####################
 # alpha = .05
-# dt = .005   ## 0,3
-# t = np.arange(0,1.5,dt)
-# x0 = [.5, 1]
+# dt = .05   ## 0,3
+# t = np.arange(0,2.5,dt)
+# x0 = [.2, 1]
 # a = [(.12,), (.16,), (.2,)]
 # func = func1
 # monomial = monomial_poly
 # monomial_name = monomial_poly_name
 # real0 = "x'=a + x^2"
 # real1 = "y'=-y"
-# threshold_sindy=7e-2
+# threshold_sindy=5e-2
+# threshold_similarity = 1e-3
 
 # alpha = .05
 # dt = .1
@@ -156,21 +158,23 @@ from func import func12_, func3_, func4_
 # real0 = "x'=.2 + a*x^2"
 # real1 = "y'=-y"
 # threshold_sindy=7e-2
+# threshold_similarity = 1e-3
+
+alpha = .05
+dt = .05      ## 2,3,6,8;     1,2,7,9
+t = np.arange(0,8,dt)
+x0 = [.5, 1]
+a = [(.2,), (.4,), (.6,)]
+func = func3
+monomial = monomial_poly
+monomial_name = monomial_poly_name
+real0 = "x'=-y + a*x^2 - x^3 - xy^2"
+real1 = "y'=x + a*y - x^2y - y^3"    
+threshold_sindy=1e-2
+threshold_similarity = 1e-2
 
 # alpha = .05
-# dt = .01      ## 2,3,6,8;     1,2,7,9
-# t = np.arange(0,8,dt)
-# x0 = [.5, 1]
-# a = [(.2,), (.4,), (.6,)]
-# func = func3
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=-y + a*x^2 - x^3 - xy^2"
-# real1 = "y'=x + a*y - x^2y - y^3"    
-# threshold_sindy=1e-2
-
-# alpha = .05
-# dt = .01    ## 1,4    2,4
+# dt = .1    ## 1,4    2,4
 # t = np.arange(0,5,dt)
 # x0 = [4, 1]
 # a = [(.7,), (1,)]#,(.5,),(.6,)]
@@ -180,6 +184,7 @@ from func import func12_, func3_, func4_
 # real0 = "x'=a*x - xy"
 # real1 = "y'=-y + a*xy"    
 # threshold_sindy=1e-2
+# threshold_similarity = 1e-3
 
 # alpha = .05
 # dt = .1
@@ -192,20 +197,21 @@ from func import func12_, func3_, func4_
 # real0 = "x'=y"
 # real1 = "y'=a*y-5sin(x)"
 # threshold_sindy=1e-2
+# threshold_similarity = 1e-3
 
-alpha = .05
-dt = .1
-t = np.arange(0,6,dt)
-x0 = [np.pi-.1, 0]
-# a = [-5, -6]
-a = [(-.15,), (-1,), (-2,), (-5,)]
-func = func7
-monomial = monomial_trig
-monomial_name = monomial_trig_name
-real0 = "x'=y"
-real1 = "y'=-0.25*y+a*sin(x)"
-threshold_sindy=1e-2
-
+# alpha = .05
+# dt = .1
+# t = np.arange(0,6,dt)
+# x0 = [np.pi-.1, 0]
+# # a = [-5, -6]
+# a = [(-.15,), (-1,), (-2,), (-5,)]
+# func = func7
+# monomial = monomial_trig
+# monomial_name = monomial_trig_name
+# real0 = "x'=y"
+# real1 = "y'=-0.25*y+a*sin(x)"
+# threshold_sindy=1e-2
+# threshold_similarity = 1e-3
 
 
 # num_feature = len(x0)
@@ -279,9 +285,9 @@ Xi0_list_, Xi1_list_ = [], []
 for k in range(num_traj):
     for i in range(num_series):
         sol0_, sol0_deriv_ = data_interp(np.linspace(length*(i*.005),length*(per+i*.005),\
-                                                     num=int(length_sub//dt)), t, sol0_org[k].squeeze())
+                                                     num=int(length_sub//dt)), t, sol0_org[k].squeeze(), deriv_spline=True)
         sol1_, sol1_deriv_ = data_interp(np.linspace(length*(i*.005),length*(per+i*.005),\
-                                                     num=int(length_sub//dt)), t, sol1_org[k].squeeze())
+                                                     num=int(length_sub//dt)), t, sol1_org[k].squeeze(), deriv_spline=True)
 
         theta_ = monomial(np.c_[sol0_,sol1_])
         theta0.append(theta_)
@@ -306,6 +312,7 @@ num_traj, num_series, length_series, num_basis = theta0.shape
 idx_basis = np.arange(num_basis)
 
 
+max_iter = 20
 all_basis = []
 same_basis = []
 diff_basis = []
@@ -317,7 +324,8 @@ for nth_feature, (theta_, sol_deriv_) in enumerate(zip([theta0, theta1], [sol0_d
     idx_same_activ_pre = copy.deepcopy(idx_same_activ)
     idx_diff_activ_pre = copy.deepcopy(idx_diff_activ)
 
-    for epoch in range(10):
+    for epoch in range(max_iter):
+        ### do SINDy over each sub-series
         Xi0_group = np.zeros([num_traj, num_series, num_basis])
         for j in range(num_series):
             block_diff_list = [block_[j][:,idx_diff_activ] for block_ in theta_]
@@ -336,20 +344,19 @@ for nth_feature, (theta_, sol_deriv_) in enumerate(zip([theta0, theta1], [sol0_d
         
         plot(Xi0_group, nth_feature, epoch)
         
-        # idx_selected = (np.abs(Xi0_group.mean(1))>threshold_sindy).any(0)
-        # idx_activ = np.logical_and(idx_activ, idx_selected)
+        
+        ### remove part outliers of estimated parameters
         tail = int(num_series*.1)
         Xi0_group = np.sort(Xi0_group, axis=1)[:,tail:-tail,:]
-        # plt.plot(Xi0_group[:,:,4].T)
         idx_activ = (np.abs(Xi0_group.mean(0).mean(0))>threshold_sindy)
         
-        ###### Xi0_group normalization #####
-        ###########for calculate distance of distributions###########
+        ##### Xi0_group normalization for calculate distance of distributions#####
         Xi0_group[:,:,~idx_activ] = 0
         norm_each_coef = np.linalg.norm(np.vstack(Xi0_group),axis=0)
         Xi0_group[:,:,idx_activ] = Xi0_group[:,:,idx_activ]/norm_each_coef[idx_activ]
-        ######################################        
-
+          
+        
+        ##### To find the identical basis
         idx_same_activ = np.logical_and(idx_activ, idx_same_activ)
         idx_diff_activ = copy.deepcopy(idx_activ)
         idx_diff_activ[idx_same_activ] = False
@@ -358,7 +365,6 @@ for nth_feature, (theta_, sol_deriv_) in enumerate(zip([theta0, theta1], [sol0_d
         from scipy.stats import wasserstein_distance
         radius = []
         for k in idx_basis[idx_diff_activ]:
-            # radius_ = np.zeros([num_traj, num_traj])
             radius_ = []
             for i,j in combinations(np.arange(num_traj), 2):
                 radius_.append(wasserstein_distance(Xi0_group[i,:,k],Xi0_group[j,:,k]))
@@ -368,7 +374,7 @@ for nth_feature, (theta_, sol_deriv_) in enumerate(zip([theta0, theta1], [sol0_d
             radius.append(np.median(dist_))
         radius = np.array(radius)
         
-        idx_similar = np.where(radius<1e-3)   #####
+        idx_similar = np.where(radius<threshold_similarity) 
         idx_same = idx_basis[idx_diff_activ][idx_similar]
         idx_same_activ[idx_same] = True
         idx_diff_activ[idx_same] = False
@@ -411,7 +417,11 @@ for k, (theta_org_, sol_deriv_org_) in enumerate(zip([theta0_org,theta1_org],[so
     Xi_final[:,k,diff_basis[k]] = Xi0_[:num_diff_].reshape([num_traj,-1])
     Xi_final[:,k,same_basis[k]] = Xi0_[num_diff_:]
     
+mask_tol = np.abs(Xi_final.mean(0))>threshold_tol
+all_basis[0] = np.logical_and(mask_tol[0],all_basis[0])
+all_basis[1] = np.logical_and(mask_tol[1],all_basis[1])
 
+# Xi_final[:,:,mask_tol]
 # reg = LinearRegression(fit_intercept=False)
 # coef = np.zeros([num_traj,num_basis])
 # for i in range(num_traj):
@@ -455,7 +465,7 @@ if func.__name__ not in ['func6', 'func7']:
     for i in range(len(a)):
         sol_, sol_deriv_, t_ = get_sol_deriv(func, x0, t, a[i])
     
-        model.fit(sol_, t=t_)#, ensemble=True, quiet=True)
+        model.fit(sol_, t=t_, x_dot=sol_deriv_)#, ensemble=True, quiet=True)
         model.print()
         # model.coefficients()
         
@@ -482,9 +492,10 @@ else:
     for i in range(len(a)):
         sol_, sol_deriv_, t_ = get_sol_deriv(func, x0, t, a[i])
     
-        model.fit(sol_, t=t_)
+        model.fit(sol_, t=t_, x_dot=sol_deriv_)
         model.print()
-        
+        # model.coefficients()
+
         # theta_ = monomial(sol_)
         # print(SLS(theta_, sol_deriv_, threshold_sindy))
         
