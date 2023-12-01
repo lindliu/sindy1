@@ -106,8 +106,8 @@ from func import func12_, func3_, func4_
 # threshold_similarity = 1e-3
 
 # alpha = .05
-# dt = .02      ## 2,3,6,8;     1,2,7,9
-# t = np.arange(0,8,dt)
+# dt = .1      ## 2,3,6,8;     1,2,7,9
+# t = np.arange(0,12,dt)
 # x0 = [.5, 1]
 # a = [(.2, -.6), (.4, -.8), (.6, -1)]
 # func = func3_
@@ -116,11 +116,11 @@ from func import func12_, func3_, func4_
 # real0 = "x'=b*y + a*x^2 - x^3 - xy^2"
 # real1 = "y'=x + a*y + b*x^2y - y^3"    
 # threshold_sindy=1e-2
-# threshold_similarity = 1e-3
+# threshold_similarity = 1e-2
 
 # alpha = .05
-# dt = .01    ## 1,4    2,4
-# t = np.arange(0,5,dt)
+# dt = .1    ## 1,4    2,4
+# t = np.arange(0,6,dt)
 # x0 = [4, 1]
 # a = [(.7,-.8), (1,-1), (.5,-.6), (1.5,-1.5)]
 # func = func4_
@@ -161,8 +161,8 @@ from func import func12_, func3_, func4_
 # threshold_similarity = 1e-3
 
 alpha = .05
-dt = .05      ## 2,3,6,8;     1,2,7,9
-t = np.arange(0,8,dt)
+dt = .1      ## 2,3,6,8;     1,2,7,9
+t = np.arange(0,12,dt)
 x0 = [.5, 1]
 a = [(.2,), (.4,), (.6,)]
 func = func3
@@ -221,13 +221,6 @@ sol0_org, theta0_org, sol0_deriv_org = [], [], []
 sol1_org, theta1_org, sol1_deriv_org = [], [], []
 for i in range(num_traj):
     sol_, sol_deriv_, t_ = get_sol_deriv(func, x0, t, a[i], step=1)
-    
-    # t_ = np.linspace(0,t[-1])
-    # sol0_, sol0_deriv_ = data_interp(t_, t, sol_[:,0])
-    # sol1_, sol1_deriv_ = data_interp(t_, t, sol_[:,1])
-    # sol_ = np.c_[sol0_,sol1_]
-    # sol_deriv_ = np.c_[sol0_deriv_, sol1_deriv_]
-    
     theta_ = monomial(sol_)
 
     sol0_org.append(sol_[:,[0]])
@@ -238,9 +231,11 @@ for i in range(num_traj):
     theta1_org.append(theta_)
     sol1_deriv_org.append(sol_deriv_[:,[1]])
     
-    plt.plot(t_, sol_, 'o', markersize=1)
+    plt.plot(t_, sol_, 'o', markersize=1, label=f'{a[i]}')
+plt.legend()
+plt.text(1, .95, f'${real0}$', fontsize=12)
+plt.text(1, .8, f'${real1}$', fontsize=12)
 
-# theta0_org = np.vstack(theta0_org)
 theta0_org = np.c_[theta0_org]
 theta1_org = np.c_[theta1_org]
 sol0_deriv_org = np.vstack(sol0_deriv_org)
@@ -270,7 +265,7 @@ def plot(Xi0_group, nth_feature, epoch):
         ax[i].hist(list(Xi0_group[:,:,i]), alpha = 0.5, label=monomial_name[i])
         ax[i].set_title(monomial_name[i])
         # ax[i].legend()    
-    fig.suptitle(f'{nth_feature}th feature with iteration:{epoch}', fontsize=16)
+    fig.suptitle(f'{nth_feature}th feature with iteration:{epoch}', fontsize=20)
 
 ### get data
 per = .7
