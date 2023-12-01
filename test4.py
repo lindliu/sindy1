@@ -487,7 +487,7 @@ else:
     for i in range(len(a)):
         sol_, sol_deriv_, t_ = get_sol_deriv(func, x0, t, a[i])
     
-        model.fit(sol_, t=t_, x_dot=sol_deriv_)
+        model.fit(sol_, t=t_, x_dot=sol_deriv_)#, ensemble=True, quiet=True)
         model.print()
         # model.coefficients()
 
