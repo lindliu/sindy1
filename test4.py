@@ -105,18 +105,18 @@ from func import func12_, func3_, func4_
 # threshold_sindy=7e-2
 # threshold_similarity = 1e-3
 
-# alpha = .05
-# dt = .1      ## 2,3,6,8;     1,2,7,9
-# t = np.arange(0,12,dt)
-# x0 = [.5, 1]
-# a = [(.2, -.6), (.4, -.8), (.6, -1)]
-# func = func3_
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=b*y + a*x^2 - x^3 - xy^2"
-# real1 = "y'=x + a*y + b*x^2y - y^3"    
-# threshold_sindy=1e-2
-# threshold_similarity = 1e-2
+alpha = .05
+dt = .1      ## 2,3,6,8;     1,2,7,9
+t = np.arange(0,12,dt)
+x0 = [.5, 1]
+a = [(.2, -.6), (.4, -.8), (.6, -1)]
+func = func3_
+monomial = monomial_poly
+monomial_name = monomial_poly_name
+real0 = "x'=b*y + a*x^2 - x^3 - xy^2"
+real1 = "y'=x + a*y + b*x^2y - y^3"    
+threshold_sindy=1e-2
+threshold_similarity = 1e-2
 
 # alpha = .05
 # dt = .1    ## 1,4    2,4
@@ -160,18 +160,18 @@ from func import func12_, func3_, func4_
 # threshold_sindy=7e-2
 # threshold_similarity = 1e-3
 
-alpha = .05
-dt = .1      ## 2,3,6,8;     1,2,7,9
-t = np.arange(0,12,dt)
-x0 = [.5, 1]
-a = [(.2,), (.4,), (.6,)]
-func = func3
-monomial = monomial_poly
-monomial_name = monomial_poly_name
-real0 = "x'=-y + a*x^2 - x^3 - xy^2"
-real1 = "y'=x + a*y - x^2y - y^3"    
-threshold_sindy=1e-2
-threshold_similarity = 1e-2
+# alpha = .05
+# dt = .1      ## 2,3,6,8;     1,2,7,9
+# t = np.arange(0,12,dt)
+# x0 = [.5, 1]
+# a = [(.2,), (.4,), (.6,)]
+# func = func3
+# monomial = monomial_poly
+# monomial_name = monomial_poly_name
+# real0 = "x'=-y + a*x^2 - x^3 - xy^2"
+# real1 = "y'=x + a*y - x^2y - y^3"    
+# threshold_sindy=1e-2
+# threshold_similarity = 1e-2
 
 # alpha = .05
 # dt = .1    ## 1,4    2,4
