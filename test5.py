@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu Nov 23 15:42:07 2023
+Created on Mon Dec  4 08:56:40 2023
 
 @author: dliu
 """
@@ -89,7 +89,7 @@ def data_interp(x_new, x, y, deriv_spline=True):
 # data_interp(np.linspace(0,t[-1]), t, sol0[2].squeeze())
 
 from func import func12_, func3_, func4_
-deriv_spline = True#False#
+
 
 
 # alpha = .05
@@ -220,7 +220,7 @@ num_traj = len(a)
 sol0_org, theta0_org, sol0_deriv_org = [], [], []
 sol1_org, theta1_org, sol1_deriv_org = [], [], []
 for i in range(num_traj):
-    sol_, sol_deriv_, t_ = get_sol_deriv(func, x0, t, a[i], deriv_spline)
+    sol_, sol_deriv_, t_ = get_sol_deriv(func, x0, t, a[i], step=1)
     theta_ = monomial(sol_)
 
     sol0_org.append(sol_[:,[0]])
@@ -241,8 +241,6 @@ theta1_org = np.c_[theta1_org]
 sol0_deriv_org = np.vstack(sol0_deriv_org)
 sol1_deriv_org = np.vstack(sol1_deriv_org)
 
-theta_org_list = [theta0_org, theta1_org]
-sol_deriv_org_list = [sol0_deriv_org, sol1_deriv_org]
 
 
 #%%
@@ -266,7 +264,7 @@ def plot(Xi0_group, nth_feature, epoch):
         # for j in range(num_traj):
         ax[i].hist(list(Xi0_group[:,:,i]), alpha = 0.5, label=monomial_name[i])
         ax[i].set_title(monomial_name[i])
-        # ax[i].legend()
+        # ax[i].legend()    
     fig.suptitle(f'{nth_feature}th feature with iteration:{epoch}', fontsize=20)
 
 ### get data
@@ -305,12 +303,6 @@ sol1_deriv = sol1_deriv.reshape(num_traj, -1, *sol1_deriv.shape[1:])
 sol0_deriv = np.vstack(sol0_deriv.transpose(0,2,1,3)).transpose(1,0,2)
 sol1_deriv = np.vstack(sol1_deriv.transpose(0,2,1,3)).transpose(1,0,2)
 
-
-theta_list = [theta0, theta1]
-sol_deriv_list = [sol0_deriv, sol1_deriv]
-num_feature = len(theta_list)
-assert num_feature==len(x0)
-
 num_traj, num_series, length_series, num_basis = theta0.shape
 idx_basis = np.arange(num_basis)
 
@@ -319,7 +311,7 @@ max_iter = 20
 all_basis = []
 same_basis = []
 diff_basis = []
-for nth_feature, (theta_, sol_deriv_) in enumerate(zip(theta_list, sol_deriv_list)):
+for nth_feature, (theta_, sol_deriv_) in enumerate(zip([theta0, theta1], [sol0_deriv, sol1_deriv])):
     idx_activ = np.ones([num_basis],dtype=bool)
     
     idx_same_activ = np.zeros_like(idx_activ,dtype=bool)
@@ -403,8 +395,9 @@ for nth_feature, (theta_, sol_deriv_) in enumerate(zip(theta_list, sol_deriv_lis
 
 
 #%% get final predicted Xi
-Xi_final = np.zeros([num_traj, num_feature, num_basis])
-for k, (theta_org_, sol_deriv_org_) in enumerate(zip(theta_org_list, sol_deriv_org_list)):
+num_dimension = 2
+Xi_final = np.zeros([num_traj, num_dimension, num_basis])
+for k, (theta_org_, sol_deriv_org_) in enumerate(zip([theta0_org,theta1_org],[sol0_deriv_org,sol1_deriv_org])):
     block_diff_list = [block_[:,diff_basis[k]] for block_ in theta_org_]
     block_diff = block_diag_multi_traj(block_diff_list)
     
@@ -423,6 +416,14 @@ mask_tol = np.abs(Xi_final.mean(0))>threshold_tol
 all_basis[0] = np.logical_and(mask_tol[0],all_basis[0])
 all_basis[1] = np.logical_and(mask_tol[1],all_basis[1])
 
+# Xi_final[:,:,mask_tol]
+# reg = LinearRegression(fit_intercept=False)
+# coef = np.zeros([num_traj,num_basis])
+# for i in range(num_traj):
+#     coef[i,idx_activ] = reg.fit(theta0_org[i][:,idx_activ], sol0_deriv_org[i]).coef_
+
+# dist_norm = MSE(theta0_org[i][:,idx_activ]@coef[i,idx_activ]-sol0_deriv_org[i])
+    
 print('*'*50)
 print(f'real0: {real0}')
 print(f'real1: {real1}')
@@ -477,11 +478,12 @@ else:
 
 
 for i in range(len(a)):
-    sol_, sol_deriv_, t_ = get_sol_deriv(func, x0, t, a[i], deriv_spline)
+    sol_, sol_deriv_, t_ = get_sol_deriv(func, x0, t, a[i])
 
-    model.fit(sol_, t=t_, x_dot=sol_deriv_)#, ensemble=True, quiet=True)
+    model.fit(sol_, t=t_, x_dot=sol_deriv_, ensemble=True, quiet=True)
     model.print()
     # model.coefficients()
+    model.coef_list()
     
     # theta_ = monomial(sol_)
     # print(SLS(theta_, sol_deriv_, threshold_sindy))

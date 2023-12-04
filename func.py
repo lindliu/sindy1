@@ -156,7 +156,7 @@ def func7(x, t, a):
 
 
 from scipy.integrate import odeint
-def get_sol_deriv(func, x0, t, a, step=1, deriv_spline=True):
+def get_sol_deriv(func, x0, t, a, deriv_spline=True):
     ###https://github.com/florisvb/PyNumDiff/blob/master/examples/1_basic_tutorial.ipynb
     sol1 = odeint(func, x0, t, args=a)
     # sol1 = sol1 + .01*np.random.randn(*sol1.shape)
