@@ -281,10 +281,10 @@ sol0_deriv, sol1_deriv = [], [] ### num_series, length
 Xi0_list_, Xi1_list_ = [], []
 for k in range(num_traj):
     for i in range(num_series):
-        sol0_, sol0_deriv_ = data_interp(np.linspace(length*(i*.005),length*(per+i*.005),\
-                                                     num=int(length_sub//dt)), t, sol0_org[k].squeeze(), deriv_spline=True)
-        sol1_, sol1_deriv_ = data_interp(np.linspace(length*(i*.005),length*(per+i*.005),\
-                                                     num=int(length_sub//dt)), t, sol1_org[k].squeeze(), deriv_spline=True)
+        # t_new = np.sort(t[0] + np.random.rand(100)*length)
+        t_new = np.linspace(length*(i*.005),length*(per+i*.005), num=int(length_sub//dt))
+        sol0_, sol0_deriv_ = data_interp(t_new, t, sol0_org[k].squeeze(), deriv_spline)
+        sol1_, sol1_deriv_ = data_interp(t_new, t, sol1_org[k].squeeze(), deriv_spline)
 
         theta_ = monomial(np.c_[sol0_,sol1_])
         theta0.append(theta_)
