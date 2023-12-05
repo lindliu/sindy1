@@ -19,7 +19,7 @@ from func import func1, func2, func3, func4, func5, func6, func7, \
 
 MSE = lambda x: (np.array(x)**2).mean()
 # MSE = lambda x: np.linalg.norm(x)
-threshold_tol = 1e-3
+
 
 def SLS(Theta, DXdt, threshold, alpha=.05):
     n_feature = DXdt.shape[1]
@@ -90,7 +90,7 @@ def data_interp(x_new, x, y, deriv_spline=True):
 
 from func import func12_, func3_, func4_
 deriv_spline = True#False#
-
+threshold_tol = 1e-2
 
 # alpha = .05
 # dt = .1   ## 0,3
@@ -351,7 +351,8 @@ for nth_feature, (theta_, sol_deriv_) in enumerate(zip(theta_list, sol_deriv_lis
         ### remove part outliers of estimated parameters
         tail = int(num_series*.1)
         Xi0_group = np.sort(Xi0_group, axis=1)[:,tail:-tail,:]
-        idx_activ = (np.abs(Xi0_group.mean(0).mean(0))>threshold_sindy)
+        # idx_activ = (np.abs(Xi0_group.mean(0).mean(0))>threshold_sindy)
+        idx_activ = (np.abs(Xi0_group.mean(0).mean(0))>threshold_tol)
         
         ##### Xi0_group normalization for calculate distance of distributions#####
         Xi0_group[:,:,~idx_activ] = 0
