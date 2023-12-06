@@ -424,6 +424,8 @@ mask_tol = np.abs(Xi_final.mean(0))>threshold_tol
 all_basis[0] = np.logical_and(mask_tol[0],all_basis[0])
 all_basis[1] = np.logical_and(mask_tol[1],all_basis[1])
 
+
+np.set_printoptions(formatter={'float': lambda x: "{0:.3f}".format(x)})
 print('*'*50)
 print(f'real0: {real0}')
 print(f'real1: {real1}')
