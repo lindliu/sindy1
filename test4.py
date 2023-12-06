@@ -349,7 +349,7 @@ for nth_feature, (theta_, sol_deriv_) in enumerate(zip(theta_list, sol_deriv_lis
         
         
         ### remove part outliers of estimated parameters
-        tail = int(num_series*.1)
+        tail = int(num_series*.1) #### can be improved by more advanced method!!!!!!!!!!!!!!
         Xi0_group = np.sort(Xi0_group, axis=1)[:,tail:-tail,:]
         # idx_activ = (np.abs(Xi0_group.mean(0).mean(0))>threshold_sindy)
         idx_activ = (np.abs(Xi0_group.mean(0).mean(0))>threshold_tol)
@@ -428,8 +428,8 @@ all_basis[1] = np.logical_and(mask_tol[1],all_basis[1])
 np.set_printoptions(formatter={'float': lambda x: "{0:.3f}".format(x)})
 print('*'*50)
 print(f'real0: {real0}')
-print(f'real1: {real1}')
 print(f'feature 0 with different basis {monomial_name[diff_basis[0]]}: \n {Xi_final[:,0,all_basis[0]]} \n {monomial_name[all_basis[0]]}')
+print(f'real1: {real1}')
 print(f'feature 1 with different basis {monomial_name[diff_basis[1]]}: \n {Xi_final[:,1,all_basis[1]]} \n {monomial_name[all_basis[1]]}')
 
 
