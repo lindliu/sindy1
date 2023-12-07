@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu Nov 23 15:42:07 2023
+Created on Thu Dec  7 16:48:50 2023
 
-@author: dliu
+@author: do0236li
 """
 
 
@@ -21,7 +21,7 @@ MSE = lambda x: (np.array(x)**2).mean()
 # MSE = lambda x: np.linalg.norm(x)
 
 
-def SLS(Theta, DXdt, threshold, alpha=.05):
+def SLS(Theta, DXdt, threshold, alpha=.05, threshold_tol=1e-3):
     n_feature = DXdt.shape[1]
     Xi = ridge_regression(Theta,DXdt, alpha=alpha).T
     # Xi = np.linalg.lstsq(Theta,DXdt, rcond=None)[0]
@@ -88,163 +88,40 @@ def data_interp(x_new, x, y, deriv_spline=True):
         return y_new, dydx_hat.reshape([-1,1])
 # data_interp(np.linspace(0,t[-1]), t, sol0[2].squeeze())
 
-from func import func12_, func3_, func4_
-deriv_spline = True#False#
-threshold_tol = 1e-3
-
-# alpha = .05
-# dt = .1   ## 0,3
-# t = np.arange(0,1.5,dt)
-# x0 = [.5, 1]
-# a = [(.16, .25), (.3, .4), (.3, .5)]
-# func = func12_
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=a + b*x^2"
-# real1 = "y'=-y"
-# threshold_sindy=7e-2
-# threshold_similarity = 1e-3
-# threshold_tol = 1e-2
-
-alpha = .05
-dt = .1      ## 2,3,6,8;     1,2,7,9
-t = np.arange(0,12,dt)
-x0 = [.5, 1]
-a = [(.2, -.6), (.4, -.8), (.6, -1)]
-func = func3_
-monomial = monomial_poly
-monomial_name = monomial_poly_name
-real0 = "x'=b*y + a*x^2 - x^3 - xy^2"
-real1 = "y'=x + a*y + b*x^2y - y^3"
-threshold_sindy=1e-2
-threshold_similarity = 1e-2
-
-# alpha = .05
-# dt = .1    ## 1,4    2,4
-# t = np.arange(0,6,dt)
-# x0 = [4, 1]
-# a = [(.7,-.8), (1,-1), (.5,-.6), (1.5,-1.5)]
-# func = func4_
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=a*x + b*xy"
-# real1 = "y'=b*y + a*xy"
-# threshold_sindy=1e-2
-# threshold_similarity = 1e-3
-
-
-################### 1 variable ####################
-# alpha = .05
-# dt = .05   ## 0,3
-# t = np.arange(0,2.5,dt)
-# x0 = [.2, 1]
-# a = [(.12,), (.16,), (.2,)]
-# func = func1
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=a + x^2"
-# real1 = "y'=-y"
-# threshold_sindy=5e-2
-# threshold_similarity = 1e-3
-
-# alpha = .05
-# dt = .1
-# t = np.arange(0,2,dt)
-# x0 = [.5, 1]
-# a = [(.25,), (.3,), (.5,)]
-# # a = [(.1,), (.25,), (.3,), (.5,)]
-# func = func2
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=.2 + a*x^2"
-# real1 = "y'=-y"
-# threshold_sindy=7e-2
-# threshold_similarity = 1e-3
-
-# alpha = .05
-# dt = .1      ## 2,3,6,8;     1,2,7,9
-# t = np.arange(0,12,dt)
-# x0 = [.5, 1]
-# a = [(.2,), (.4,), (.6,)]
-# func = func3
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=-y + a*x^2 - x^3 - xy^2"
-# real1 = "y'=x + a*y - x^2y - y^3"    
-# threshold_sindy=1e-2
-# threshold_similarity = 1e-2
-
-# alpha = .05
-# dt = .1    ## 1,4    2,4
-# t = np.arange(0,5,dt)
-# x0 = [4, 1]
-# a = [(.7,), (1,)]#,(.5,),(.6,)]
-# func = func4
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=a*x - xy"
-# real1 = "y'=-y + a*xy"    
-# threshold_sindy=1e-2
-# threshold_similarity = 1e-3
-
-# alpha = .05
-# dt = .1
-# t = np.arange(0,3.3,dt)
-# x0 = [np.pi-.1, 0]
-# a = [(-.25,), (-.35,)]
-# func = func6
-# monomial = monomial_trig
-# monomial_name = monomial_trig_name
-# real0 = "x'=y"
-# real1 = "y'=a*y-5sin(x)"
-# threshold_sindy=1e-2
-# threshold_similarity = 1e-3
-
-# alpha = .05
-# dt = .1
-# t = np.arange(0,6,dt)
-# x0 = [np.pi-.1, 0]
-# # a = [-5, -6]
-# a = [(-.15,), (-1,), (-2,), (-5,)]
-# func = func7
-# monomial = monomial_trig
-# monomial_name = monomial_trig_name
-# real0 = "x'=y"
-# real1 = "y'=-0.25*y+a*sin(x)"
-# threshold_sindy=1e-2
-# threshold_similarity = 1e-3
-
 
 # num_feature = len(x0)
 #%%
-num_traj = len(a)
-sol0_org, theta0_org, sol0_deriv_org = [], [], []
-sol1_org, theta1_org, sol1_deriv_org = [], [], []
-for i in range(num_traj):
-    sol_, sol_deriv_, t_ = get_sol_deriv(func, x0, t, a[i], deriv_spline)
-    theta_ = monomial(sol_)
-
-    sol0_org.append(sol_[:,[0]])
-    theta0_org.append(theta_)
-    sol0_deriv_org.append(sol_deriv_[:,[0]])
+def get_data(a, x0, t, func, monomial, real0, real1, deriv_spline=True):
+    num_traj = len(a)
+    sol0_org, theta0_org, sol0_deriv_org = [], [], []
+    sol1_org, theta1_org, sol1_deriv_org = [], [], []
+    for i in range(num_traj):
+        sol_, sol_deriv_, t_ = get_sol_deriv(func, x0, t, a[i], deriv_spline)
+        theta_ = monomial(sol_)
     
-    sol1_org.append(sol_[:,[1]])
-    theta1_org.append(theta_)
-    sol1_deriv_org.append(sol_deriv_[:,[1]])
+        sol0_org.append(sol_[:,[0]])
+        theta0_org.append(theta_)
+        sol0_deriv_org.append(sol_deriv_[:,[0]])
+        
+        sol1_org.append(sol_[:,[1]])
+        theta1_org.append(theta_)
+        sol1_deriv_org.append(sol_deriv_[:,[1]])
+        
+        plt.plot(t_, sol_, 'o', markersize=1, label=f'{a[i]}')
+    plt.legend()
+    plt.text(1, .95, f'${real0}$', fontsize=12)
+    plt.text(1, .8, f'${real1}$', fontsize=12)
     
-    plt.plot(t_, sol_, 'o', markersize=1, label=f'{a[i]}')
-plt.legend()
-plt.text(1, .95, f'${real0}$', fontsize=12)
-plt.text(1, .8, f'${real1}$', fontsize=12)
-
-theta0_org = np.c_[theta0_org]
-theta1_org = np.c_[theta1_org]
-sol0_deriv_org = np.vstack(sol0_deriv_org)
-sol1_deriv_org = np.vstack(sol1_deriv_org)
-
-theta_org_list = [theta0_org, theta1_org]
-sol_deriv_org_list = [sol0_deriv_org, sol1_deriv_org]
-
+    theta0_org = np.c_[theta0_org]
+    theta1_org = np.c_[theta1_org]
+    sol0_deriv_org = np.vstack(sol0_deriv_org)
+    sol1_deriv_org = np.vstack(sol1_deriv_org)
+    
+    sol_org_list = [sol0_org, sol1_org]
+    theta_org_list = [theta0_org, theta1_org]
+    sol_deriv_org_list = [sol0_deriv_org, sol1_deriv_org]
+    
+    return theta_org_list, sol_deriv_org_list
 
 #%%
 import scipy
@@ -260,7 +137,7 @@ def block_diag_multi_traj(A):
         block = block_diag(block, A[i])
     return block
 
-def plot(Xi0_group, nth_feature, epoch):
+def plot(Xi0_group, nth_feature, epoch, monomial_name):
     fig, ax = plt.subplots(5,5,figsize=(12,12), constrained_layout=True)
     ax = ax.flatten()
     for i in idx_basis[idx_activ]:
@@ -340,13 +217,13 @@ for nth_feature, (theta_, sol_deriv_) in enumerate(zip(theta_list, sol_deriv_lis
         
             Theta = np.c_[block_diff, block_same]
             dXdt = sol_deriv_[j]
-            Xi0_ = SLS(Theta, dXdt, threshold_sindy)[...,0]
+            Xi0_ = SLS(Theta, dXdt, threshold_sindy, threshold_tol)[...,0]
             
             num_diff_ = idx_diff_activ.sum()*num_traj
             Xi0_group[:,j,idx_diff_activ] = Xi0_[:num_diff_].reshape([num_traj,-1])
             Xi0_group[:,j,idx_same_activ] = Xi0_[num_diff_:]
         
-        plot(Xi0_group, nth_feature, epoch)
+        plot(Xi0_group, nth_feature, epoch, monomial_name)
         
         
         def find_interval(series, tail):
@@ -369,7 +246,7 @@ for nth_feature, (theta_, sol_deriv_) in enumerate(zip(theta_list, sol_deriv_lis
         # idx_activ = (np.abs(Xi0_group.mean(0).mean(0))>threshold_sindy)
         idx_activ = (np.abs(Xi0_group.mean(0).mean(0))>threshold_tol)
         
-        # plot(Xi0_group, nth_feature, epoch)
+        # plot(Xi0_group, nth_feature, epoch, monomial_name)
 
     
         # ### remove part outliers of estimated parameters
@@ -438,7 +315,7 @@ for k, (theta_org_, sol_deriv_org_) in enumerate(zip(theta_org_list, sol_deriv_o
 
     Theta = np.c_[block_diff, block_same]
     dXdt = sol_deriv_org_
-    Xi0_ = SLS(Theta, dXdt, threshold_sindy)[...,0]
+    Xi0_ = SLS(Theta, dXdt, threshold_sindy, threshold_tol)[...,0]
     
     num_diff_ = diff_basis[k].sum()*num_traj
     Xi_final[:,k,diff_basis[k]] = Xi0_[:num_diff_].reshape([num_traj,-1])
@@ -511,5 +388,5 @@ for i in range(len(a)):
     # model.coefficients()
     
     # theta_ = monomial(sol_)
-    # print(SLS(theta_, sol_deriv_, threshold_sindy))
+    # print(SLS(theta_, sol_deriv_, threshold_sindy, threshold_tol))
     

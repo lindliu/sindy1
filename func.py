@@ -35,7 +35,8 @@ def func12_(x, t, a, b):
 
 def func3(x, t, a):
     """
-    P81, Hopf Bifurcation, differential equations, dynamical systems, and an introduction to chaos
+    P81, differential equations, dynamical systems, and an introduction to chaos
+    Hopf Bifurcation
     
     dxdt = a*x^2 - y - x*(x^2 + y^2) =      -y + a*x^2 - x^3 - xy^2
     dydt = x + a*y - y*(x^2 + y^2)   = x + a*y                      - x^2y - y^3
@@ -49,7 +50,8 @@ def func3(x, t, a):
 
 def func3_(x, t, a, b):
     """
-    P81, Hopf Bifurcation, differential equations, dynamical systems, and an introduction to chaos
+    P81, differential equations, dynamical systems, and an introduction to chaos
+    Hopf Bifurcation
     
     dxdt = a*x^2 - y - x*(x^2 + y^2) =      -y + a*x^2 - x^3 - xy^2
     dydt = x + a*y - y*(x^2 + y^2)   = x + a*y                      - x^2y - y^3
