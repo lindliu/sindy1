@@ -156,7 +156,7 @@ def func7(x, t, a):
     dxdt = [x2, c0*x2+c1*np.sin(x1)]
     return dxdt
 
-
+    
 from scipy.integrate import odeint
 def get_sol_deriv(func, x0, t, a, deriv_spline=True):
     ###https://github.com/florisvb/PyNumDiff/blob/master/examples/1_basic_tutorial.ipynb
@@ -186,6 +186,7 @@ def get_sol_deriv(func, x0, t, a, deriv_spline=True):
             sol1_deriv[:,i] = dxdt_hat
         
         return sol1, sol1_deriv, t
+
 
 # def get_sol_deriv(func, x0, t, a, step=1):
 #     sol1 = odeint(func, x0, t, args=(a,))
