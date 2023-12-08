@@ -89,39 +89,32 @@ def data_interp(x_new, x, y, deriv_spline=True):
 # data_interp(np.linspace(0,t[-1]), t, sol0[2].squeeze())
 
 
-# num_feature = len(x0)
 #%%
-def get_data(a, x0, t, func, monomial, real0, real1, deriv_spline=True):
+def get_series(a, x0, t, func, monomial, real0, real1, deriv_spline=True):
     num_traj = len(a)
-    sol0_org, theta0_org, sol0_deriv_org = [], [], []
-    sol1_org, theta1_org, sol1_deriv_org = [], [], []
+    num_feature = len(x0)
+    
+    sol_org_list = [[] for _ in range(num_feature)]
+    theta_org_list = [[] for _ in range(num_feature)]
+    sol_deriv_org_list = [[] for _ in range(num_feature)]
     for i in range(num_traj):
         sol_, sol_deriv_, t_ = get_sol_deriv(func, x0, t, a[i], deriv_spline)
         theta_ = monomial(sol_)
     
-        sol0_org.append(sol_[:,[0]])
-        theta0_org.append(theta_)
-        sol0_deriv_org.append(sol_deriv_[:,[0]])
-        
-        sol1_org.append(sol_[:,[1]])
-        theta1_org.append(theta_)
-        sol1_deriv_org.append(sol_deriv_[:,[1]])
-        
+        for j in range(num_feature):
+            sol_org_list[j].append(sol_[:,[j]])
+            theta_org_list[j].append(theta_)
+            sol_deriv_org_list[j].append(sol_deriv_[:,[j]])
+
         plt.plot(t_, sol_, 'o', markersize=1, label=f'{a[i]}')
     plt.legend()
     plt.text(1, .95, f'${real0}$', fontsize=12)
     plt.text(1, .8, f'${real1}$', fontsize=12)
     
-    theta0_org = np.c_[theta0_org]
-    theta1_org = np.c_[theta1_org]
-    sol0_deriv_org = np.vstack(sol0_deriv_org)
-    sol1_deriv_org = np.vstack(sol1_deriv_org)
+    theta_org_list = [np.c_[theta_] for theta_ in theta_org_list]
+    sol_deriv_org_list = [np.vstack(sol_deriv_) for sol_deriv_ in sol_deriv_org_list]
     
-    sol_org_list = [sol0_org, sol1_org]
-    theta_org_list = [theta0_org, theta1_org]
-    sol_deriv_org_list = [sol0_deriv_org, sol1_deriv_org]
-    
-    return theta_org_list, sol_deriv_org_list
+    return sol_org_list, theta_org_list, sol_deriv_org_list
 
 #%%
 import scipy
@@ -148,46 +141,51 @@ def plot(Xi0_group, nth_feature, epoch, monomial_name):
     fig.suptitle(f'{nth_feature}th feature with iteration:{epoch}', fontsize=20)
 
 ### get data
-per = .7
-length = t[-1]-t[0]
-length_sub = length*per
+def get_multi_series(sol_org_list, t, monomial, per=.7, deriv_spline=True):
+    per = .7
+    length = t[-1]-t[0]
+    length_sub = length*per
+    
+    dt = t[1]-t[0]
+    
+    # threshold_sindy = 5e-2
+    num_series = int(100*(1-per))*2
+    theta0, theta1 = [], []   ### num_series, length
+    sol0_deriv, sol1_deriv = [], [] ### num_series, length
+    Xi0_list_, Xi1_list_ = [], []
+    for k in range(num_traj):
+        for i in range(num_series):
+            # t_new = np.sort(t[0] + np.random.rand(100)*length)
+            t_new = np.linspace(length*(i*.005),length*(per+i*.005), num=int(length_sub//dt))
+            sol0_, sol0_deriv_ = data_interp(t_new, t, sol_org_list[0][k].squeeze(), deriv_spline)
+            sol1_, sol1_deriv_ = data_interp(t_new, t, sol_org_list[1][k].squeeze(), deriv_spline)
+    
+            theta_ = monomial(np.c_[sol0_,sol1_])
+            theta0.append(theta_)
+            theta1.append(theta_)
+            sol0_deriv.append(sol0_deriv_)
+            sol1_deriv.append(sol1_deriv_)
+    
+    theta0 = np.c_[theta0]
+    theta1 = np.c_[theta1]
+    sol0_deriv = np.c_[sol0_deriv]
+    sol1_deriv = np.c_[sol1_deriv]
+    
+    theta0 = theta0.reshape(num_traj, -1, *theta0.shape[1:])
+    theta1 = theta1.reshape(num_traj, -1, *theta1.shape[1:])
+    sol0_deriv = sol0_deriv.reshape(num_traj, -1, *sol0_deriv.shape[1:])
+    sol1_deriv = sol1_deriv.reshape(num_traj, -1, *sol1_deriv.shape[1:])
+    
+    sol0_deriv = np.vstack(sol0_deriv.transpose(0,2,1,3)).transpose(1,0,2)
+    sol1_deriv = np.vstack(sol1_deriv.transpose(0,2,1,3)).transpose(1,0,2)
+    
+    
+    theta_list = [theta0, theta1]
+    sol_deriv_list = [sol0_deriv, sol1_deriv]
+    # num_feature = len(theta_list)
+    # assert num_feature==len(x0)
+    return theta_list, sol_deriv_list
 
-# threshold_sindy = 5e-2
-num_series = int(100*(1-per))*2
-theta0, theta1 = [], []   ### num_series, length
-sol0_deriv, sol1_deriv = [], [] ### num_series, length
-Xi0_list_, Xi1_list_ = [], []
-for k in range(num_traj):
-    for i in range(num_series):
-        # t_new = np.sort(t[0] + np.random.rand(100)*length)
-        t_new = np.linspace(length*(i*.005),length*(per+i*.005), num=int(length_sub//dt))
-        sol0_, sol0_deriv_ = data_interp(t_new, t, sol0_org[k].squeeze(), deriv_spline)
-        sol1_, sol1_deriv_ = data_interp(t_new, t, sol1_org[k].squeeze(), deriv_spline)
-
-        theta_ = monomial(np.c_[sol0_,sol1_])
-        theta0.append(theta_)
-        theta1.append(theta_)
-        sol0_deriv.append(sol0_deriv_)
-        sol1_deriv.append(sol1_deriv_)
-
-theta0 = np.c_[theta0]
-theta1 = np.c_[theta1]
-sol0_deriv = np.c_[sol0_deriv]
-sol1_deriv = np.c_[sol1_deriv]
-
-theta0 = theta0.reshape(num_traj, -1, *theta0.shape[1:])
-theta1 = theta1.reshape(num_traj, -1, *theta1.shape[1:])
-sol0_deriv = sol0_deriv.reshape(num_traj, -1, *sol0_deriv.shape[1:])
-sol1_deriv = sol1_deriv.reshape(num_traj, -1, *sol1_deriv.shape[1:])
-
-sol0_deriv = np.vstack(sol0_deriv.transpose(0,2,1,3)).transpose(1,0,2)
-sol1_deriv = np.vstack(sol1_deriv.transpose(0,2,1,3)).transpose(1,0,2)
-
-
-theta_list = [theta0, theta1]
-sol_deriv_list = [sol0_deriv, sol1_deriv]
-num_feature = len(theta_list)
-assert num_feature==len(x0)
 
 num_traj, num_series, length_series, num_basis = theta0.shape
 idx_basis = np.arange(num_basis)
