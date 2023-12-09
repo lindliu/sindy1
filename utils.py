@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu Nov 16 15:51:23 2023
+Created on Sat Dec  9 01:32:07 2023
 
-@author: do0236li
+@author: dliu
 """
-import numpy as np
 
-from sklearn.linear_model import ridge_regression, LinearRegression, SGDRegressor
+import numpy as np
+import matplotlib.pyplot as plt
 
 def func1(x, t, a):
     """
@@ -48,7 +48,7 @@ def func3(x, t, a):
     dxdt = [a*x1**2-x2-x1*(x1**2+x2**2), x1+a*x2-x2*(x1**2+x2**2)]
     return dxdt
 
-def func3_(x, t, a, b):
+def  func3_(x, t, a, b):
     """
     P81, differential equations, dynamical systems, and an introduction to chaos
     Hopf Bifurcation
@@ -61,6 +61,21 @@ def func3_(x, t, a, b):
     """
     x1, x2 = x
     dxdt = [b*x2+a*x1**2-x1**3-x1*x2**2, x1+a*x2+b*x2*x1**2-x2**3]
+    return dxdt
+
+def  func3__(x, t, a, b, c):
+    """
+    P81, differential equations, dynamical systems, and an introduction to chaos
+    Hopf Bifurcation
+    
+    dxdt = a*x^2 - y - x*(x^2 + y^2) =      -y + a*x^2 - x^3 - xy^2
+    dydt = x + a*y - y*(x^2 + y^2)   = x + a*y                      - x^2y - y^3
+    
+    [0, 0, -1, a, 0, 0, -1,  0, -1,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 1, a,  0, 0, 0,  0, -1,  0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    """
+    x1, x2 = x
+    dxdt = [b*x2+a*x1**2+c*x1**3-x1*x2**2, x1+a*x2+b*x2*x1**2+c*x2**3]
     return dxdt
 
 def func4(x, t, a):
@@ -156,47 +171,6 @@ def func7(x, t, a):
     dxdt = [x2, c0*x2+c1*np.sin(x1)]
     return dxdt
 
-    
-from scipy.integrate import odeint
-def get_sol_deriv(func, x0, t, a, deriv_spline=True):
-    ###https://github.com/florisvb/PyNumDiff/blob/master/examples/1_basic_tutorial.ipynb
-    sol1 = odeint(func, x0, t, args=a)
-    # sol1 = sol1 + .01*np.random.randn(*sol1.shape)
-    
-    sol1_deriv = np.zeros_like(sol1)
-    dt = t[1]-t[0]
-    
-    if deriv_spline:
-        from scipy import interpolate
-        f = interpolate.interp1d(t, sol1.T, kind='cubic')
-        fd1 = f._spline.derivative(nu=1)
-        return f(t).T, fd1(t), t
-    else:
-        import pynumdiff
-        for i in range(sol1.shape[1]):
-            # x_hat, dxdt_hat = pynumdiff.finite_difference.first_order(sol1[:,i], dt)
-            x_hat, dxdt_hat = pynumdiff.finite_difference.second_order(sol1[:,i], dt)
-            # x_hat, dxdt_hat = pynumdiff.finite_difference.first_order(sol1[:,i], dt, params=[50], options={'iterate': True})
-            # x_hat, dxdt_hat = pynumdiff.smooth_finite_difference.gaussiandiff(sol1[:,i], dt, params=[20], options={'iterate': False})
-            # x_hat, dxdt_hat = pynumdiff.smooth_finite_difference.friedrichsdiff(sol1[:,i], dt, params=10, options={'iterate': False})
-            # x_hat, dxdt_hat = pynumdiff.smooth_finite_difference.butterdiff(sol1[:,i], dt, params=[3, 0.09], options={'iterate': False})
-            # x_hat, dxdt_hat = pynumdiff.linear_model.spectraldiff(sol1[:,i], dt, params=[0.05])
-            # x_hat, dxdt_hat = pynumdiff.linear_model.savgoldiff(sol1[:,i], dt, params=[2, 10, 10])
-    
-            sol1_deriv[:,i] = dxdt_hat
-        
-        return sol1, sol1_deriv, t
-
-
-# def get_sol_deriv(func, x0, t, a, step=1):
-#     sol1 = odeint(func, x0, t, args=(a,))
-#     # sol1 = sol1 + .01*np.random.randn(*sol1.shape)
-    
-#     from pysindy.differentiation import FiniteDifference
-#     fd = FiniteDifference()
-#     sol1_deriv = fd._differentiate(sol1, t)
-
-#     return sol1, sol1_deriv, t
 
 def monomial_poly(x):
     x1 = x[:,[0]]
@@ -220,3 +194,42 @@ def monomial_trig(x):
 monomial_trig_name = np.array(['1', 'x', 'y', 'sin(x)', 'sin(y)',  'cos(x)', 'cos(y)'])
 
 
+
+from scipy.integrate import odeint
+def ode_solver(func, x0, t, a):
+    sol = odeint(func, x0, t, args=a)
+    return sol, t
+
+def get_multi_sol(func, x0, t, a):
+    num_traj = len(a)
+    sol_org_list_ = []
+    for i in range(num_traj):
+        sol_, _ = ode_solver(func, x0, t, a[i])
+        sol_org_list_.append(sol_)
+    
+    return sol_org_list_
+
+def get_deriv(sol, t, deriv_spline=True):
+    if deriv_spline:
+        from scipy import interpolate
+        f = interpolate.interp1d(t, sol.T, kind='cubic')
+        fd1 = f._spline.derivative(nu=1)
+        return f(t).T, fd1(t), t
+    else:
+        ###https://github.com/florisvb/PyNumDiff/blob/master/examples/1_basic_tutorial.ipynb
+        import pynumdiff
+        sol_deriv = np.zeros_like(sol)
+        dt = t[1]-t[0]
+        for i in range(sol.shape[1]):
+            # x_hat, dxdt_hat = pynumdiff.finite_difference.first_order(sol1[:,i], dt)
+            x_hat, dxdt_hat = pynumdiff.finite_difference.second_order(sol[:,i], dt)
+            # x_hat, dxdt_hat = pynumdiff.finite_difference.first_order(sol[:,i], dt, params=[50], options={'iterate': True})
+            # x_hat, dxdt_hat = pynumdiff.smooth_finite_difference.gaussiandiff(sol[:,i], dt, params=[20], options={'iterate': False})
+            # x_hat, dxdt_hat = pynumdiff.smooth_finite_difference.friedrichsdiff(sol[:,i], dt, params=10, options={'iterate': False})
+            # x_hat, dxdt_hat = pynumdiff.smooth_finite_difference.butterdiff(sol[:,i], dt, params=[3, 0.09], options={'iterate': False})
+            # x_hat, dxdt_hat = pynumdiff.linear_model.spectraldiff(sol[:,i], dt, params=[0.05])
+            # x_hat, dxdt_hat = pynumdiff.linear_model.savgoldiff(sol[:,i], dt, params=[2, 10, 10])
+    
+            sol_deriv[:,i] = dxdt_hat
+        
+        return sol, sol_deriv, t
