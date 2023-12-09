@@ -13,7 +13,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import copy
 from sklearn.linear_model import ridge_regression, LinearRegression, SGDRegressor
-from func import func1, func2, func3, func4, func5, func6, func7, \
+from func import func1, func2, func3, func4, func5, func6, func7, func3__, \
     get_sol_deriv, monomial_poly, monomial_trig, monomial_poly_name, monomial_trig_name
 
 
@@ -92,6 +92,21 @@ from func import func12_, func3_, func4_
 deriv_spline = True#False#
 threshold_tol = 1e-3
 
+################### 3 variable ####################
+alpha = .05
+dt = .1      ## 2,3,6,8;     1,2,7,9
+t = np.arange(0,10,dt)
+x0 = [.5, 1]
+a = [(.2, -.6, -.5), (.4, -.8, -.7), (.6, -1, -1)]
+func = func3__
+monomial = monomial_poly
+monomial_name = monomial_poly_name
+real0 = "x'=b*y + a*x^2 + c*x^3 - xy^2"
+real1 = "y'=x + a*y + b*x^2y + c*y^3"
+threshold_sindy=1e-2
+threshold_similarity = 1e-2
+
+################### 2 variable ####################
 # alpha = .05
 # dt = .1   ## 0,3
 # t = np.arange(0,1.5,dt)
@@ -106,18 +121,18 @@ threshold_tol = 1e-3
 # threshold_similarity = 1e-3
 # threshold_tol = 1e-2
 
-alpha = .05
-dt = .1      ## 2,3,6,8;     1,2,7,9
-t = np.arange(0,12,dt)
-x0 = [.5, 1]
-a = [(.2, -.6), (.4, -.8), (.6, -1)]
-func = func3_
-monomial = monomial_poly
-monomial_name = monomial_poly_name
-real0 = "x'=b*y + a*x^2 - x^3 - xy^2"
-real1 = "y'=x + a*y + b*x^2y - y^3"
-threshold_sindy=1e-2
-threshold_similarity = 1e-2
+# alpha = .05
+# dt = .1      ## 2,3,6,8;     1,2,7,9
+# t = np.arange(0,12,dt)
+# x0 = [.5, 1]
+# a = [(.2, -.6), (.4, -.8), (.6, -1)]
+# func = func3_
+# monomial = monomial_poly
+# monomial_name = monomial_poly_name
+# real0 = "x'=b*y + a*x^2 - x^3 - xy^2"
+# real1 = "y'=x + a*y + b*x^2y - y^3"
+# threshold_sindy=1e-2
+# threshold_similarity = 1e-2
 
 # alpha = .05
 # dt = .1    ## 1,4    2,4
@@ -161,18 +176,18 @@ threshold_similarity = 1e-2
 # threshold_sindy=7e-2
 # threshold_similarity = 1e-3
 
-alpha = .05
-dt = .1      ## 2,3,6,8;     1,2,7,9
-t = np.arange(0,12,dt)
-x0 = [.5, 1]
-a = [(.2,), (.4,), (.6,)]
-func = func3
-monomial = monomial_poly
-monomial_name = monomial_poly_name
-real0 = "x'=-y + a*x^2 - x^3 - xy^2"
-real1 = "y'=x + a*y - x^2y - y^3"    
-threshold_sindy=1e-2
-threshold_similarity = 1e-2
+# alpha = .05
+# dt = .1      ## 2,3,6,8;     1,2,7,9
+# t = np.arange(0,12,dt)
+# x0 = [.5, 1]
+# a = [(.2,), (.4,), (.6,)]
+# func = func3
+# monomial = monomial_poly
+# monomial_name = monomial_poly_name
+# real0 = "x'=-y + a*x^2 - x^3 - xy^2"
+# real1 = "y'=x + a*y - x^2y - y^3"    
+# threshold_sindy=1e-2
+# threshold_similarity = 1e-2
 
 # alpha = .05
 # dt = .1    ## 1,4    2,4
@@ -414,7 +429,10 @@ for nth_feature, (theta_, sol_deriv_) in enumerate(zip(theta_list, sol_deriv_lis
         else:
             idx_same_activ_pre = copy.deepcopy(idx_same_activ)
             idx_diff_activ_pre = copy.deepcopy(idx_diff_activ)
-            
+        
+        if not idx_activ.any():
+            break
+        
     all_basis.append(idx_activ)
     same_basis.append(idx_same_activ)
     diff_basis.append(idx_diff_activ)
@@ -430,6 +448,9 @@ for nth_feature, (theta_, sol_deriv_) in enumerate(zip(theta_list, sol_deriv_lis
 #%% get final predicted Xi
 Xi_final = np.zeros([num_traj, num_feature, num_basis])
 for k, (theta_org_, sol_deriv_org_) in enumerate(zip(theta_org_list, sol_deriv_org_list)):
+    if not all_basis[k].any():
+        continue
+    
     block_diff_list = [block_[:,diff_basis[k]] for block_ in theta_org_]
     block_diff = block_diag_multi_traj(block_diff_list)
     

@@ -184,7 +184,7 @@ gsindy = GSINDy(monomial=monomial,\
                 deriv_spline=deriv_spline)
     
 gsindy.get_multi_sub_series(sol_org_list, t, num_series=60, window_per=.7) ### to get theta_list, sol_deriv_list
-gsindy.basis_identification(remove_per=.2)
+gsindy.basis_identification(remove_per=.2, plot_dist=True)
 
 Xi_final = gsindy.prediction(sol_org_list, t)
 

@@ -275,11 +275,7 @@ class GSINDy():
             else:
                 idx_same_activ_pre = copy.deepcopy(idx_same_activ)
                 idx_diff_activ_pre = copy.deepcopy(idx_diff_activ)
-            
-            ## if no basis selected
-            if not idx_activ.any():
-                break
-            
+        
         return idx_activ, idx_same_activ, idx_diff_activ
 
     def basis_identification(self, remove_per=.2, plot_dist=True):
@@ -307,15 +303,10 @@ class GSINDy():
 
     #%% get final predicted Xi
     def prediction(self, sol_org_list, t):
-        theta_org_list, sol_deriv_org_list = self.get_multi_theta(sol_org_list, t)        
+        theta_org_list, sol_deriv_org_list = self.get_multi_theta(sol_org_list, t)
         
         Xi_final = np.zeros([self.num_traj, self.num_feature, self.num_basis])
         for k, (theta_org_, sol_deriv_org_) in enumerate(zip(theta_org_list, sol_deriv_org_list)):
-            
-            ## if no basis selected
-            if not self.all_basis[k].any():
-                continue
-            
             block_diff_list = [block_[:,self.diff_basis[k]] for block_ in theta_org_]
             block_diff = block_diag_multi_traj(block_diff_list)
             
@@ -348,10 +339,7 @@ class GSINDy():
                 theta_org_list[j].append(theta_)
                 sol_deriv_org_list[j].append(sol_deriv_[:,[j]])
                 
-        theta_org_list_ = [np.c_[theta_] for theta_ in theta_org_list]   ### num_feature, num_traj, length_series, num_basis
-        sol_deriv_org_list_ = [np.vstack(sol_deriv_) for sol_deriv_ in sol_deriv_org_list] ### num_feature, num_traj*length_series, 1
-        
-        self.theta_org_list = theta_org_list_
-        self.sol_deriv_org_list = sol_deriv_org_list
-        return theta_org_list_, sol_deriv_org_list_
+        theta_org_list = [np.c_[theta_] for theta_ in theta_org_list]   ### num_feature, num_traj, length_series, num_basis
+        sol_deriv_org_list = [np.vstack(sol_deriv_) for sol_deriv_ in sol_deriv_org_list] ### num_feature, num_traj*length_series, 1
+        return theta_org_list, sol_deriv_org_list
     

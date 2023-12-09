@@ -165,41 +165,62 @@ num_feature = len(x0)
 from utils import get_multi_sol
 sol_org_list = get_multi_sol(func, x0, t, a)
 
+
+fig, ax = plt.subplots(1,1,figsize=[6,3])
 for i in range(num_traj):
-    plt.plot(t, sol_org_list[i], 'o', markersize=1, label=f'{a[i]}')
-plt.legend()
-plt.text(1, .95, f'${real0}$', fontsize=12)
-plt.text(1, .8, f'${real1}$', fontsize=12)
+    ax.plot(t, sol_org_list[i], 'o', markersize=1, label=f'{a[i]}')
+ax.legend()
+ax.text(1, .95, f'${real0}$', fontsize=12)
+ax.text(1, .8, f'${real1}$', fontsize=12)
 
 
-        
-gsindy = GSINDy(monomial=monomial,\
-                monomial_name=monomial_name, \
-                num_traj = num_traj, \
-                num_feature = num_feature, \
-                threshold_sindy=threshold_sindy, \
-                threshold_tol=threshold_tol, \
-                threshold_similarity=threshold_similarity, \
-                alpha=alpha,\
-                deriv_spline=deriv_spline)
+############# group sindy ##############
+# opts_params =  [1e-3, 5e-3, 1e-2, 5e-2, 1e-1, 5e-1, 1e0, 5e0, 1e1]
+opts_params =  [threshold_sindy]
+for param in opts_params:
+    print(f'################### [GSINDy] threshold: {param} ################')
     
-gsindy.get_multi_sub_series(sol_org_list, t, num_series=60, window_per=.7) ### to get theta_list, sol_deriv_list
-gsindy.basis_identification(remove_per=.2)
+    gsindy = GSINDy(monomial=monomial,\
+                    monomial_name=monomial_name, \
+                    num_traj = num_traj, \
+                    num_feature = num_feature, \
+                    threshold_sindy = param,  #threshold_sindy, \
+                    threshold_tol=threshold_tol, \
+                    threshold_similarity=threshold_similarity, \
+                    alpha=alpha,\
+                    deriv_spline=deriv_spline)
+        
+    gsindy.get_multi_sub_series(sol_org_list, t, num_series=60, window_per=.7) ### to get theta_list, sol_deriv_list
+    gsindy.basis_identification(remove_per=.2, plot_dist=False) ##True
+    
+    Xi_final = gsindy.prediction(sol_org_list, t)
+    
+    
+    
+    all_basis = gsindy.all_basis
+    diff_basis = gsindy.diff_basis
+    np.set_printoptions(formatter={'float': lambda x: "{0:.3f}".format(x)})
+    print('*'*50)
+    print(f'real0: {real0}')
+    print(f'feature 0 with different basis {monomial_name[diff_basis[0]]}: \n {Xi_final[:,0,all_basis[0]]} \n {monomial_name[all_basis[0]]}')
+    print(f'real1: {real1}')
+    print(f'feature 1 with different basis {monomial_name[diff_basis[1]]}: \n {Xi_final[:,1,all_basis[1]]} \n {monomial_name[all_basis[1]]}')
 
-Xi_final = gsindy.prediction(sol_org_list, t)
 
 
-
-all_basis = gsindy.all_basis
-diff_basis = gsindy.diff_basis
-np.set_printoptions(formatter={'float': lambda x: "{0:.3f}".format(x)})
-print('*'*50)
-print(f'real0: {real0}')
-print(f'feature 0 with different basis {monomial_name[diff_basis[0]]}: \n {Xi_final[:,0,all_basis[0]]} \n {monomial_name[all_basis[0]]}')
-print(f'real1: {real1}')
-print(f'feature 1 with different basis {monomial_name[diff_basis[1]]}: \n {Xi_final[:,1,all_basis[1]]} \n {monomial_name[all_basis[1]]}')
-
-
+    MSE = lambda x, y: ((x-y)**2).mean()
+    loss = []
+    for j in range(num_traj):
+        sol0_deriv_prediction = gsindy.theta_org_list[0][j,:,:]@Xi_final[j,0,:]
+        sol1_deriv_prediction = gsindy.theta_org_list[1][j,:,:]@Xi_final[j,1,:]
+        
+        sol0_deriv = gsindy.sol_deriv_org_list[0][j].squeeze()
+        sol1_deriv = gsindy.sol_deriv_org_list[1][j].squeeze()
+        
+        loss_ = MSE(sol0_deriv_prediction, sol0_deriv) + MSE(sol1_deriv_prediction, sol1_deriv)
+        loss.append(loss_)
+        print(f'trajectory {j} MSE loss: {loss_}')
+    print(f'Mean of each trajecctory loss: {np.mean(loss)}')
 
 
 #%% compare to pysindy
@@ -207,6 +228,8 @@ import pysindy as ps
 
 if func.__name__ not in ['func6', 'func7']:
     from pysindy.feature_library import GeneralizedLibrary, PolynomialLibrary, CustomLibrary
+    from pysindy.optimizers import STLSQ
+    
     # lib_generalized = PolynomialLibrary(degree=5)
     functions = [lambda x,y: 1, \
             lambda x,y: x, lambda x,y: y, \
@@ -223,13 +246,11 @@ if func.__name__ not in ['func6', 'func7']:
     lib_custom = CustomLibrary(library_functions=functions, function_names=names)
     lib_generalized = GeneralizedLibrary([lib_custom])
 
-    from pysindy.optimizers import STLSQ
-    optimizer = STLSQ(threshold=threshold_sindy, alpha=alpha)
-    model = ps.SINDy(feature_names=["x", "y"], feature_library=lib_generalized, optimizer=optimizer)
-        
 else:
     from pysindy.feature_library import FourierLibrary, CustomLibrary
     from pysindy.feature_library import GeneralizedLibrary
+    from pysindy.optimizers import STLSQ
+    
     functions = [lambda x,y: 1, lambda x,y: x, lambda x,y: y, lambda x,y: np.sin(x), lambda x,y: np.sin(y), \
                   lambda x,y: np.cos(x), lambda x,y: np.cos(y)]
     names = [lambda x,y: '1', lambda x,y: 'x', lambda x,y: 'y', lambda x,y: 'sin(x)', lambda x,y: 'sin(y)', \
@@ -240,22 +261,24 @@ else:
     # x = np.array([[0.,-1],[1.,0.],[2.,-1.]])
     # lib_generalized.fit(x)
     # lib_generalized.transform(x)
-    from pysindy.optimizers import STLSQ
-    optimizer = STLSQ(threshold=threshold_sindy, alpha=alpha)
-    
+
+
+############# sindy ##############
+from utils import ode_solver
+for param in opts_params:
+    optimizer = STLSQ(threshold=param, alpha=alpha)
     model = ps.SINDy(feature_names=["x", "y"], feature_library=lib_generalized, optimizer=optimizer)
 
-
-from utils import ode_solver
-for i in range(len(a)):
-    # sol_, sol_deriv_, t_ = get_sol_deriv(func, x0, t, a[i], deriv_spline)
-    sol_, t_ = ode_solver(func, x0, t, a[i])
-    _, sol_deriv_, _ = get_deriv(sol_, t, deriv_spline)
-
-    model.fit(sol_, t=t_, x_dot=sol_deriv_, ensemble=True, quiet=True)
-    model.print()
-    # model.coefficients()
+    print(f'################### [SINDy] threshold: {param} ################')
+    for i in range(len(a)):
+        # sol_, sol_deriv_, t_ = get_sol_deriv(func, x0, t, a[i], deriv_spline)
+        sol_, t_ = ode_solver(func, x0, t, a[i])
+        _, sol_deriv_, _ = get_deriv(sol_, t, deriv_spline)
     
-    # theta_ = monomial(sol_)
-    # print(SLS(theta_, sol_deriv_, threshold_sindy, threshold_tol))
-    
+        model.fit(sol_, t=t_, x_dot=sol_deriv_, ensemble=True, quiet=True)
+        model.print()
+        # model.coefficients()
+        
+        # theta_ = monomial(sol_)
+        # print(SLS(theta_, sol_deriv_, threshold_sindy, threshold_tol))
+        
