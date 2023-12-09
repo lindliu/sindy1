@@ -18,18 +18,18 @@ deriv_spline = True#False#
 threshold_tol = 1e-3
 
 ################### 3 variable ####################
-# alpha = .05
-# dt = .1      ## 2,3,6,8;     1,2,7,9
-# t = np.arange(0,10,dt)
-# x0 = [.5, 1]
-# a = [(.2, -.6, -.5), (.4, -.8, -.7), (.6, -1, -1)]
-# func = func3__
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=b*y + a*x^2 + c*x^3 - xy^2"
-# real1 = "y'=x + a*y + b*x^2y + c*y^3"
-# threshold_sindy=1e-2
-# threshold_similarity = 1e-2
+alpha = .05
+dt = .1      ## 2,3,6,8;     1,2,7,9
+t = np.arange(0,10,dt)
+x0 = [.5, 1]
+a = [(.2, -.6, -.5), (.4, -.8, -.7), (.6, -1, -1)]
+func = func3__
+monomial = monomial_poly
+monomial_name = monomial_poly_name
+real0 = "x'=b*y + a*x^2 + c*x^3 - xy^2"
+real1 = "y'=x + a*y + b*x^2y + c*y^3"
+threshold_sindy=1e-2
+threshold_similarity = 1e-2
 
 ################### 2 variable ####################
 # alpha = .05
@@ -142,19 +142,19 @@ threshold_tol = 1e-3
 # threshold_sindy=1e-2
 # threshold_similarity = 1e-3
 
-alpha = .05
-dt = .1
-t = np.arange(0,6,dt)
-x0 = [np.pi-.1, 0]
-# a = [-5, -6]
-a = [(-.15,), (-1,), (-2,), (-5,)]
-func = func7
-monomial = monomial_trig
-monomial_name = monomial_trig_name
-real0 = "x'=y"
-real1 = "y'=-0.25*y+a*sin(x)"
-threshold_sindy=1e-2
-threshold_similarity = 1e-3
+# alpha = .05
+# dt = .1
+# t = np.arange(0,6,dt)
+# x0 = [np.pi-.1, 0]
+# # a = [-5, -6]
+# a = [(-.15,), (-1,), (-2,), (-5,)]
+# func = func7
+# monomial = monomial_trig
+# monomial_name = monomial_trig_name
+# real0 = "x'=y"
+# real1 = "y'=-0.25*y+a*sin(x)"
+# threshold_sindy=1e-2
+# threshold_similarity = 1e-3
 
 
 
@@ -184,11 +184,14 @@ gsindy = GSINDy(monomial=monomial,\
                 deriv_spline=deriv_spline)
     
 gsindy.get_multi_sub_series(sol_org_list, t, num_series=60, window_per=.7) ### to get theta_list, sol_deriv_list
-all_basis, same_basis, diff_basis = gsindy.basis_identification(remove_per=.2)
+gsindy.basis_identification(remove_per=.2)
 
 Xi_final = gsindy.prediction(sol_org_list, t)
 
 
+
+all_basis = gsindy.all_basis
+diff_basis = gsindy.diff_basis
 np.set_printoptions(formatter={'float': lambda x: "{0:.3f}".format(x)})
 print('*'*50)
 print(f'real0: {real0}')

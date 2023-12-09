@@ -291,7 +291,7 @@ class GSINDy():
             diff_basis.append(idx_diff_activ)
         
         self.all_basis, self.same_basis, self.diff_basis = all_basis, same_basis, diff_basis  ## num_feature, num_basis
-        return all_basis, same_basis, diff_basis
+        # return all_basis, same_basis, diff_basis
 
 # # for k in range(21):
 # #     std = Xi0_group[0,:,k].std()
