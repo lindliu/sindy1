@@ -14,6 +14,8 @@ from utils import func1, func2, func3, func4, func5, func6, func7, \
                 monomial_poly, monomial_trig, monomial_poly_name, monomial_trig_name
 from GSINDy import *
 
+MSE = lambda x, y: ((x-y)**2).mean()
+
 opt = 'SQTL' ##['Manually', 'SQTL', 'LASSO', 'SR3']
 ensemble = False
 deriv_spline = True#False#
@@ -35,19 +37,19 @@ threshold_tol = 1e-3
 
 
 ################### 2 variable ####################
-# alpha = .05
-# dt = .1   ## 0,3
-# t = np.arange(0,1.5,dt)
-# x0 = [.5, 1]
-# a = [(.16, .25), (.3, .4), (.3, .5)]
-# func = func12_
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=a + b*x^2"
-# real1 = "y'=-y"
-# threshold_sindy=7e-2
-# threshold_similarity = 1e-3
-# threshold_tol = 1e-2
+alpha = .05
+dt = .1   ## 0,3
+t = np.arange(0,1.5,dt)
+x0 = [.5, 1]
+a = [(.16, .25), (.3, .4), (.3, .5)]
+func = func12_
+monomial = monomial_poly
+monomial_name = monomial_poly_name
+real0 = "x'=a + b*x^2"
+real1 = "y'=-y"
+threshold_sindy=7e-2
+threshold_similarity = 1e-3
+threshold_tol = 1e-2
 
 # alpha = .05
 # dt = .1      ## 2,3,6,8;     1,2,7,9
@@ -145,19 +147,19 @@ threshold_tol = 1e-3
 # threshold_sindy=1e-2
 # threshold_similarity = 1e-3
 
-alpha = .05
-dt = .1
-t = np.arange(0,6,dt)
-x0 = [np.pi-.1, 0]
-# a = [-5, -6]
-a = [(-.15,), (-1,), (-2,), (-5,)]
-func = func7
-monomial = monomial_trig
-monomial_name = monomial_trig_name
-real0 = "x'=y"
-real1 = "y'=-0.25*y+a*sin(x)"
-threshold_sindy=1e-2
-threshold_similarity = 1e-3
+# alpha = .05
+# dt = .1
+# t = np.arange(0,6,dt)
+# x0 = [np.pi-.1, 0]
+# # a = [-5, -6]
+# a = [(-.15,), (-1,), (-2,), (-5,)]
+# func = func7
+# monomial = monomial_trig
+# monomial_name = monomial_trig_name
+# real0 = "x'=y"
+# real1 = "y'=-0.25*y+a*sin(x)"
+# threshold_sindy=1e-2
+# threshold_similarity = 1e-3
 
 
 
@@ -201,7 +203,7 @@ for param in opts_params:
     
     Xi_final = gsindy.prediction(sol_org_list, t)
     
-    # model_set.append()
+    model_set.append(Xi_final)
     
     all_basis = gsindy.all_basis
     diff_basis = gsindy.diff_basis
@@ -212,21 +214,63 @@ for param in opts_params:
     print(f'real1: {real1}')
     print(f'feature 1 with different basis {monomial_name[diff_basis[1]]}: \n {Xi_final[:,1,all_basis[1]]} \n {monomial_name[all_basis[1]]}')
 
+    # MSE = lambda x, y: ((x-y)**2).mean()
+    # loss = []
+    # for j in range(num_traj):
+    #     sol0_deriv_prediction = gsindy.theta_org_list[0][j,:,:]@Xi_final[j,0,:]
+    #     sol1_deriv_prediction = gsindy.theta_org_list[1][j,:,:]@Xi_final[j,1,:]
+        
+    #     sol0_deriv = gsindy.sol_deriv_org_list[0][j].squeeze()
+    #     sol1_deriv = gsindy.sol_deriv_org_list[1][j].squeeze()
+        
+    #     loss_ = MSE(sol0_deriv_prediction, sol0_deriv) + MSE(sol1_deriv_prediction, sol1_deriv)
+    #     loss.append(loss_)
+    #     print(f'trajectory {j} MSE loss: {loss_}')
+    # print(f'Mean of each trajecctory loss: {np.mean(loss)}')
 
 
-    MSE = lambda x, y: ((x-y)**2).mean()
-    loss = []
-    for j in range(num_traj):
-        sol0_deriv_prediction = gsindy.theta_org_list[0][j,:,:]@Xi_final[j,0,:]
-        sol1_deriv_prediction = gsindy.theta_org_list[1][j,:,:]@Xi_final[j,1,:]
+
+
+#%%
+##### simulations #####
+def func_simulation(x, t, param, basis):
+    mask0 = param[0]!=0
+    mask1 = param[1]!=0
+    
+    basis[mask0]
+    basis[mask1]
+    
+    x1, x2 = x
+    dx1dt = 0
+    for par,f in zip(param[0][mask0], basis[mask0]):
+        dx1dt = dx1dt+par*f(x1,x2)
+    
+    dx2dt = 0
+    for par,f in zip(param[1][mask1], basis[mask1]):
+        dx2dt = dx2dt+par*f(x1,x2)
         
-        sol0_deriv = gsindy.sol_deriv_org_list[0][j].squeeze()
-        sol1_deriv = gsindy.sol_deriv_org_list[1][j].squeeze()
-        
-        loss_ = MSE(sol0_deriv_prediction, sol0_deriv) + MSE(sol1_deriv_prediction, sol1_deriv)
-        loss.append(loss_)
-        print(f'trajectory {j} MSE loss: {loss_}')
-    print(f'Mean of each trajecctory loss: {np.mean(loss)}')
+    dxdt = [dx1dt, dx2dt]
+    return dxdt
+
+from scipy.integrate import odeint
+basis = np.array([lambda x,y: 1, \
+        lambda x,y: x, lambda x,y: y, \
+        lambda x,y: x**2, lambda x,y: x*y, lambda x,y: y**2, \
+        lambda x,y: x**3, lambda x,y: x**2*y, lambda x,y: x*y**2, lambda x,y: y**3, \
+        lambda x,y: x**4, lambda x,y: x**3*y, lambda x,y: x**2*y**2, lambda x,y: x*y**3, lambda x,y: y**4, \
+        lambda x,y: x**5, lambda x,y: x**4*y, lambda x,y: x**3*y**2, lambda x,y: x**2*y**3, lambda x,y: x*y**4, lambda x,y: y**5])
+
+simulations = []
+for j in range(num_traj):
+    args = (Xi_final[j],basis)
+    simulation = odeint(func_simulation, x0, t, args=args)
+    simulations.append(simulation)
+    
+    print(MSE(sol_org_list[j], simulation))
+
+############################################
+
+
 
 
 #%% compare to pysindy

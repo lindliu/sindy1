@@ -391,13 +391,15 @@ class GSINDy():
                 else:
                     model.fit(np.ones([1]), t=1, x_dot=dXdt) ###first 2 inputs has no meanings
                 Xi0_ = model.coefficients()[0,...]
-                    
-                
+                                
             num_diff_ = self.diff_basis[k].sum()*self.num_traj
             Xi_final[:,k,self.diff_basis[k]] = Xi0_[:num_diff_].reshape([self.num_traj,-1])
             Xi_final[:,k,self.same_basis[k]] = Xi0_[num_diff_:]
             
-        mask_tol = np.abs(Xi_final.mean(0))>self.threshold_tol  ###???
+        Xi_final[np.abs(Xi_final)<self.threshold_tol] = 0
+        
+        # mask_tol = np.abs(Xi_final.mean(0))>self.threshold_tol  ###???
+        mask_tol = (Xi_final!=0).any(0)
         self.all_basis[0] = np.logical_and(mask_tol[0],self.all_basis[0])
         self.all_basis[1] = np.logical_and(mask_tol[1],self.all_basis[1])
     
