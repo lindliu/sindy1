@@ -116,7 +116,6 @@ from sklearn.linear_model import Lasso
 import pysindy_ as ps
 from pysindy_.utils import AxesArray
 from pysindy_.feature_library import Shell_custom_theta
-
 def Axes_transfer(theta_):
     xp = AxesArray(
         np.empty(
@@ -268,6 +267,7 @@ class GSINDy():
                         model.fit(np.ones([1]), t=1, x_dot=dXdt) ###first 2 inputs has no meanings
                     Xi0_ = model.coefficients()[0,...]
         
+        
                 num_diff_ = idx_diff_activ.sum()*self.num_traj
                 Xi0_group[:,j,idx_diff_activ] = Xi0_[:num_diff_].reshape([self.num_traj,-1])
                 Xi0_group[:,j,idx_same_activ] = Xi0_[num_diff_:]
@@ -392,11 +392,12 @@ class GSINDy():
                     model.fit(np.ones([1]), t=1, x_dot=dXdt) ###first 2 inputs has no meanings
                 Xi0_ = model.coefficients()[0,...]
                     
+                
             num_diff_ = self.diff_basis[k].sum()*self.num_traj
             Xi_final[:,k,self.diff_basis[k]] = Xi0_[:num_diff_].reshape([self.num_traj,-1])
             Xi_final[:,k,self.same_basis[k]] = Xi0_[num_diff_:]
             
-        mask_tol = np.abs(Xi_final.mean(0))>self.threshold_tol
+        mask_tol = np.abs(Xi_final.mean(0))>self.threshold_tol  ###???
         self.all_basis[0] = np.logical_and(mask_tol[0],self.all_basis[0])
         self.all_basis[1] = np.logical_and(mask_tol[1],self.all_basis[1])
     

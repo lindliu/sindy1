@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu Dec  7 16:49:29 2023
+Created on Sun Dec 10 11:45:53 2023
 
-@author: do0236li
+@author: dliu
 """
+
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -176,6 +177,7 @@ ax.text(1, .95, f'${real0}$', fontsize=12)
 ax.text(1, .8, f'${real1}$', fontsize=12)
 
 
+model_set = []
 ############# group sindy ##############
 # opts_params =  [1e-3, 5e-3, 1e-2, 5e-2, 1e-1, 5e-1, 1e0, 5e0, 1e1]
 opts_params =  [threshold_sindy]
@@ -199,7 +201,7 @@ for param in opts_params:
     
     Xi_final = gsindy.prediction(sol_org_list, t)
     
-    
+    # model_set.append()
     
     all_basis = gsindy.all_basis
     diff_basis = gsindy.diff_basis
