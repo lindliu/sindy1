@@ -15,6 +15,7 @@ from utils import func1, func2, func3, func4, func5, func6, func7, \
 from GSINDy import *
 
 MSE = lambda x, y: ((x-y)**2).mean()
+SSE = lambda x, y: ((x-y)**2).sum()
 
 opt = 'SQTL' ##['Manually', 'SQTL', 'LASSO', 'SR3']
 ensemble = False
@@ -81,7 +82,7 @@ threshold_tol = 1e-2
 ################### 1 variable ####################
 # alpha = .05
 # dt = .05   ## 0,3
-# t = np.arange(0,2.5,dt)
+# t = np.arange(0,2.,dt)
 # x0 = [.2, 1]
 # a = [(.12,), (.16,), (.2,)]
 # func = func1
@@ -181,8 +182,8 @@ ax.text(1, .8, f'${real1}$', fontsize=12)
 
 model_set = []
 ############# group sindy ##############
-# opts_params =  [1e-3, 5e-3, 1e-2, 5e-2, 1e-1, 5e-1, 1e0, 5e0, 1e1]
-opts_params =  [threshold_sindy]
+opts_params =  [1e-3, 5e-3, 1e-2, 5e-2, 1e-1, 5e-1, 1e0]
+# opts_params =  [threshold_sindy]
 for param in opts_params:
     print(f'################### [GSINDy] threshold: {param} ################')
     
@@ -231,7 +232,8 @@ for param in opts_params:
 
 
 
-#%%
+#%% model selection
+from ModelSelection import ModelSelection
 ##### simulations #####
 def func_simulation(x, t, param, basis):
     mask0 = param[0]!=0
@@ -260,18 +262,58 @@ basis = np.array([lambda x,y: 1, \
         lambda x,y: x**4, lambda x,y: x**3*y, lambda x,y: x**2*y**2, lambda x,y: x*y**3, lambda x,y: y**4, \
         lambda x,y: x**5, lambda x,y: x**4*y, lambda x,y: x**3*y**2, lambda x,y: x**2*y**3, lambda x,y: x*y**4, lambda x,y: y**5])
 
-simulations = []
-for j in range(num_traj):
-    args = (Xi_final[j],basis)
-    simulation = odeint(func_simulation, x0, t, args=args)
-    simulations.append(simulation)
-    
-    print(MSE(sol_org_list[j], simulation))
+t_steps = t.shape[0]
+ms = ModelSelection(model_set, t_steps)
+ms.compute_k()
+
+for model_id, Xi in enumerate(model_set):
+    # simulations = []
+    sse_sum = 0
+    for j in range(num_traj):
+        args = (Xi[j],basis)
+        simulation = odeint(func_simulation, x0, t, args=args)
+        # simulations.append(simulation)
+        SSE(sol_org_list[j], simulation)
+        
+        sse_sum += ms.compute_SSE(sol_org_list[j], simulation)
+        
+    # ms.set_model_SSE(model_id, sse_sum/num_traj)
+    ms.set_model_SSE(model_id, sse_sum)
+
+
+best_AIC_model = ms.compute_AIC()
+best_AICc_model = ms.compute_AICc()
+best_BIC_model = ms.compute_BIC()
+
+# Get best model
+print("Melhor modelo AIC = " + str(best_AIC_model) + "\n")
+print("Melhor modelo AICc = " + str(best_AICc_model) + "\n")
+print("Melhor modelo BIC = " + str(best_BIC_model) + "\n")
+
+Xi_best = model_set[best_AIC_model]
+
+print('*'*25+'real'+'*'*25)
+print(f'real a: {a}')
+print(f'real0: {real0}')
+print(f'real1: {real1}')
+print('*'*25+'pred'+'*'*25)
+for i in range(num_traj):
+    print('*'*8+f'traj {i}'+'*'*8)
+    dx1dt = "x'="
+    dx2dt = "y'="
+    for j,pa in enumerate(Xi_best[i,0]):
+        if pa!=0:
+            dx1dt = dx1dt+f' + {pa:.2f}{monomial_name[j]}'
+    for j,pa in enumerate(Xi_best[i,1]):
+        if pa!=0:
+            dx2dt = dx2dt+f' + {pa:.2f}{monomial_name[j]}'
+                
+    print(dx1dt)
+    print(dx2dt)
+
+
 
 ############################################
-
-
-
 
 #%% compare to pysindy
 import pysindy_ as ps
