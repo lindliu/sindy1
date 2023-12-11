@@ -296,8 +296,9 @@ class GSINDy():
             
             # plot_distribution(Xi0_group, nth_feature, epoch, self.monomial_name, idx=self.idx_basis[idx_activ])
 
-            
-            ##### To find the identical basis
+            #######################################
+            ##### To find the identical basis #####
+            #######################################
             idx_same_activ = np.logical_and(idx_activ, idx_same_activ)
             idx_diff_activ = copy.deepcopy(idx_activ)
             idx_diff_activ[idx_same_activ] = False
@@ -327,6 +328,7 @@ class GSINDy():
             else:
                 idx_same_activ_pre = copy.deepcopy(idx_same_activ)
                 idx_diff_activ_pre = copy.deepcopy(idx_diff_activ)
+            
             
             ## if no basis selected
             if not idx_activ.any():

@@ -204,7 +204,7 @@ def get_multi_sol(func, x0, t, a):
     num_traj = len(a)
     sol_org_list_ = []
     for i in range(num_traj):
-        sol_, _ = ode_solver(func, x0, t, a[i])
+        sol_, _ = ode_solver(func, x0[i], t, a[i])
         sol_org_list_.append(sol_)
     
     return sol_org_list_

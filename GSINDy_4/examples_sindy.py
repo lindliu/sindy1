@@ -21,27 +21,27 @@ ensemble = False
 
 
 ################### 3 variable ####################
-alpha = .05
-dt = .1      ## 2,3,6,8;     1,2,7,9
-t = np.arange(0,10,dt)
-x0 = [.5, 1]
-a = [(.2, -.6, -.5), (.4, -.8, -.7), (.6, -1, -1)]
-func = func3__
-monomial = monomial_poly
-monomial_name = monomial_poly_name
-real0 = "x'=b*y + a*x^2 + c*x^3 - xy^2"
-real1 = "y'=x + a*y + b*x^2y + c*y^3"
-threshold_sindy=1e-2
-threshold_group = 1e-3
-threshold_similarity = 1e-2
-precision = 1e-3
-deriv_spline = True#False#
+# alpha = .05
+# dt = .1      ## 2,3,6,8;     1,2,7,9
+# t = np.arange(0,10,dt)
+# x0 = [[.5, 1], [.5, 1], [.5, 1]]
+# a = [(.2, -.6, -.5), (.4, -.8, -.7), (.6, -1, -1)]
+# func = func3__
+# monomial = monomial_poly
+# monomial_name = monomial_poly_name
+# real0 = "x'=b*y + a*x^2 + c*x^3 - xy^2"
+# real1 = "y'=x + a*y + b*x^2y + c*y^3"
+# threshold_sindy=1e-2
+# threshold_group = 1e-3
+# threshold_similarity = 1e-2
+# precision = 1e-3
+# deriv_spline = True#False#
 
 ################### 2 variable ####################
 # alpha = .05
 # dt = .1   ## 0,3
 # t = np.arange(0,1.5,dt)
-# x0 = [.5, 1]
+# x0 = [[.5, 1], [.5, 1], [.5, 1]]
 # a = [(.16, .25), (.3, .4), (.3, .5)]
 # func = func12_
 # monomial = monomial_poly
@@ -57,7 +57,7 @@ deriv_spline = True#False#
 # alpha = .05
 # dt = .1      ## 2,3,6,8;     1,2,7,9
 # t = np.arange(0,12,dt)
-# x0 = [.5, 1]
+# x0 = [[.5, 1], [.5, 1], [.5, 1]]
 # a = [(.2, -.6), (.4, -.8), (.6, -1)]
 # func = func3_
 # monomial = monomial_poly
@@ -70,28 +70,28 @@ deriv_spline = True#False#
 # precision = 1e-3
 # deriv_spline = True#False#
 
-# alpha = .05
-# dt = .1    ## 1,4    2,4
-# t = np.arange(0,6,dt)
-# x0 = [4, 1]
-# a = [(.7,-.8), (1,-1), (.5,-.6), (1.5,-1.5)]
-# func = func4_
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=a*x + b*xy"
-# real1 = "y'=b*y + a*xy"
-# threshold_sindy=1e-2
-# threshold_group = 1e-3
-# threshold_similarity = 1e-3
-# precision = 1e-3
-# deriv_spline = True#False#
+alpha = .05
+dt = .1    ## 1,4    2,4
+t = np.arange(0,6,dt)
+x0 = [[4, 1], [4, 1], [4, 1], [4, 1]]
+a = [(.7,-.8), (1,-1), (.5,-.6), (1.5,-1.5)]
+func = func4_
+monomial = monomial_poly
+monomial_name = monomial_poly_name
+real0 = "x'=a*x + b*xy"
+real1 = "y'=b*y + a*xy"
+threshold_sindy=1e-2
+threshold_group = 1e-3
+threshold_similarity = 1e-3
+precision = 1e-3
+deriv_spline = True#False#
 
 
 ################### 1 variable ####################
 # alpha = .05
 # dt = .05   ## 0,3
 # t = np.arange(0,2.3,dt)
-# x0 = [.2, 1]
+# x0 = [[.2, 1], [.2, 1], [.1, 1]]
 # a = [(.12,), (.16,), (.2,)]
 # func = func1
 # monomial = monomial_poly
@@ -107,7 +107,7 @@ deriv_spline = True#False#
 # alpha = .05
 # dt = .1
 # t = np.arange(0,2,dt)
-# x0 = [.5, 1]
+# x0 = [[.5, 1], [.5, 1], [.5, 1]]
 # a = [(.25,), (.3,), (.5,)]
 # # a = [(.1,), (.25,), (.3,), (.5,)]
 # func = func2
@@ -124,7 +124,7 @@ deriv_spline = True#False#
 # alpha = .05
 # dt = .1      ## 2,3,6,8;     1,2,7,9
 # t = np.arange(0,12,dt)
-# x0 = [.5, 1]
+# x0 = [[.5, 1], [.5, 1], [.5, 1]]
 # a = [(.2,), (.4,), (.6,)]
 # func = func3
 # monomial = monomial_poly
@@ -140,7 +140,7 @@ deriv_spline = True#False#
 # alpha = .05
 # dt = .1    ## 1,4    2,4
 # t = np.arange(0,5,dt)
-# x0 = [4, 1]
+# x0 = [[4, 1], [4, 1]]
 # a = [(.7,), (1,)]#,(.5,),(.6,)]
 # func = func4
 # monomial = monomial_poly
@@ -156,7 +156,7 @@ deriv_spline = True#False#
 # alpha = .05
 # dt = .2
 # t = np.arange(0,3.3,dt)
-# x0 = [np.pi-.1, 0]
+# x0 = [[np.pi-.1, 0], [np.pi-.1, 0]]
 # a = [(-.25,), (-.35,)]
 # func = func6
 # monomial = monomial_trig
@@ -172,7 +172,7 @@ deriv_spline = True#False#
 # alpha = .05
 # dt = .1
 # t = np.arange(0,6,dt)
-# x0 = [np.pi-.1, 0]
+# x0 = [[np.pi-.1, 0], [np.pi-.1, 0], [np.pi-.1, 0], [np.pi-.1, 0]]
 # # a = [-5, -6]
 # a = [(-.15,), (-1,), (-2,), (-5,)]
 # func = func7
@@ -189,7 +189,7 @@ deriv_spline = True#False#
 
 ### generate data ###
 num_traj = len(a)
-num_feature = len(x0)
+num_feature = len(x0[0])
 
 from utils import get_multi_sol
 sol_org_list = get_multi_sol(func, x0, t, a)
@@ -236,7 +236,7 @@ else:
 
 if __name__ == "__main__":
     #%% 
-    threshold_sindy_list =  [1e-3, 5e-3, 1e-2, 5e-2, 1e-1, 5e-1]
+    threshold_sindy_list =  [1e-3, 5e-3, 1e-2, 5e-2, 1e-1]
     # threshold_sindy_list =  [1e-2]
     from utils import ode_solver, get_deriv
     
@@ -252,7 +252,7 @@ if __name__ == "__main__":
             model = ps.SINDy(feature_names=["x", "y"], feature_library=lib_generalized, optimizer=optimizer)
         
             # print(f'################### [SINDy] threshold: {threshold_sindy} ################')
-            sol_, t_ = ode_solver(func, x0, t, a[traj_i])
+            sol_, t_ = ode_solver(func, x0[traj_i], t, a[traj_i])
             _, sol_deriv_, _ = get_deriv(sol_, t, deriv_spline)
             
             if ensemble:
@@ -282,12 +282,12 @@ if __name__ == "__main__":
         for model_id, model in enumerate(model_set):    
             sse_sum = 0
             
-            if np.abs(model.coefficients()).sum()>1e4:
+            if np.abs(model.coefficients()).sum()>1e3:
                 ms.set_model_SSE(model_id, 1e5)
                 continue
                 
             ##### simulations #####
-            simulation = model.simulate(x0, t = t)
+            simulation = model.simulate(x0[traj_i], t = t)
             
             sse_sum += ms.compute_SSE(sol_org_list[traj_i], simulation)
             
@@ -298,10 +298,10 @@ if __name__ == "__main__":
         best_AICc_model = ms.compute_AICc()
         best_BIC_model = ms.compute_BIC()
         
-        # ### Get best model
-        # print("Melhor modelo AIC = " + str(best_AIC_model) + "\n")
-        # print("Melhor modelo AICc = " + str(best_AICc_model) + "\n")
-        # print("Melhor modelo BIC = " + str(best_BIC_model) + "\n")
+        ### Get best model
+        print("Melhor modelo AIC = " + str(best_AIC_model) + "\n")
+        print("Melhor modelo AICc = " + str(best_AICc_model) + "\n")
+        print("Melhor modelo BIC = " + str(best_BIC_model) + "\n")
         
         def count_decimal_places(number):
             return len(str(1e-3).split('.')[1])

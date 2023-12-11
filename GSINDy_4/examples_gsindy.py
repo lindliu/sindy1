@@ -25,7 +25,7 @@ ensemble = False
 # alpha = .05
 # dt = .1      ## 2,3,6,8;     1,2,7,9
 # t = np.arange(0,10,dt)
-# x0 = [.5, 1]
+# x0 = [[.5, 1], [.5, 1], [.5, 1]]
 # a = [(.2, -.6, -.5), (.4, -.8, -.7), (.6, -1, -1)]
 # func = func3__
 # monomial = monomial_poly
@@ -42,7 +42,7 @@ ensemble = False
 # alpha = .05
 # dt = .1   ## 0,3
 # t = np.arange(0,1.5,dt)
-# x0 = [.5, 1]
+# x0 = [[.5, 1], [.5, 1], [.5, 1]]
 # a = [(.16, .25), (.3, .4), (.3, .5)]
 # func = func12_
 # monomial = monomial_poly
@@ -58,7 +58,7 @@ ensemble = False
 # alpha = .05
 # dt = .1      ## 2,3,6,8;     1,2,7,9
 # t = np.arange(0,12,dt)
-# x0 = [.5, 1]
+# x0 = [[.5, 1], [.5, 1], [.5, 1]]
 # a = [(.2, -.6), (.4, -.8), (.6, -1)]
 # func = func3_
 # monomial = monomial_poly
@@ -71,28 +71,28 @@ ensemble = False
 # precision = 1e-3
 # deriv_spline = True#False#
 
-# alpha = .05
-# dt = .1    ## 1,4    2,4
-# t = np.arange(0,6,dt)
-# x0 = [4, 1]
-# a = [(.7,-.8), (1,-1), (.5,-.6), (1.5,-1.5)]
-# func = func4_
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=a*x + b*xy"
-# real1 = "y'=b*y + a*xy"
-# threshold_sindy=1e-2
-# threshold_group = 1e-3
-# threshold_similarity = 1e-3
-# precision = 1e-3
-# deriv_spline = True#False#
+alpha = .05
+dt = .1    ## 1,4    2,4
+t = np.arange(0,6,dt)
+x0 = [[4, 1], [4, 1], [4, 1], [4, 1]]
+a = [(.7,-.8), (1,-1), (.5,-.6), (1.5,-1.5)]
+func = func4_
+monomial = monomial_poly
+monomial_name = monomial_poly_name
+real0 = "x'=a*x + b*xy"
+real1 = "y'=b*y + a*xy"
+threshold_sindy=1e-2
+threshold_group = 1e-3
+threshold_similarity = 1e-3
+precision = 1e-3
+deriv_spline = True#False#
 
 
 ################### 1 variable ####################
 # alpha = .05
 # dt = .05   ## 0,3
 # t = np.arange(0,2.3,dt)
-# x0 = [.2, 1]
+# x0 = [[.2, 1], [.2, 1], [.1, 1]]
 # a = [(.12,), (.16,), (.2,)]
 # func = func1
 # monomial = monomial_poly
@@ -108,7 +108,7 @@ ensemble = False
 # alpha = .05
 # dt = .1
 # t = np.arange(0,2,dt)
-# x0 = [.5, 1]
+# x0 = [[.5, 1], [.5, 1], [.5, 1]]
 # a = [(.25,), (.3,), (.5,)]
 # # a = [(.1,), (.25,), (.3,), (.5,)]
 # func = func2
@@ -125,7 +125,7 @@ ensemble = False
 # alpha = .05
 # dt = .1      ## 2,3,6,8;     1,2,7,9
 # t = np.arange(0,12,dt)
-# x0 = [.5, 1]
+# x0 = [[.5, 1], [.5, 1], [.5, 1]]
 # a = [(.2,), (.4,), (.6,)]
 # func = func3
 # monomial = monomial_poly
@@ -141,7 +141,7 @@ ensemble = False
 # alpha = .05
 # dt = .1    ## 1,4    2,4
 # t = np.arange(0,5,dt)
-# x0 = [4, 1]
+# x0 = [[4, 1], [4, 1]]
 # a = [(.7,), (1,)]#,(.5,),(.6,)]
 # func = func4
 # monomial = monomial_poly
@@ -154,26 +154,26 @@ ensemble = False
 # precision = 1e-3
 # deriv_spline = True#False#
 
-alpha = .05
-dt = .2
-t = np.arange(0,3.3,dt)
-x0 = [np.pi-.1, 0]
-a = [(-.25,), (-.35,)]
-func = func6
-monomial = monomial_trig
-monomial_name = monomial_trig_name
-real0 = "x'=y"
-real1 = "y'=a*y-5sin(x)"
-threshold_sindy=1e-2
-threshold_group = 1e-3
-threshold_similarity = 1e-3
-precision = 1e-3
-deriv_spline = True#False#
+# alpha = .05
+# dt = .2
+# t = np.arange(0,3.3,dt)
+# x0 = [[np.pi-.1, 0], [np.pi-.1, 0]]
+# a = [(-.25,), (-.35,)]
+# func = func6
+# monomial = monomial_trig
+# monomial_name = monomial_trig_name
+# real0 = "x'=y"
+# real1 = "y'=a*y-5sin(x)"
+# threshold_sindy=1e-2
+# threshold_group = 1e-3
+# threshold_similarity = 1e-3
+# precision = 1e-3
+# deriv_spline = True#False#
 
 # alpha = .05
 # dt = .1
 # t = np.arange(0,6,dt)
-# x0 = [np.pi-.1, 0]
+# x0 = [[np.pi-.1, 0], [np.pi-.1, 0], [np.pi-.1, 0], [np.pi-.1, 0]]
 # # a = [-5, -6]
 # a = [(-.15,), (-1,), (-2,), (-5,)]
 # func = func7
@@ -210,7 +210,7 @@ def func_simulation(x, t, param, basis):
 
 ### generate data ###
 num_traj = len(a)
-num_feature = len(x0)
+num_feature = len(x0[0])
 
 from utils import get_multi_sol
 sol_org_list = get_multi_sol(func, x0, t, a)
@@ -229,8 +229,8 @@ if __name__ == "__main__":
     ############# group sindy ##############
     ########################################
     model_set = []
-    threshold_sindy_list = [1e-3, 5e-3, 1e-2, 5e-2, 1e-1, 5e-1]
-    threshold_group_list = [1e-4, 1e-3, 1e-2]
+    threshold_sindy_list = [1e-3, 5e-3, 1e-2, 5e-2, 1e-1]
+    threshold_group_list = [1e-3, 1e-2]
     threshold_similarity_list = [1e-4, 1e-3]
     # threshold_sindy_list = [5e-3, 1e-2]
     # threshold_group_list = [1e-4, 1e-3]
@@ -245,16 +245,17 @@ if __name__ == "__main__":
                 print(f'################### [GSINDy] threshold_group: {threshold_group} ################')
                 print(f'################### [GSINDy] threshold_similarity: {threshold_similarity} ################')
 
-                gsindy = GSINDy(monomial=monomial,\
-                                monomial_name=monomial_name, \
-                                num_traj = num_traj, \
-                                num_feature = num_feature, \
-                                threshold_sindy = threshold_sindy, \
-                                threshold_group=threshold_group, \
-                                threshold_similarity=threshold_similarity, \
-                                precision = precision, \
-                                alpha=alpha,\
-                                deriv_spline=deriv_spline,\
+                gsindy = GSINDy(monomial=monomial,
+                                monomial_name=monomial_name, 
+                                num_traj = num_traj, 
+                                num_feature = num_feature, 
+                                threshold_sindy = threshold_sindy, 
+                                threshold_group=threshold_group, 
+                                threshold_similarity=threshold_similarity, 
+                                precision = precision, 
+                                alpha=alpha,
+                                deriv_spline=deriv_spline,
+                                max_iter = 20, 
                                 optimizer=opt, ##['Manually', 'SQTL', 'LASSO', 'SR3']
                                 ensemble=ensemble)    
                     
@@ -308,14 +309,16 @@ if __name__ == "__main__":
     for model_id, Xi in enumerate(model_set):
         sse_sum = 0
         for j in range(num_traj):
+            # _, sol_deriv_, _ = get_deriv(sol_org_list[j], t, deriv_spline)
+            # sse_sum += ms.compute_SSE(monomial(sol_org_list[j])@Xi[j].T, sol_deriv_)
             
-            if np.abs(Xi[j]).sum()>1e4:
+            if np.abs(Xi[j]).sum()>1e3:
                 sse_sum += 1e5
                 continue
             
             args = (Xi[j], basis)
             ##### simulations #####
-            simulation = odeint(func_simulation, x0, t, args=args)
+            simulation = odeint(func_simulation, x0[j], t, args=args)
             # SSE(sol_org_list[j], simulation)
             
             sse_sum += ms.compute_SSE(sol_org_list[j], simulation)
