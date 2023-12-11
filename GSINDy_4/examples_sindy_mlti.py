@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sun Dec 10 20:43:45 2023
+Created on Mon Dec 11 18:55:57 2023
 
 @author: dliu
 """
+
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -242,79 +243,84 @@ if __name__ == "__main__":
     # threshold_sindy_list =  [1e-2]
     from utils import ode_solver, get_deriv
     
-    for traj_i in range(len(a)):
+    ##################################
+    ############# sindy ##############
+    ##################################
+    model_set = []
+    parameter_list = []
+    for threshold_sindy in threshold_sindy_list:
+        optimizer = STLSQ(threshold=threshold_sindy, alpha=alpha)
+        model = ps.SINDy(feature_names=["x", "y"], feature_library=lib_generalized, optimizer=optimizer)
         
-        ##################################
-        ############# sindy ##############
-        ##################################
-        model_set = []
-        parameter_list = []
-        for threshold_sindy in threshold_sindy_list:
-            optimizer = STLSQ(threshold=threshold_sindy, alpha=alpha)
-            model = ps.SINDy(feature_names=["x", "y"], feature_library=lib_generalized, optimizer=optimizer)
-        
-            # print(f'################### [SINDy] threshold: {threshold_sindy} ################')
+        print(f'################### [SINDy] threshold: {threshold_sindy} ################')
+
+        sol_list = []
+        sol_deriv_list = []
+        for traj_i in range(num_traj):
             sol_, t_ = ode_solver(func, x0[traj_i], t, a[traj_i])
             _, sol_deriv_, _ = get_deriv(sol_, t, deriv_spline)
             
-            if ensemble:
-                model.fit(sol_, t=t_, x_dot=sol_deriv_, ensemble=True, quiet=True)
-            else:
-                model.fit(sol_, t=t_, x_dot=sol_deriv_)
-            # model.print()
-            # model.coefficients()
+            sol_list.append(sol_)
+            sol_deriv_list.append(sol_deriv_)
             
-            model_set.append(model)
-            # theta_ = monomial(sol_)
-            # print(SLS(theta_, sol_deriv_, threshold_sindy, precision))
-            
-            parameter_list.append(threshold_sindy)
+        if ensemble:
+            model.fit(sol_list, t=t_, x_dot=sol_deriv_list, ensemble=True, quiet=True, multiple_trajectories=True)
+        else:
+            model.fit(sol_list, t=t_, x_dot=sol_deriv_list, multiple_trajectories=True)
+        model.print()
+        # model.coefficients()
+        
+        model_set.append(model)
+        # theta_ = monomial(sol_)
+        # print(SLS(theta_, sol_deriv_, threshold_sindy, precision))
+        
+        parameter_list.append(threshold_sindy)
 
 
-        ###########################
-        ##### model selection #####
-        ###########################
+    ###########################
+    ##### model selection #####
+    ###########################
+    
+    from ModelSelection import ModelSelection
+    
+    t_steps = t.shape[0]
+    ms = ModelSelection(model_set, t_steps)
+    ms.compute_k_sindy()
+    
+    for model_id, model in enumerate(model_set):    
+        if np.abs(model.coefficients()).sum()>1e3:
+            ms.set_model_SSE(model_id, 1e5)
+            continue
         
-        from ModelSelection import ModelSelection
-        
-        t_steps = t.shape[0]
-        ms = ModelSelection(model_set, t_steps)
-        ms.compute_k_sindy()
-        
-        for model_id, model in enumerate(model_set):    
-            sse_sum = 0
-            
-            if np.abs(model.coefficients()).sum()>1e3:
-                ms.set_model_SSE(model_id, 1e5)
-                continue
-                
-            ##### simulations #####
+        sse_sum = 0
+        ##### simulations #####
+        for traj_i in range(num_traj):
             simulation = model.simulate(x0[traj_i], t = t)
-            
-            sse_sum += ms.compute_SSE(sol_org_list[traj_i], simulation)
-            
-            # ms.set_model_SSE(model_id, sse_sum/num_traj)
-            ms.set_model_SSE(model_id, sse_sum)
         
-        best_AIC_model = ms.compute_AIC()
-        best_AICc_model = ms.compute_AICc()
-        best_BIC_model = ms.compute_BIC()
+            sse_sum += ms.compute_SSE(sol_list[traj_i], simulation)
         
-        ### Get best model
-        print("Melhor modelo AIC = " + str(best_AIC_model) + "\n")
-        print("Melhor modelo AICc = " + str(best_AICc_model) + "\n")
-        print("Melhor modelo BIC = " + str(best_BIC_model) + "\n")
-        
-        def count_decimal_places(number):
-            return len(str(1e-3).split('.')[1])
-        
-        ### best model 
-        print('*'*65)
-        print('*'*16+f' The best model of trajectory: {traj_i} '+'*'*16)
-        print('*'*65)
-        model_best = model_set[best_AIC_model]
-        model_best.print(precision=count_decimal_places(precision))
-        print('*'*65)
-        print('*'*65)
-        
-        print(f'threshold: {parameter_list[best_AIC_model]}')
+        ms.set_model_SSE(model_id, sse_sum/num_traj)
+        # ms.set_model_SSE(model_id, sse_sum)
+    
+    best_AIC_model = ms.compute_AIC()
+    best_AICc_model = ms.compute_AICc()
+    best_BIC_model = ms.compute_BIC()
+    
+    ### Get best model
+    print("Melhor modelo AIC = " + str(best_AIC_model) + "\n")
+    print("Melhor modelo AICc = " + str(best_AICc_model) + "\n")
+    print("Melhor modelo BIC = " + str(best_BIC_model) + "\n")
+    
+    def count_decimal_places(number):
+        return len(str(1e-3).split('.')[1])
+    
+    ### best model 
+    print('*'*65)
+    print('*'*16+f' The best model '+'*'*16)
+    print('*'*65)
+    model_best = model_set[best_AIC_model]
+    model_best.print(precision=count_decimal_places(precision))
+    print('*'*65)
+    print('*'*65)
+    
+    print(f'threshold: {parameter_list[best_AIC_model]}')

@@ -182,6 +182,8 @@ class GSINDy():
     
     ### get data
     def get_multi_sub_series(self, sol_org_list, t, num_series=60, window_per=.7):
+        assert window_per<1, 'window_per has to be less than 1'
+        
         num_traj = self.num_traj
 
         length = t[-1]-t[0]
@@ -197,7 +199,9 @@ class GSINDy():
         for k in range(num_traj):
             for i in range(num_series):
                 # t_new = np.sort(t[0] + np.random.rand(100)*length)
-                t_new = np.linspace(length*(i*step),length*(i*step)+length_sub, num=int(length_sub//dt))
+                t_new = np.linspace(length*(i*step), length*(i*step)+length_sub, num=int(length_sub//dt))
+                # start = (length-length_sub)*np.random.rand()
+                # t_new = np.linspace(start, start+length_sub, num=int(length_sub//dt))
                 sol0_, sol0_deriv_ = data_interp(t_new, t, sol_org_list[k][:,0].squeeze(), self.deriv_spline)
                 sol1_, sol1_deriv_ = data_interp(t_new, t, sol_org_list[k][:,1].squeeze(), self.deriv_spline)
         
