@@ -189,7 +189,7 @@ ensemble = False
 # deriv_spline = True#False#
     
 alpha = .05
-dt = .05    ## 1,4    2,4
+dt = .05    
 t = np.arange(0,20,dt)
 x0 = [[1, -2], [1, -2], [1, -2], [1, -2]]
 a = [(.3,), (.4,),(.5,),(.2,)]
@@ -306,7 +306,7 @@ if __name__ == "__main__":
                 continue
                 
             ##### simulations #####
-            simulation = model.simulate(x0[traj_i], t = t)
+            simulation = model.simulate(x0[traj_i], t=t, integrator = "odeint")
             
             sse_sum += ms.compute_SSE(sol_org_list[traj_i], simulation)
             
@@ -329,9 +329,9 @@ if __name__ == "__main__":
         print('*'*65)
         print('*'*16+f' The best model of trajectory: {traj_i} '+'*'*16)
         print('*'*65)
-        model_best = model_set[best_AIC_model]
+        model_best = model_set[best_BIC_model]
         model_best.print(precision=count_decimal_places(precision))
         print('*'*65)
         print('*'*65)
         
-        print(f'threshold: {parameter_list[best_AIC_model]}')
+        print(f'threshold: {parameter_list[best_BIC_model]}')

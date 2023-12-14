@@ -191,7 +191,7 @@ ensemble = False
 # deriv_spline = True#False#
 
 alpha = .05
-dt = .05    ## 1,4    2,4
+dt = .05    
 t = np.arange(0,20,dt)
 x0 = [[1, -2], [1, -2], [1, -2], [1, -2]]
 a = [(.3,), (.4,),(.5,),(.2,)]
