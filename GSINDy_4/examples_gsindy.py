@@ -11,7 +11,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from utils import func1, func2, func3, func4, func5, func6, func7, \
                 func12_, func3_, func4_, func3__, \
-                monomial_poly, monomial_trig, monomial_poly_name, monomial_trig_name
+                monomial_poly, monomial_trig, monomial_poly_name, monomial_trig_name, \
+                monomial_all, monomial_all_name
 from GSINDy import *
 
 MSE = lambda x, y: ((x-y)**2).mean()
@@ -89,23 +90,23 @@ ensemble = False
 
 
 ################### 1 variable ####################
-alpha = .05
-dt = .05   ## 0,3
-t = np.arange(0,2.3,dt)
-# x0 = [[.2, 1], [.2, 1], [.1, 1]]
-# a = [(.12,), (.16,), (.2,)]
-x0 = [[.2, 1], [.05, 1], [.1, 1]]
-a = [(.2,), (.2,), (.2,)]
-func = func1
-monomial = monomial_poly
-monomial_name = monomial_poly_name
-real0 = "x'=a + x^2"
-real1 = "y'=-y"
-threshold_sindy=5e-2
-threshold_similarity = 1e-3
-threshold_group = 1e-3
-precision = 1e-3
-deriv_spline = True#False#
+# alpha = .05
+# dt = .05   ## 0,3
+# t = np.arange(0,2.3,dt)
+# # x0 = [[.2, 1], [.2, 1], [.1, 1]]
+# # a = [(.12,), (.16,), (.2,)]
+# x0 = [[.2, 1], [.05, 1], [.1, 1]]
+# a = [(.2,), (.2,), (.2,)]
+# func = func1
+# monomial = monomial_poly
+# monomial_name = monomial_poly_name
+# real0 = "x'=a + x^2"
+# real1 = "y'=-y"
+# threshold_sindy=5e-2
+# threshold_similarity = 1e-3
+# threshold_group = 1e-3
+# precision = 1e-3
+# deriv_spline = True#False#
 
 # alpha = .05
 # dt = .1
@@ -179,8 +180,8 @@ deriv_spline = True#False#
 # # a = [-5, -6]
 # a = [(-.15,), (-1,), (-2,), (-5,)]
 # func = func7
-# monomial = monomial_trig
-# monomial_name = monomial_trig_name
+# monomial = monomial_trig  ## monomial_all
+# monomial_name = monomial_trig_name ## monomial_all_name
 # real0 = "x'=y"
 # real1 = "y'=-0.25*y+a*sin(x)"
 # threshold_sindy=1e-2
@@ -188,6 +189,22 @@ deriv_spline = True#False#
 # threshold_similarity = 1e-3
 # precision = 1e-3
 # deriv_spline = True#False#
+
+alpha = .05
+dt = .05    ## 1,4    2,4
+t = np.arange(0,20,dt)
+x0 = [[1, -2], [1, -2], [1, -2], [1, -2]]
+a = [(.3,), (.4,),(.5,),(.2,)]
+func = func5
+monomial = monomial_poly
+monomial_name = monomial_poly_name
+real0 = "x'=5*(x - y- a*x^3)"
+real1 = "y'=.2*x"    
+threshold_sindy=1e-2
+threshold_group = 1e-3
+threshold_similarity = 1e-3
+precision = 1e-3
+deriv_spline = True#False#   ### model selection process need to be improved. make it more focus on smaller model
 
 
 def func_simulation(x, t, param, basis):
@@ -233,7 +250,7 @@ if __name__ == "__main__":
     model_set = []
     threshold_sindy_list = [1e-3, 5e-3, 1e-2, 5e-2, 1e-1]
     threshold_group_list = [1e-3, 1e-2]
-    threshold_similarity_list = [1e-4, 1e-3]
+    threshold_similarity_list = [1e-3, 1e-2]
     # threshold_sindy_list = [5e-3, 1e-2]
     # threshold_group_list = [1e-4, 1e-3]
     # threshold_similarity_list = [1e-3, 1e-2]
@@ -261,7 +278,7 @@ if __name__ == "__main__":
                                 optimizer=opt, ##['Manually', 'SQTL', 'LASSO', 'SR3']
                                 ensemble=ensemble)    
                     
-                gsindy.get_multi_sub_series(sol_org_list, t, num_series=60, window_per=.7) ### to get theta_list, sol_deriv_list
+                gsindy.get_multi_sub_series(sol_org_list, t, num_series=100, window_per=.7) ### to get theta_list, sol_deriv_list
                 gsindy.basis_identification(remove_per=.2, plot_dist=False) ##True
                 
                 Xi_final = gsindy.prediction(sol_org_list, t)
@@ -303,6 +320,16 @@ if __name__ == "__main__":
     else:
         basis = np.array([lambda x,y: 1, lambda x,y: x, lambda x,y: y, lambda x,y: np.sin(x), lambda x,y: np.sin(y), \
                   lambda x,y: np.cos(x), lambda x,y: np.cos(y)])
+    
+    # basis = np.array([lambda x,y: 1, \
+    #     lambda x,y: x, lambda x,y: y, \
+    #     lambda x,y: x**2, lambda x,y: x*y, lambda x,y: y**2, \
+    #     lambda x,y: x**3, lambda x,y: x**2*y, lambda x,y: x*y**2, lambda x,y: y**3, \
+    #     lambda x,y: x**4, lambda x,y: y**4, \
+    #     lambda x,y: 1/x, lambda x,y: 1/y, 
+    #     lambda x,y: np.sin(x), lambda x,y: np.sin(y),lambda x,y: np.cos(x), lambda x,y: np.cos(y),\
+    #     lambda x,y: np.exp(x), lambda x,y: np.exp(y)])
+    
     
     t_steps = t.shape[0]
     ms = ModelSelection(model_set, t_steps)

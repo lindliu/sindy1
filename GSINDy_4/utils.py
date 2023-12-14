@@ -123,18 +123,14 @@ def func4_(x, t, a, b):
 
 def func5(x, t, a):
     """
-    SINDy-SA: tumor growth model
+    van der pol
     
-    dxdt = c0*x + c1*x^2
-    dydt = -y
-    
-    c0 = .028, c1=-3.305e-6
-    x0, y0 = 245.185, 1
+    dxdt = 5*(x - y- c0*x^3)
+    dydt = .2*x
     """
     c0 = a
-    c1 = -3.305e-6
     x1, x2 = x
-    dxdt = [c0*x1 + c1*x1**2, -x2]
+    dxdt = [5*(x1 - x2- c0*x1**3), .2*x1]
     return dxdt
 
 def func6(x, t, a):
@@ -193,6 +189,20 @@ def monomial_trig(x):
         
 monomial_trig_name = np.array(['1', 'x', 'y', 'sin(x)', 'sin(y)',  'cos(x)', 'cos(y)'])
 
+def monomial_all(x):
+    x1 = x[:,[0]]
+    x2 = x[:,[1]]
+    return np.c_[np.ones([x1.shape[0],1]), \
+                 x1, x2, \
+                 x1**2, x1*x2, x2**2, \
+                 x1**3, x1**2*x2, x1*x2**2, x2**3, \
+                 x1**4, x2**4, \
+                 1/x1, 1/x2, \
+                 np.sin(x1), np.sin(x2), np.cos(x1), np.cos(x2), np.exp(x1), np.exp(x2)]
+
+monomial_all_name = np.array(['1', 'x', 'y', 'x^2', 'xy','y^2','x^3','x^2y','xy^2','y^3',\
+                      'x^4','y^4','1/x','1/y',\
+                      'sin(x)', 'sin(y)', 'cos(x)', 'cos(y)', 'exp(x)', 'exp(y)'])
 
 
 from scipy.integrate import odeint
