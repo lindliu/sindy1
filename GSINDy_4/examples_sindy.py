@@ -88,23 +88,23 @@ ensemble = False
 
 
 ################### 1 variable ####################
-# alpha = .05
-# dt = .05   ## 0,3
-# t = np.arange(0,2.3,dt)
-# # x0 = [[.2, 1], [.2, 1], [.1, 1]]
-# # a = [(.12,), (.16,), (.2,)]
-# x0 = [[.2, 1], [.05, 1], [.1, 1]]
-# a = [(.2,), (.2,), (.2,)]
-# func = func1
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=a + x^2"
-# real1 = "y'=-y"
-# threshold_sindy=5e-2
-# threshold_similarity = 1e-3
-# threshold_group = 1e-3
-# precision = 1e-3
-# deriv_spline = True#False#
+alpha = .05
+dt = .05   ## 0,3
+t = np.arange(0,2.3,dt)
+# x0 = [[.2, 1], [.2, 1], [.1, 1]]
+# a = [(.12,), (.16,), (.2,)]
+x0 = [[.2, 1], [.05, 1], [.1, 1]]
+a = [(.2,), (.2,), (.2,)]
+func = func1
+monomial = monomial_poly
+monomial_name = monomial_poly_name
+real0 = "x'=a + x^2"
+real1 = "y'=-y"
+threshold_sindy=5e-2
+threshold_similarity = 1e-3
+threshold_group = 1e-3
+precision = 1e-3
+deriv_spline = True#False#
 
 # alpha = .05
 # dt = .1
@@ -188,21 +188,21 @@ ensemble = False
 # precision = 1e-3
 # deriv_spline = True#False#
     
-alpha = .05
-dt = .05    
-t = np.arange(0,20,dt)
-x0 = [[1, -2], [1, -2], [1, -2], [1, -2]]
-a = [(.3,), (.4,),(.5,),(.2,)]
-func = func5
-monomial = monomial_poly
-monomial_name = monomial_poly_name
-real0 = "x'=5*(x - y- a*x^3)"
-real1 = "y'=.2*x"    
-threshold_sindy=1e-2
-threshold_group = 1e-3
-threshold_similarity = 1e-3
-precision = 1e-3
-deriv_spline = True#False#   ### model selection process need to be improved. make it more focus on smaller model
+# alpha = .05
+# dt = .05    
+# t = np.arange(0,20,dt)
+# x0 = [[1, -2], [1, -2], [1, -2], [1, -2]]
+# a = [(.3,), (.4,),(.5,),(.2,)]
+# func = func5
+# monomial = monomial_poly
+# monomial_name = monomial_poly_name
+# real0 = "x'=5*(x - y- a*x^3)"
+# real1 = "y'=.2*x"    
+# threshold_sindy=1e-2
+# threshold_group = 1e-3
+# threshold_similarity = 1e-3
+# precision = 1e-3
+# deriv_spline = True#False#   ### model selection process need to be improved. make it more focus on smaller model
 
 
 
@@ -258,7 +258,8 @@ if __name__ == "__main__":
     threshold_sindy_list =  [1e-3, 5e-3, 1e-2, 5e-2, 1e-1]
     # threshold_sindy_list =  [1e-2]
     from utils import ode_solver, get_deriv
-    
+    from sklearn.linear_model import Lasso
+
     for traj_i in range(len(a)):
         
         ##################################
@@ -267,7 +268,14 @@ if __name__ == "__main__":
         model_set = []
         parameter_list = []
         for threshold_sindy in threshold_sindy_list:
-            optimizer = STLSQ(threshold=threshold_sindy, alpha=alpha)
+            # optimizer = STLSQ(threshold=threshold_sindy, alpha=alpha)
+            if opt=='SQTL':
+                optimizer = ps.STLSQ(threshold=threshold_sindy, alpha=alpha)
+            elif opt=='LASSO':
+                optimizer = Lasso(alpha=alpha, max_iter=5000, fit_intercept=False)
+            elif opt=='SR3':
+                optimizer = ps.SR3(threshold=threshold_sindy, nu=.1)
+            
             model = ps.SINDy(feature_names=["x", "y"], feature_library=lib_generalized, optimizer=optimizer)
         
             # print(f'################### [SINDy] threshold: {threshold_sindy} ################')

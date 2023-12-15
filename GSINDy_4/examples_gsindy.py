@@ -90,23 +90,23 @@ ensemble = False
 
 
 ################### 1 variable ####################
-# alpha = .05
-# dt = .05   ## 0,3
-# t = np.arange(0,2.3,dt)
-# # x0 = [[.2, 1], [.2, 1], [.1, 1]]
-# # a = [(.12,), (.16,), (.2,)]
-# x0 = [[.2, 1], [.05, 1], [.1, 1]]
-# a = [(.2,), (.2,), (.2,)]
-# func = func1
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=a + x^2"
-# real1 = "y'=-y"
-# threshold_sindy=5e-2
-# threshold_similarity = 1e-3
-# threshold_group = 1e-3
-# precision = 1e-3
-# deriv_spline = True#False#
+alpha = .05
+dt = .05   ## 0,3
+t = np.arange(0,2.3,dt)
+# x0 = [[.2, 1], [.2, 1], [.1, 1]]
+# a = [(.12,), (.16,), (.2,)]
+x0 = [[.2, 1], [.05, 1], [.1, 1]]
+a = [(.2,), (.2,), (.2,)]
+func = func1
+monomial = monomial_poly
+monomial_name = monomial_poly_name
+real0 = "x'=a + x^2"
+real1 = "y'=-y"
+threshold_sindy=5e-2
+threshold_similarity = 1e-3
+threshold_group = 1e-3
+precision = 1e-3
+deriv_spline = True#False#
 
 # alpha = .05
 # dt = .1
@@ -190,21 +190,21 @@ ensemble = False
 # precision = 1e-3
 # deriv_spline = True#False#
 
-alpha = .05
-dt = .05    
-t = np.arange(0,20,dt)
-x0 = [[1, -2], [1, -2], [1, -2], [1, -2]]
-a = [(.3,), (.4,),(.5,),(.2,)]
-func = func5
-monomial = monomial_poly
-monomial_name = monomial_poly_name
-real0 = "x'=5*(x - y- a*x^3)"
-real1 = "y'=.2*x"    
-threshold_sindy=1e-2
-threshold_group = 1e-3
-threshold_similarity = 1e-3
-precision = 1e-3
-deriv_spline = True#False#   ### model selection process need to be improved. make it more focus on smaller model
+# alpha = .05
+# dt = .05    
+# t = np.arange(0,20,dt)
+# x0 = [[1, -2], [1, -2], [1, -2], [1, -2]]
+# a = [(.3,), (.4,),(.5,),(.2,)]
+# func = func5
+# monomial = monomial_poly
+# monomial_name = monomial_poly_name
+# real0 = "x'=5*(x - y- a*x^3)"
+# real1 = "y'=.2*x"    
+# threshold_sindy=1e-2
+# threshold_group = 1e-3
+# threshold_similarity = 1e-3
+# precision = 1e-3
+# deriv_spline = True#False#   ### model selection process need to be improved. make it more focus on smaller model
 
 
 def func_simulation(x, t, param, basis):
@@ -281,7 +281,8 @@ if __name__ == "__main__":
                 gsindy.get_multi_sub_series(sol_org_list, t, num_series=100, window_per=.7) ### to get theta_list, sol_deriv_list
                 gsindy.basis_identification(remove_per=.2, plot_dist=False) ##True
                 
-                Xi_final = gsindy.prediction(sol_org_list, t)
+                # Xi_final = gsindy.prediction(sol_org_list, t)
+                Xi_final = gsindy.prediction_(sol_org_list, t, split_basis=False)
                 
                 model_set.append(Xi_final)
                 

@@ -412,6 +412,69 @@ class GSINDy():
     
         return Xi_final
     
+    
+    #%% get final predicted Xi
+    def prediction_(self, sol_org_list, t, split_basis=True):
+        if split_basis:
+            all_basis = copy.deepcopy(self.all_basis)
+            diff_basis = copy.deepcopy(self.diff_basis)
+            same_basis = copy.deepcopy(self.same_basis)
+        else:
+            all_basis = copy.deepcopy(self.all_basis)
+            diff_basis = copy.deepcopy(self.all_basis)
+            same_basis = [[] for _ in range(self.num_feature)]
+            
+        theta_org_list, sol_deriv_org_list = self.get_multi_theta(sol_org_list, t)        
+        
+        Xi_final = np.zeros([self.num_traj, self.num_feature, self.num_basis])
+        for k, (theta_org_, sol_deriv_org_) in enumerate(zip(theta_org_list, sol_deriv_org_list)):
+            
+            ## if no basis selected
+            if not all_basis[k].any():
+                continue
+            
+            block_diff_list = [block_[:,diff_basis[k]] for block_ in theta_org_]
+            block_diff = block_diag_multi_traj(block_diff_list)
+            
+            block_same_list = [block_[:,same_basis[k]] for block_ in theta_org_]
+            block_same = np.vstack(block_same_list)
+        
+            Theta = np.c_[block_diff, block_same]
+            dXdt = sol_deriv_org_
+            
+            
+            if self.optimizer=='Manually':
+                ### using own solver, should be the same in sindy without ensemble case
+                Xi0_ = SLS(Theta, dXdt, self.threshold_sindy, self.precision, self.alpha)[...,0]
+            else:
+                ### using pysindy solver
+                Theta_ = Axes_transfer(Theta)
+                lib_generalized = Shell_custom_theta(theta=Theta_)  ###此处Shell_custom_theta只是壳，方便带入Theta_，无实际意义
+                model = ps.SINDy(feature_names=["x", "y"], feature_library=lib_generalized, optimizer=self.optimizer)
+                if self.ensemble:
+                    model.fit(np.ones([1]), t=1, x_dot=dXdt, ensemble=True, quiet=True) ###first 2 inputs has no meanings
+                else:
+                    model.fit(np.ones([1]), t=1, x_dot=dXdt) ###first 2 inputs has no meanings
+                Xi0_ = model.coefficients()[0,...]
+                                
+            num_diff_ = diff_basis[k].sum()*self.num_traj
+            Xi_final[:,k,diff_basis[k]] = Xi0_[:num_diff_].reshape([self.num_traj,-1])
+            Xi_final[:,k,same_basis[k]] = Xi0_[num_diff_:]
+            
+            
+        Xi_final[np.abs(Xi_final)<self.precision] = 0
+        
+        # mask_tol = np.abs(Xi_final.mean(0))>self.precision  
+        mask_tol = (Xi_final!=0).any(0)
+        all_basis[0] = np.logical_and(mask_tol[0],all_basis[0])
+        all_basis[1] = np.logical_and(mask_tol[1],all_basis[1])
+    
+        if split_basis:
+            self.all_basis = copy.deepcopy(all_basis)
+        else:
+            self.all_basis = copy.deepcopy(all_basis)
+        return Xi_final
+    
     def get_multi_theta(self, sol_org_list, t):
         theta_org_list = [[] for _ in range(self.num_feature)]
         sol_deriv_org_list = [[] for _ in range(self.num_feature)]
