@@ -283,22 +283,25 @@ class GSINDy():
             ### remove part outliers of estimated parameters ###
             tail = int(num_series*self.remove_per) #### 
             Xi0_group = np.sort(Xi0_group, axis=1)
+
+            Xi0_group_r = np.zeros([self.num_traj, num_series-tail, num_basis])
             for p in range(self.num_traj):
                 for q in range(num_basis):
                     i_min = self.find_interval(Xi0_group[p,:,q], tail)
-                    Xi0_group[p,tail:,q] = Xi0_group[p, i_min:num_series-(tail-i_min), q]
-                    Xi0_group[p,:tail,q] = 0  ##only use statistical meaning later, so doesn't mater where are zeros
-
+                    Xi0_group_r[p,:,q] = Xi0_group[p, i_min:num_series-(tail-i_min), q]
+                    # Xi0_group[p,tail:,q] = Xi0_group[p, i_min:num_series-(tail-i_min), q]
+                    # Xi0_group[p,:tail,q] = 0  ##only use statistical meaning later, so doesn't mater where are zeros
+                    
             ### group threshold ###
-            idx_activ = (np.abs(Xi0_group.mean(0).mean(0))>self.threshold_group)
-            Xi0_group[:,:,~idx_activ] = 0
+            idx_activ = (np.abs(Xi0_group_r.mean(0).mean(0))>self.threshold_group)
+            Xi0_group_r[:,:,~idx_activ] = 0
             
-            ##### Xi0_group normalization for calculate distance of distributions ##### !!!!!! for func3
-            norm_each_coef = np.linalg.norm(np.vstack(Xi0_group),axis=0)  ## num_basis
-            # norm_each_coef = np.mean(np.abs(np.vstack(Xi0_group)),axis=0)  ## num_basis
-            Xi0_group[:,:,idx_activ] = Xi0_group[:,:,idx_activ]/norm_each_coef[idx_activ]
+            ##### Xi0_group_r normalization for calculate distance of distributions ##### !!!!!! for func3
+            norm_each_coef = np.linalg.norm(np.vstack(Xi0_group_r),axis=0)  ## num_basis
+            # norm_each_coef = np.mean(np.abs(np.vstack(Xi0_group_r)),axis=0)  ## num_basis
+            Xi0_group_r[:,:,idx_activ] = Xi0_group_r[:,:,idx_activ]/norm_each_coef[idx_activ]
             
-            # plot_distribution(Xi0_group, nth_feature, epoch, self.monomial_name, idx=self.idx_basis[idx_activ])
+            # plot_distribution(Xi0_group_r, nth_feature, epoch, self.monomial_name, idx=self.idx_basis[idx_activ])
 
             #######################################
             ##### To find the identical basis #####
@@ -313,7 +316,7 @@ class GSINDy():
             for k in self.idx_basis[idx_diff_activ]:
                 radius_ = []
                 for i,j in combinations(np.arange(self.num_traj), 2):
-                    radius_.append(wasserstein_distance(Xi0_group[i,:,k],Xi0_group[j,:,k]))
+                    radius_.append(wasserstein_distance(Xi0_group_r[i,:,k],Xi0_group_r[j,:,k]))
                 dist_ = scipy.cluster.hierarchy.linkage(radius_, method='single')[:,2]
                 # radius.append(np.max(dist_))
                 # radius.append(np.mean(dist_))

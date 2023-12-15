@@ -282,7 +282,7 @@ if __name__ == "__main__":
                 gsindy.basis_identification(remove_per=.2, plot_dist=False) ##True
                 
                 # Xi_final = gsindy.prediction(sol_org_list, t)
-                Xi_final = gsindy.prediction_(sol_org_list, t, split_basis=False)
+                Xi_final = gsindy.prediction_(sol_org_list, t, split_basis=True)
                 
                 model_set.append(Xi_final)
                 
