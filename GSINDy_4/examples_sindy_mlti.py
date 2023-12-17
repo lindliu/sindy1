@@ -71,41 +71,43 @@ ensemble = False
 # precision = 1e-3
 # deriv_spline = True#False#
 
-# alpha = .05
-# dt = .1    ## 1,4    2,4
-# t = np.arange(0,6,dt)
+alpha = .05
+dt = .1    ## 1,4    2,4
+t = np.arange(0,9,dt)
 # x0 = [[4, 1], [4, 1], [4, 1], [4, 1]]
 # a = [(.7,-.8), (1,-1), (.5,-.6), (1.5,-1.5)]
-# func = func4_
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=a*x + b*xy"
-# real1 = "y'=b*y + a*xy"
-# threshold_sindy=1e-2
-# threshold_group = 1e-3
-# threshold_similarity = 1e-3
-# precision = 1e-3
-# deriv_spline = True#False#
+x0 = [[4, 1]]
+a = [(.7,-.8)]
+func = func4_
+monomial = monomial_poly
+monomial_name = monomial_poly_name
+real0 = "x'=a*x + b*xy"
+real1 = "y'=b*y + a*xy"
+threshold_sindy=1e-2
+threshold_group = 1e-3
+threshold_similarity = 1e-3
+precision = 1e-3
+deriv_spline = True#False#
 
 
 ################### 1 variable ####################
-alpha = .05
-dt = .05   ## 0,3
-t = np.arange(0,2.3,dt)
-# x0 = [[.2, 1], [.2, 1], [.1, 1]]
-# a = [(.12,), (.16,), (.2,)]
-x0 = [[.2, 1], [.05, 1], [.1, 1]]
-a = [(.2,), (.2,), (.2,)]
-func = func1
-monomial = monomial_poly
-monomial_name = monomial_poly_name
-real0 = "x'=a + x^2"
-real1 = "y'=-y"
-threshold_sindy=5e-2
-threshold_similarity = 1e-3
-threshold_group = 1e-3
-precision = 1e-3
-deriv_spline = True#False#
+# alpha = .05
+# dt = .05   ## 0,3
+# t = np.arange(0,2.3,dt)
+# # x0 = [[.2, 1], [.2, 1], [.1, 1]]
+# # a = [(.12,), (.16,), (.2,)]
+# x0 = [[.2, 1], [.05, 1], [.1, 1]]
+# a = [(.2,), (.2,), (.2,)]
+# func = func1
+# monomial = monomial_poly
+# monomial_name = monomial_poly_name
+# real0 = "x'=a + x^2"
+# real1 = "y'=-y"
+# threshold_sindy=5e-2
+# threshold_similarity = 1e-3
+# threshold_group = 1e-3
+# precision = 1e-3
+# deriv_spline = True#False#
 
 # alpha = .05
 # dt = .1

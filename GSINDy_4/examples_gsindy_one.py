@@ -72,39 +72,39 @@ ensemble = False
 # precision = 1e-3
 # deriv_spline = True#False#
 
-# alpha = .05
-# dt = .1    ## 1,4    2,4
-# t = np.arange(0,6,dt)
-# x0 = [[4, 1], [4, 1], [4, 1], [4, 1]]
-# a = [(.7,-.8), (1,-1), (.5,-.6), (1.5,-1.5)]
-# func = func4_
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=a*x + b*xy"
-# real1 = "y'=b*y + a*xy"
-# threshold_sindy=1e-2
-# threshold_group = 1e-3
-# threshold_similarity = 1e-3
-# precision = 1e-3
-# deriv_spline = True#False#
+alpha = .05
+dt = .1    ## 1,4    2,4
+t = np.arange(0,9,dt)
+x0 = [[4, 1]]
+a = [(.7,-.8)]
+func = func4_
+monomial = monomial_poly
+monomial_name = monomial_poly_name
+real0 = "x'=a*x + b*xy"
+real1 = "y'=b*y + a*xy"
+threshold_sindy=1e-2
+threshold_group = 1e-3
+threshold_similarity = 1e-3
+precision = 1e-3
+deriv_spline = True#False#
 
 
 ################### 1 variable ####################
-alpha = .05
-dt = .05   ## 0,3
-t = np.arange(0,1.1,dt)
-x0 = [[0.2, 1.0], [0.4568, 0.3167]]
-a = [(.12,), (.12,)]
-func = func1
-monomial = monomial_poly
-monomial_name = monomial_poly_name
-real0 = "x'=a + x^2"
-real1 = "y'=-y"
-threshold_sindy=5e-2
-threshold_similarity = 1e-3
-threshold_group = 1e-3
-precision = 1e-3
-deriv_spline = True#False#
+# alpha = .05
+# dt = .05   ## 0,3
+# t = np.arange(0,2.3,dt)
+# x0 = [[0.2, 1.0]]#, [0.4568, 0.3167]]
+# a = [(.12,)]#, (.12,)]
+# func = func1
+# monomial = monomial_poly
+# monomial_name = monomial_poly_name
+# real0 = "x'=a + x^2"
+# real1 = "y'=-y"
+# threshold_sindy=5e-2
+# threshold_similarity = 1e-3
+# threshold_group = 1e-3
+# precision = 1e-3
+# deriv_spline = True#False#
 
 # alpha = .05
 # dt = .1
@@ -225,12 +225,24 @@ def func_simulation(x, t, param, basis):
     return dxdt
     
 
+from utils import get_multi_sol
+sol_org_list = get_multi_sol(func, x0, t, a)
+
+
+num_split = 2
+ll = t.shape[0]//num_split
+idx_init = list(range(0,ll*num_split,ll))
+
+sol_org_list_ = list(sol_org_list[0][:num_split*ll,:].reshape([num_split,ll,-1]))
+t_ = t[:ll]
+x0_ = [list(sub[0]) for sub in sol_org_list_]
+a_ = [a[0] for _ in range(num_split)]
+
+t, x0, a, sol_org_list = t_, x0_, a_, sol_org_list_
+
 ### generate data ###
 num_traj = len(a)
 num_feature = len(x0[0])
-
-from utils import get_multi_sol
-sol_org_list = get_multi_sol(func, x0, t, a)
 
 ### plot data ###
 fig, ax = plt.subplots(1,1,figsize=[6,3])
@@ -239,18 +251,6 @@ for i in range(num_traj):
 ax.legend()
 ax.text(1, .95, f'${real0}$', fontsize=12)
 ax.text(1, .8, f'${real1}$', fontsize=12)
-
-
-# num_split = 2
-# ll = t.shape[0]//num_split
-# idx_init = list(range(0,ll*num_split,ll))
-
-# t_ = t[:ll]
-# x0_ = [list(sol_org_list[0][i]) for i in idx_init]
-# a_ = [(.12,) for _ in idx_init]
-# sol_org_list_ = [sol_org_list[0][ll*i:ll*(i+1)] for i in range(num_split)]
-
-# t, x0, a, sol_org_list = t_, x0_, a_, sol_org_list_
 
 if __name__ == "__main__":
     #%% 
