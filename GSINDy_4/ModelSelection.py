@@ -82,6 +82,27 @@ class ModelSelection:
 		self.best_BIC_model = np.argmax(self.BIC_prob)
 		return self.best_BIC_model
 
+	def compute_HQIC(self):
+		self.HQIC = self.n*np.log(self.SSE/self.n) + 2.0*self.k*np.log(np.log(self.n))
+		HQICmin = np.amin(self.HQIC)
+		self.Delta_HQIC = self.HQIC - HQICmin
+		self.like = np.exp(-0.5*self.Delta_HQIC)
+		likesum = np.sum(self.like)
+		self.HQIC_weights = self.like/likesum
+		self.best_HQIC_model = np.argmax(self.HQIC_weights)
+		self.HQIC_evid_ratio = self.HQIC_weights[self.best_HQIC_model]/self.HQIC_weights
+		return self.best_HQIC_model
+    
+	def compute_BIC_custom(self):
+		self.BICc = self.n*np.log(self.SSE/self.n) + self.k*np.log(self.n)/np.log(1.2)
+		BICcmin = np.amin(self.BICc)
+		self.Delta_BICc = self.BICc - BICcmin
+		BICcsum = np.sum(np.exp(-0.5*self.Delta_BICc))
+		self.BICc_prob = np.exp(-0.5*self.Delta_BICc)/BICcsum
+		self.best_BICc_model = np.argmax(self.BICc_prob)
+		return self.best_BICc_model
+    
+    
 	def write_output(self, filename = os.path.join("output", "output.dat")):
 		file = open(filename, "w")
 

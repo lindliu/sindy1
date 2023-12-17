@@ -90,23 +90,23 @@ ensemble = False
 
 
 ################### 1 variable ####################
-alpha = .05
-dt = .05   ## 0,3
-t = np.arange(0,2.3,dt)
-# x0 = [[.2, 1], [.2, 1], [.1, 1]]
-# a = [(.12,), (.16,), (.2,)]
-x0 = [[.2, 1], [.05, 1], [.1, 1]]
-a = [(.2,), (.2,), (.2,)]
-func = func1
-monomial = monomial_poly
-monomial_name = monomial_poly_name
-real0 = "x'=a + x^2"
-real1 = "y'=-y"
-threshold_sindy=5e-2
-threshold_similarity = 1e-3
-threshold_group = 1e-3
-precision = 1e-3
-deriv_spline = True#False#
+# alpha = .05
+# dt = .05   ## 0,3
+# t = np.arange(0,2.3,dt)
+# # x0 = [[.2, 1], [.2, 1], [.1, 1]]
+# # a = [(.12,), (.16,), (.2,)]
+# x0 = [[.2, 1], [.05, 1], [.1, 1]]
+# a = [(.2,), (.2,), (.2,)]
+# func = func1
+# monomial = monomial_poly
+# monomial_name = monomial_poly_name
+# real0 = "x'=a + x^2"
+# real1 = "y'=-y"
+# threshold_sindy=5e-2
+# threshold_similarity = 1e-3
+# threshold_group = 1e-3
+# precision = 1e-3
+# deriv_spline = True#False#
 
 # alpha = .05
 # dt = .1
@@ -190,21 +190,21 @@ deriv_spline = True#False#
 # precision = 1e-3
 # deriv_spline = True#False#
 
-# alpha = .05
-# dt = .05    
-# t = np.arange(0,20,dt)
-# x0 = [[1, -2], [1, -2], [1, -2], [1, -2]]
-# a = [(.3,), (.4,),(.5,),(.2,)]
-# func = func5
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# real0 = "x'=5*(x - y- a*x^3)"
-# real1 = "y'=.2*x"    
-# threshold_sindy=1e-2
-# threshold_group = 1e-3
-# threshold_similarity = 1e-3
-# precision = 1e-3
-# deriv_spline = True#False#   ### model selection process need to be improved. make it more focus on smaller model
+alpha = .05
+dt = .05    
+t = np.arange(0,20,dt)
+x0 = [[1, -2], [1, -2], [1, -2], [1, -2]]
+a = [(.3,), (.4,),(.5,),(.2,)]
+func = func5
+monomial = monomial_poly
+monomial_name = monomial_poly_name
+real0 = "x'=5*(x - y- a*x^3)"
+real1 = "y'=.2*x"    
+threshold_sindy=1e-2
+threshold_group = 1e-3
+threshold_similarity = 1e-3
+precision = 1e-3
+deriv_spline = True#False#   ### model selection process need to be improved. make it more focus on smaller model
 
 
 def func_simulation(x, t, param, basis):
@@ -359,12 +359,15 @@ if __name__ == "__main__":
     best_AIC_model = ms.compute_AIC()
     best_AICc_model = ms.compute_AICc()
     best_BIC_model = ms.compute_BIC()
-    
+    best_HQIC_model = ms.compute_HQIC()
+    best_BICc_model = ms.compute_BIC_custom()
     ### Get best model
     print("Melhor modelo AIC = " + str(best_AIC_model) + "\n")
     print("Melhor modelo AICc = " + str(best_AICc_model) + "\n")
     print("Melhor modelo BIC = " + str(best_BIC_model) + "\n")
-    
+    print("Melhor modelo HQIC = " + str(best_HQIC_model) + "\n")
+    print("Melhor modelo BICc = " + str(best_BICc_model) + "\n")
+
     ### Xi of best model 
     Xi_best = model_set[best_BIC_model]
     
