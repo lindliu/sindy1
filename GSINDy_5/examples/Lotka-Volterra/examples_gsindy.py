@@ -33,7 +33,7 @@ monomial_name = monomial_poly_name
 
 dt = .1 
 t = np.arange(0,8,dt)
-num = 1
+num = 4
 
 #################### 2 variable ####################
 x0_list = [[3, 1], [3, 1], [3, 1], [3, 1]]
