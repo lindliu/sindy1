@@ -17,7 +17,7 @@ from utils import func1, func2, func3, func4, func5, func6, func7, \
                 monomial_poly, monomial_trig, monomial_poly_name, monomial_trig_name, \
                 monomial_all, monomial_all_name
 from GSINDy import *
-
+                   
 np.set_printoptions(formatter={'float': lambda x: "{0:.4f}".format(x)})
 
 MSE = lambda x, y: ((x-y)**2).mean()
@@ -28,241 +28,18 @@ ensemble = False
 precision = 1e-3
 deriv_spline = True#False#
 alpha = .05
-
-# ####################################################
-# #################### Lotka-Volterra ################
-# ####################################################
-# #################### 2 variable ####################
-# dt = .1 
-# t = np.arange(0,8,dt)
-# num = 1
-
-# x0_list = [[3, 1], [3, 1], [3, 1], [3, 1]]
-# a_list = [(.7,-.8), (1,-1), (.5,-.6), (1.5,-1.5)]
-# if num==1:
-#     x0 = x0_list[:num]
-#     a = a_list[:num]
-#     num_split = 2
-    
-# elif num>1:
-#     x0 = x0_list[:num]
-#     a = a_list[:num]
-
-# func = func4_
-# real0 = "x'=a*x + b*xy"
-# real1 = "y'=b*y + a*xy" 
-# # monomial = monomial_all
-# # monomial_name = monomial_all_name
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# ####################################################
-
-# #################### 1 variable ####################
-# dt = .1 
-# t = np.arange(0,8,dt)
-# num = 1
-
-# x0_list = [[3, 1], [3, 1]]
-# a_list = [(.7,), (1,)]#,(.5,),(.6,)]
-# if num==1:
-#     x0 = x0_list[:num]
-#     a = a_list[:num]
-#     num_split = 2
-    
-# elif num>1:
-#     x0 = x0_list[:num]
-#     a = a_list[:num]
-
-# func = func4
-# real0 = "x'=a*x - xy"
-# real1 = "y'=-y + a*xy"
-# # monomial = monomial_all
-# # monomial_name = monomial_all_name
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# ####################################################
-
-
-# #############################################################
-# #################### Modified Lotka-Volterra ################
-# #############################################################
-# #################### 3 variable ####################
-# dt = .1      ## 2,3,6,8;     1,2,7,9
-# t = np.arange(0,10,dt)
-# num = 2
-
-# x0_list = [[.4, 1], [.4, 1], [.4, 1]]
-# a_list = [(.2, -.6, -.5), (.4, -.8, -.7), (.6, -1, -1)]
-# if num==1:
-#     x0 = x0_list[:num]
-#     a = a_list[:num]
-#     num_split = 3
-    
-# elif num>1:
-#     x0 = x0_list[:num]
-#     a = a_list[:num]
-
-# func = func3__
-# real0 = "x'=b*y + a*x^2 + c*x^3 - xy^2"
-# real1 = "y'=x + a*y + b*x^2y + c*y^3"
-# # monomial = monomial_all
-# # monomial_name = monomial_all_name
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# ####################################################
-
-# #################### 2 variable ####################
-# dt = .1      ## 2,3,6,8;     1,2,7,9
-# t = np.arange(0,10,dt)
-# num = 2
-
-# x0_list = [[.4, 1], [.4, 1], [.4, 1]]
-# a_list = [(.2, -.6), (.4, -.8), (.6, -1)]
-# if num==1:
-#     x0 = x0_list[:num]
-#     a = a_list[:num]
-#     num_split = 3
-    
-# elif num>1:
-#     x0 = x0_list[:num]
-#     a = a_list[:num]
-
-# func = func3_
-# real0 = "x'=b*y + a*x^2 - x^3 - xy^2"
-# real1 = "y'=x + a*y + b*x^2y - y^3"
-# # monomial = monomial_all
-# # monomial_name = monomial_all_name
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# ####################################################
-
-# #################### 1 variable ####################
-# dt = .1      ## 2,3,6,8;     1,2,7,9
-# t = np.arange(0,10,dt)
-# num = 2
-
-# x0_list = [[.4, 1], [.4, 1], [.4, 1]]
-# a_list = [(.2,), (.4,), (.6,)]
-# if num==1:
-#     x0 = x0_list[:num]
-#     a = a_list[:num]
-#     num_split = 2
-    
-# elif num>1:
-#     x0 = x0_list[:num]
-#     a = a_list[:num]
-
-# func = func3
-# real0 = "x'=-y + a*x^2 - x^3 - xy^2"
-# real1 = "y'=x + a*y - x^2y - y^3"   
-# # monomial = monomial_all
-# # monomial_name = monomial_all_name
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# ####################################################
-
-
-
-# ####################################################
-# #################### Brusselator ###################
-# ####################################################
-# ##################### 2 variable ####################
-# dt = .1    
-# t = np.arange(0,20,dt)
-# num = 1
-
-# x0_list = [[.4, 1], [.4, 1], [.4, 1], [.4, 1], [.4, 1], [.4, 1]]
-# a_list = [(1, 3), (.8, 2.5), (.9, 2.8), (.5, 2.8), (.6, 2.6), (.7, 2.8)]
-
-# if num==1:
-#     x0 = x0_list[:num]
-#     a = a_list[:num]
-#     num_split = 3 
-    
-# elif num>1:
-#     x0 = x0_list[:num]
-#     a = a_list[:num]
-
-# func = func8
-# real0 = "x'=a-4x+x^2y"
-# real1 = "y'=bx-x^2y"
-# # monomial = monomial_all
-# # monomial_name = monomial_all_name
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# ######################################################
-
-
-
-
-####################################################
-#################### Van der Pol ###################
-####################################################
-
-# # ################## 1 variable ####################
-# dt = .05 
-# t = np.arange(0,20,dt)
-# num = 6
-
-# x0_list = [[1.5, -.5], [1.5, -.5], [1.5, -.5], [1.5, -.5], [1.5, -.5], [1.5, -.5]]
-# a_list = [(.5,), (.3,), (.4,),(.2,), (.35,), (.6,)]
-# if num==1:
-#     x0 = x0_list[:num]
-#     a = a_list[:num]
-#     num_split = 2
-    
-# elif num>1:
-#     x0 = x0_list[:num]
-#     a = a_list[:num]
-
-# func = func5
-# real0 = "x'=5*(x - y- a*x^3)"
-# real1 = "y'=.2*x"    
-# # monomial = monomial_all
-# # monomial_name = monomial_all_name
-# monomial = monomial_poly
-# monomial_name = monomial_poly_name
-# ####################################################
-
-
-
-###################################################
-################### quadratic #####################
-###################################################
-################## 2 variable ####################
-alpha = .05
-dt = .1   ## 0,3
-t = np.arange(0,2.,dt)
-num = 1
-
-x0_list = [[.5, 1], [.5, 1], [.5, 1]]
-a_list = [(.16, .25), (.3, .4), (.3, .5)]
-if num==1:
-    x0 = x0_list[:num]
-    a = a_list[:num]
-    num_split = 2
-    
-elif num>1:
-    x0 = x0_list[:num]
-    a = a_list[:num]
-
-func = func12_
-real0 = "x'=a + b*x^2"
-real1 = "y'=-y"
 # monomial = monomial_all
 # monomial_name = monomial_all_name
 monomial = monomial_poly
 monomial_name = monomial_poly_name
-##################################################
 
-################### 1 variable ####################
-alpha = .05
-dt = .05   ## 0,3
-t = np.arange(0,2.3,dt)
-num = 3
+dt = .05 
+t = np.arange(0,20,dt)
+num = 6
 
-x0_list = [[.2, 1], [.2, 1], [.1, 1]]
-a_list = [(.12,), (.16,), (.2,)]
+# ################## 1 variable ####################
+x0_list = [[1.5, -.5], [1.5, -.5], [1.5, -.5], [1.5, -.5], [1.5, -.5], [1.5, -.5]]
+a_list = [(.5,), (.3,), (.4,),(.2,), (.35,), (.6,)]
 if num==1:
     x0 = x0_list[:num]
     a = a_list[:num]
@@ -271,95 +48,12 @@ if num==1:
 elif num>1:
     x0 = x0_list[:num]
     a = a_list[:num]
-    
-func = func1
-real0 = "x'=a + x^2"
-real1 = "y'=-y"
-# monomial = monomial_all
-# monomial_name = monomial_all_name
-monomial = monomial_poly
-monomial_name = monomial_poly_name
+
+func = func5
+real0 = "x'=5*(x - y- a*x^3)"
+real1 = "y'=.2*x"    
 ####################################################
 
-################### 1 variable ####################
-alpha = .05
-dt = .05   ## 0,3
-t = np.arange(0,2.3,dt)
-num = 3
-
-x0_list = [[.5, 1], [.5, 1], [.5, 1]]
-a_list = [(.25,), (.3,), (.5,)]
-if num==1:
-    x0 = x0_list[:num]
-    a = a_list[:num]
-    num_split = 2
-    
-elif num>1:
-    x0 = x0_list[:num]
-    a = a_list[:num]
-    
-func = func2
-real0 = "x'=.2 + a*x^2"
-real1 = "y'=-y"
-# monomial = monomial_all
-# monomial_name = monomial_all_name
-monomial = monomial_poly
-monomial_name = monomial_poly_name
-##################################################
-
-
-################################################################
-#################### Pendulum motion model #####################
-################################################################
-################### 1 variable ####################
-dt = .2
-t = np.arange(0,3.3,dt)
-num = 2
-
-x0_list = [[np.pi-.1, 0], [np.pi-.1, 0]]
-a_list = [(-.25,), (-.35,)]
-if num==1:
-    x0 = x0_list[:num]
-    a = a_list[:num]
-    num_split = 2
-    
-elif num>1:
-    x0 = x0_list[:num]
-    a = a_list[:num]
-
-func = func6
-real0 = "x'=y"
-real1 = "y'=a*y-5sin(x)"
-# monomial = monomial_all
-# monomial_name = monomial_all_name
-monomial = monomial_trig
-monomial_name = monomial_trig_name
-###################################################
-
-################### 1 variable ####################
-dt = .1
-t = np.arange(0,6,dt)
-num = 4
-
-x0_list = [[np.pi-.1, 0], [np.pi-.1, 0], [np.pi-.1, 0], [np.pi-.1, 0]]
-a_list = [(-.15,), (-1,), (-2,), (-5,)]
-if num==1:
-    x0 = x0_list[:num]
-    a = a_list[:num]
-    num_split = 2
-    
-elif num>1:
-    x0 = x0_list[:num]
-    a = a_list[:num]
-    
-func = func7
-real0 = "x'=y"
-real1 = "y'=-0.25*y+a*sin(x)"
-# monomial = monomial_all
-# monomial_name = monomial_all_name
-monomial = monomial_trig
-monomial_name = monomial_trig_name
-###################################################
 
 if __name__ == "__main__":
     #%% generate data
@@ -465,7 +159,7 @@ if __name__ == "__main__":
             lambda x,y: x**3, lambda x,y: x**2*y, lambda x,y: x*y**2, lambda x,y: y**3, \
             lambda x,y: x**4, lambda x,y: x**3*y, lambda x,y: x**2*y**2, lambda x,y: x*y**3, lambda x,y: y**4, \
             lambda x,y: x**5, lambda x,y: x**4*y, lambda x,y: x**3*y**2, lambda x,y: x**2*y**3, lambda x,y: x*y**4, lambda x,y: y**5])
-    if monomial.__name__ == 'monomial_all':
+    elif monomial.__name__ == 'monomial_all':
         basis_functions = np.array([lambda x,y: 1, \
             lambda x,y: x, lambda x,y: y, \
             lambda x,y: x**2, lambda x,y: x*y, lambda x,y: y**2, \
@@ -474,9 +168,6 @@ if __name__ == "__main__":
             lambda x,y: 1/x, lambda x,y: 1/y, 
             lambda x,y: np.sin(x), lambda x,y: np.sin(y),lambda x,y: np.cos(x), lambda x,y: np.cos(y),\
             lambda x,y: np.exp(x), lambda x,y: np.exp(y)])
-    if monomial.__name__ == 'monomial_trig':
-        basis_functions = np.array([lambda x,y: 1, lambda x,y: x, lambda x,y: y, lambda x,y: np.sin(x), lambda x,y: np.sin(y), \
-                          lambda x,y: np.cos(x), lambda x,y: np.cos(y)])
     
     def func_simulation(x, t, param, basis):
         mask0 = param[0]!=0
@@ -547,10 +238,10 @@ if __name__ == "__main__":
         dx2dt = "y'="
         for j,pa in enumerate(Xi_best[i,0]):
             if pa!=0:
-                dx1dt = dx1dt+f' + {pa:.2f}{monomial_name[j]}'
+                dx1dt = dx1dt+f' + {pa:.4f}{monomial_name[j]}'
         for j,pa in enumerate(Xi_best[i,1]):
             if pa!=0:
-                dx2dt = dx2dt+f' + {pa:.2f}{monomial_name[j]}'
+                dx2dt = dx2dt+f' + {pa:.4f}{monomial_name[j]}'
                     
         print(dx1dt)
         print(dx2dt)
