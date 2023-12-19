@@ -39,7 +39,7 @@ for i, path_ in enumerate(path_sindy_all):
 
 
 ##### true results
-coeff_true_ = np.array([(10,28,8/3), (8,25,3)])
+coeff_true_ = np.array([(10,28,-2.67), (9,30,-2), (8.5,28,-2.67), (10,27,-2.67), (10,27,-3), (10,29,-2)])
 coeff_true = np.zeros([num_traj, num_feature, num_basis])
 coeff_true[:,0,[1]] = -coeff_true_[:,[0]]
 coeff_true[:,0,[2]] = coeff_true_[:,[0]]
@@ -52,7 +52,7 @@ coeff_true[:,2,[7]] = [1]
 
 # real0 = "x'=a(y-x)"
 # real1 = "y'=x(b-z)-y" 
-# real2 = "z'=xy - cz" 
+# real2 = "z'=xy + cz" 
 
 
 
@@ -62,7 +62,7 @@ monomial_name = monomial_lorenz_name
 assert monomial_name.shape[0]==num_basis, 'number of basis functions does not match'
 
 #####
-fig, ax = plt.subplots(1,2,figsize=[8,5])
+fig, ax = plt.subplots(1,num_feature,figsize=[8,5])
 fig.suptitle("True(red) vs GSINDy(blue) all", fontsize=16)
 ax = ax.flatten()
 for i in range(num_feature):
@@ -74,7 +74,7 @@ fig.tight_layout()
 
 
 ##### 
-fig, ax = plt.subplots(num_traj,2,figsize=[10,15])
+fig, ax = plt.subplots(num_traj,num_feature,figsize=[10,15])
 fig.suptitle("True(red) vs GSINDy(blue) one vs SINDy(green)", fontsize=16)
 ax = ax.flatten()
 for j in range(num_traj):

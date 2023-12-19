@@ -1,33 +1,50 @@
 ***************result of trajectory 0 ***************
-coef of feature 0: [-9.98174798  9.98214875] 
+coef of feature 0: [-9.9831 9.9834] 
 basis of feature 0: ['x' 'y'] 
-coef of feature 1: [  25.06523581   -3.36274677 -318.66192929] 
-basis of feature 1: ['1' 'x' '1/z'] 
-coef of feature 2: [] 
-basis of feature 2: [] 
+coef of feature 1: [-0.1911 27.9425 -1.0197 -0.9970 2.8543] 
+basis of feature 1: ['1' 'x' 'y' 'xz' '1/z'] 
+coef of feature 2: [-1.4917 -2.6291 0.9967 15.5650 0.3196] 
+basis of feature 2: ['1' 'z' 'xy' '1/z' 'cos(x)'] 
 
 ***************result of trajectory 1 ***************
-coef of feature 0: [ 5.22158899 -1.8100111 ] 
-basis of feature 0: ['y' 'z'] 
-coef of feature 1: [167.31727153  -7.48726529 -26.09474952] 
-basis of feature 1: ['1' 'z' '1/x'] 
-coef of feature 2: [ 9.92267165 -3.11583472] 
-basis of feature 2: ['y' 'z'] 
-
-***************result of trajectory 2 ***************
-coef of feature 0: [-8.99827797  8.99478711] 
+coef of feature 0: [-8.9983 8.9948] 
 basis of feature 0: ['x' 'y'] 
-coef of feature 1: [-2.177026] 
+coef of feature 1: [-2.1770] 
 basis of feature 1: ['x'] 
-coef of feature 2: [10.93519468] 
+coef of feature 2: [10.9352] 
 basis of feature 2: ['1/z'] 
 
+***************result of trajectory 2 ***************
+coef of feature 0: [-8.4947 8.4931 0.1605] 
+basis of feature 0: ['x' 'y' '1/z'] 
+coef of feature 1: [-0.3916 27.9812 -1.0308 -0.9977 5.4669] 
+basis of feature 1: ['1' 'x' 'y' 'xz' '1/z'] 
+coef of feature 2: [-2.6664 0.9974 1.2515 0.2871] 
+basis of feature 2: ['z' 'xy' '1/z' 'cos(x)'] 
+
 ***************result of trajectory 3 ***************
-coef of feature 0: [-9.98636235  9.98729833] 
+coef of feature 0: [-9.9859 9.9859 0.0229] 
+basis of feature 0: ['x' 'y' '1/z'] 
+coef of feature 1: [17.9948 26.7653 -0.9459 -1.2212 -0.0849 -0.0153 0.0271 0.0756 -0.9935
+ -84.2967 0.1262 -0.0496 0.1298 0.1265] 
+basis of feature 1: ['1' 'x' 'y' 'z' 'x^2' 'y^2' 'z^2' 'xy' 'xz' '1/z' 'sin(x)' 'sin(y)'
+ 'sin(z)' 'cos(x)'] 
+coef of feature 2: [6.4644 -2.8910 0.0421 0.0108 0.9554 -42.1159 0.0572 0.0735 0.1051 -0.1742] 
+basis of feature 2: ['1' 'z' 'x^2' 'y^2' 'xy' '1/z' 'sin(x)' 'sin(y)' 'cos(x)' 'cos(y)'] 
+
+***************result of trajectory 4 ***************
+coef of feature 0: [-9.9860 9.9900] 
 basis of feature 0: ['x' 'y'] 
-coef of feature 1: [26.24390809 -1.12147101 -1.00410586 -0.55583024 -0.22472873  0.19656074
-  0.05645975] 
-basis of feature 1: ['x' 'y' 'xz' '1/z' 'sin(z)' 'cos(y)' 'cos(z)'] 
-coef of feature 2: [-0.05644166 -1.99137965  0.99751425] 
-basis of feature 2: ['1' 'z' 'xy'] 
+coef of feature 1: [26.9342 -1.0123 -0.9967 -0.6862] 
+basis of feature 1: ['x' 'y' 'xz' '1/z'] 
+coef of feature 2: [-2.9908 0.9980] 
+basis of feature 2: ['z' 'xy'] 
+
+***************result of trajectory 5 ***************
+coef of feature 0: [-9.9815 9.9825] 
+basis of feature 0: ['x' 'y'] 
+coef of feature 1: [29.0592 -1.0496 -1.0000] 
+basis of feature 1: ['x' 'y' 'xz'] 
+coef of feature 2: [-1.9938 0.9973] 
+basis of feature 2: ['z' 'xy'] 
 

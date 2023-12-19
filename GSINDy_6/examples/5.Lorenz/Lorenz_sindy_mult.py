@@ -34,19 +34,19 @@ alpha = .05
 monomial = monomial_lorenz
 monomial_name = monomial_lorenz_name
 
-dt = .03
+dt = .05
 t = np.arange(0,10,dt)
 num = 1
 
 #################### 3 variable ####################
 x0 = [[-8, 8, 27]]
-a = [(10,28,8/3)]
+a = [(10,28,-2.67)]
 num_split = 2
 
 func = func9
 real0 = "x'=a(y-x)"
 real1 = "y'=x(b-z)-y" 
-real2 = "z'=xy - 8/3z" 
+real2 = "z'=xy + cz" 
 real_list = [real0, real1, real2]
 # ##################################################
 

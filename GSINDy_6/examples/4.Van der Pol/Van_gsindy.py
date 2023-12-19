@@ -31,7 +31,7 @@ monomial_name = monomial_poly_name
 num_split = None
 
 
-dt = .05 
+dt = .05
 t = np.arange(0,20,dt)
 num = 6
 

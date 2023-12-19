@@ -190,7 +190,7 @@ def func9(x, t, a, b, c):
     dzdt = xy - cz,   c=8/3
     """
     x1, x2, x3 = x
-    dxdt = [a*(x2-x1), x1*(b-x3)-x2, x1*x2-c*x3]
+    dxdt = [a*(x2-x1), x1*(b-x3)-x2, x1*x2+c*x3]
     return dxdt
 
 def monomial_poly(x):

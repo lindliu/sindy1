@@ -45,7 +45,6 @@ coeff_true[:,0,[6]] = 5*coeff_true_[:,[0]]
 coeff_true[:,1,[1]] = coeff_true_[:,[1]]
 
 coeff_true[:,0,[1,2]] = [5,-5]
-coeff_true[:,1,[1]] = [1]
 
 # np.where(monomial_poly_name=='x')[0]
 # real0 = "x'=5*(x - y + a*x^3)"

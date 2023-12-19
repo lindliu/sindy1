@@ -32,7 +32,7 @@ monomial = monomial_poly
 monomial_name = monomial_poly_name
 
 
-dt = .1     
+dt = .05   
 t = np.arange(0,20,dt)
 num = 5
 
