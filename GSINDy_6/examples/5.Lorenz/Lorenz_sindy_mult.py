@@ -14,10 +14,7 @@ sys.path.insert(1, '..')
 
 import numpy as np
 import matplotlib.pyplot as plt
-from utils import func1, func2, func3, func4, func5, func6, func7, \
-                func12_, func3_, func4_, func3__, func9, \
-                monomial_poly, monomial_trig, monomial_lorenz, monomial_lorenz_name, \
-                monomial_all, monomial_all_name
+from utils import func9, monomial_poly, monomial_poly_name, monomial_lorenz, monomial_lorenz_name, monomial_all, monomial_all_name
 from train_sindy_mult_3d import fit_sindy_mult_3d
 
 MSE = lambda x, y: ((x-y)**2).mean()
@@ -38,13 +35,13 @@ dt = .05
 t = np.arange(0,10,dt)
 num = 1
 
-#################### 3 variable ####################
+#################### 4 variable ####################
 x0 = [[-8, 8, 27]]
-a = [(10,28,-2.67)]
+a = [(-10,10,28,-2.67)]
 num_split = 2
 
 func = func9
-real0 = "x'=a(y-x)"
+real0 = "x'=dy+ax)"
 real1 = "y'=x(b-z)-y" 
 real2 = "z'=xy + cz" 
 real_list = [real0, real1, real2]

@@ -14,7 +14,7 @@ sys.path.insert(1, '..')
 
 import numpy as np
 import matplotlib.pyplot as plt
-from utils import func9, monomial_poly, monomial_lorenz, monomial_poly_name, monomial_lorenz_name, monomial_all, monomial_all_name
+from utils import func9, monomial_poly, monomial_poly_name, monomial_lorenz, monomial_lorenz_name, monomial_all, monomial_all_name
 from train_sindy_3d import fit_sindy_3d
 
 opt = 'SQTL' ##['Manually', 'SQTL', 'LASSO', 'SR3']
@@ -30,12 +30,12 @@ monomial_name = monomial_lorenz_name
 dt = .05
 t = np.arange(0,10,dt)
 
-#################### 3 variable ####################
+#################### 4 variable ####################
 x0 = [[-8, 8, 27], [-8, 8, 27], [-8, 8, 27], [-8, 8, 27], [-8, 8, 27], [-8, 8, 27]]
-a = [(10,28,-2.67), (9,30,-2), (8.5,28,-2.67), (10,27,-2.67), (10,27,-3), (10,29,-2)]
+a = [(-10,10,28,-2.67), (-9,9,30,-2), (-8.5,8.5,28,-2.67), (-10,10,27,-2.67), (-10,10,27,-3), (-10,10,29,-2)]
 
 func = func9
-real0 = "x'=a(y-x)"
+real0 = "x'=dy+ax)"
 real1 = "y'=x(b-z)-y" 
 real2 = "z'=xy + cz" 
 real_list = [real0, real1, real2]

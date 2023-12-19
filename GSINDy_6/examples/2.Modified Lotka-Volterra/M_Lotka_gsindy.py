@@ -5,6 +5,7 @@ Created on Sun Dec 10 20:43:31 2023
 
 @author: dliu
 """
+
 import sys
 sys.path.insert(1, '../../GSINDy')
 sys.path.insert(1, '../..')
@@ -12,10 +13,7 @@ sys.path.insert(1, '..')
 
 import numpy as np
 import matplotlib.pyplot as plt
-from utils import func1, func2, func3, func4, func5, func6, func7, func8, func9, \
-                func12_, func3_, func4_, func3__, \
-                monomial_poly, monomial_trig, monomial_poly_name, monomial_trig_name, \
-                monomial_all, monomial_all_name
+from utils import func3, func3_, func3__, monomial_poly, monomial_poly_name, monomial_all, monomial_all_name
 from train_gsindy_2d import data_generator, fit_gsindy_2d, model_selection_gsindy_2d
 
 np.set_printoptions(formatter={'float': lambda x: "{0:.4f}".format(x)})

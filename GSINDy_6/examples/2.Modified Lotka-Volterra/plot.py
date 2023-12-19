@@ -24,12 +24,13 @@ num_traj, num_feature, num_basis = coeff_gsindy_all.shape
 
 #### results from gsindy one by one
 max_split = max([int(os.path.split(path_)[1].split('_')[-2]) for path_ in glob(os.path.join('results/coeff/gsindy_one_*.npy'))])
-n_split = max_split-2
+n_split = max_split-2+1   ##4
 coeff_gsindy_one = np.zeros([n_split, num_traj, num_feature, num_basis])
 for j in range(num_traj):
-    for k in range(2, n_split):
-        path_ = glob(os.path.join(f'results/coeff/gsindy_one_{k}_{j}.npy'))[0]
+    for k in range(n_split):
+        path_ = glob(os.path.join(f'results/coeff/gsindy_one_{k+2}_{j}.npy'))[0]
         coeff_gsindy_one[k,j,:,:] = np.load(path_)
+
 
 #### results from sindy
 path_sindy_all = glob(os.path.join('results/coeff/sindy*.npy'))
@@ -84,3 +85,11 @@ for j in range(num_traj):
     ax[2*j+i].set_title(f'feature {i}')
 fig.tight_layout()
     
+
+
+
+
+
+
+
+

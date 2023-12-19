@@ -13,7 +13,7 @@ sys.path.insert(1, '..')
 
 import numpy as np
 import matplotlib.pyplot as plt
-from utils import func9, monomial_poly, monomial_lorenz, monomial_poly_name, monomial_lorenz_name, monomial_all, monomial_all_name
+from utils import func9, monomial_poly, monomial_poly_name, monomial_lorenz, monomial_lorenz_name, monomial_all, monomial_all_name
 from train_gsindy_3d import data_generator, fit_gsindy_3d, model_selection_gsindy_3d
 
 np.set_printoptions(formatter={'float': lambda x: "{0:.4f}".format(x)})
@@ -33,9 +33,9 @@ dt = .05
 t = np.arange(0,10,dt)
 num = 1
 
-#################### 3 variable ####################
+#################### 4 variable ####################
 x0_list = [[-8, 8, 27], [-8, 8, 27], [-8, 8, 27], [-8, 8, 27], [-8, 8, 27], [-8, 8, 27]]
-a_list = [(10,28,-2.67), (9,30,-2), (8.5,28,-2.67), (10,27,-2.67), (10,27,-3), (10,29,-2)]
+a_list = [(-10,10,28,-2.67), (-9,9,30,-2), (-8.5,8.5,28,-2.67), (-10,10,27,-2.67), (-10,10,27,-3), (-10,10,29,-2)]
 if num==1:
     idx = 0 #calculate 0,1,2,3,4,5 one by one
     x0 = [x0_list[idx]]
@@ -47,7 +47,7 @@ elif num>1:
     a = a_list[:num]
 
 func = func9
-real0 = "x'=a(y-x)"
+real0 = "x'=dy+ax)"
 real1 = "y'=x(b-z)-y" 
 real2 = "z'=xy + cz" 
 real_list = [real0, real1, real2]

@@ -181,7 +181,7 @@ def func8(x, t, a, b):
     dxdt = [a-4*x1+x1**2*x2, b*x1-x1**2*x2]
     return dxdt
 
-def func9(x, t, a, b, c):
+def func9(x, t, a, d, b, c):
     """
     Lorenz
     
@@ -190,7 +190,7 @@ def func9(x, t, a, b, c):
     dzdt = xy - cz,   c=8/3
     """
     x1, x2, x3 = x
-    dxdt = [a*(x2-x1), x1*(b-x3)-x2, x1*x2+c*x3]
+    dxdt = [d*x2+a*x1, x1*(b-x3)-x2, x1*x2+c*x3]
     return dxdt
 
 def monomial_poly(x):
@@ -248,8 +248,8 @@ def monomial_all(x):
                  np.sin(x1), np.sin(x2), np.cos(x1), np.cos(x2), np.exp(x1), np.exp(x2)]
 
 monomial_all_name = np.array(['1', 'x', 'y', 'x^2', 'xy','y^2','x^3','x^2y','xy^2','y^3',\
-                      'x^4','y^4','1/x','1/y',\
-                      'sin(x)', 'sin(y)', 'cos(x)', 'cos(y)', 'exp(x)', 'exp(y)'])
+                              'x^4','y^4','1/x','1/y',\
+                              'sin(x)', 'sin(y)', 'cos(x)', 'cos(y)', 'exp(x)', 'exp(y)'])
 
 
 from scipy.integrate import odeint

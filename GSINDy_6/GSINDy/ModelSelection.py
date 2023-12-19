@@ -94,7 +94,7 @@ class ModelSelection:
 		return self.best_HQIC_model
     
 	def compute_BIC_custom(self):
-		self.BICc = self.n*np.log(self.SSE/self.n) + self.k*np.log(self.n)/np.log(1.2)
+		self.BICc = self.n*np.log(self.SSE/self.n) + self.k*np.log(self.n)/np.log(1.5)
 		BICcmin = np.amin(self.BICc)
 		self.Delta_BICc = self.BICc - BICcmin
 		BICcsum = np.sum(np.exp(-0.5*self.Delta_BICc))

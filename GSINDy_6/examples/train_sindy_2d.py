@@ -11,10 +11,6 @@ sys.path.insert(1, '../..')
 
 import numpy as np
 import matplotlib.pyplot as plt
-from utils import func1, func2, func3, func4, func5, func6, func7, \
-                func12_, func3_, func4_, func3__, \
-                monomial_poly, monomial_trig, monomial_poly_name, monomial_trig_name, \
-                monomial_all, monomial_all_name
 from GSINDy import *
 
 MSE = lambda x, y: ((x-y)**2).mean()

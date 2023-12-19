@@ -13,10 +13,6 @@ sys.path.insert(1, '..')
 
 import numpy as np
 import matplotlib.pyplot as plt
-from utils import func1, func2, func3, func4, func5, func6, func7, \
-                func12_, func3_, func4_, func3__, func9, \
-                monomial_poly, monomial_trig, monomial_lorenz, monomial_lorenz_name, \
-                monomial_all, monomial_all_name
 from GSINDy import *
 
 #%% generate data
@@ -129,8 +125,8 @@ def fit_gsindy_3d(sol_org_list, num_traj, num_feature, t, num, real_list, \
 ###########################
 ##### model selection #####
 ###########################
-def model_selection_gsindy_3d(x0, t, a, real_list, monomial, monomial_name, model_set,\
-                              sol_org_list, same0_basis_list, same1_basis_list, same2_basis_list, parameter_list):
+def model_selection_gsindy_3d(x0, t, a, real_list, monomial, monomial_name, model_set, sol_org_list, \
+                              same0_basis_list=None, same1_basis_list=None, same2_basis_list=None, parameter_list=None):
     
     from ModelSelection import ModelSelection
     from scipy.integrate import odeint
@@ -250,11 +246,13 @@ def model_selection_gsindy_3d(x0, t, a, real_list, monomial, monomial_name, mode
         print(dx2dt)
         print(dx3dt)
 
+    if parameter_list is not None:
+        print('*'*50)
+        print(f'threshold: {parameter_list[best_BIC_model]}')
+        print(f'same basis for feature 0: {same0_basis_list[best_BIC_model]}')
+        print(f'same basis for feature 1: {same1_basis_list[best_BIC_model]}')
+        print(f'same basis for feature 2: {same2_basis_list[best_BIC_model]}')
+        return ms, best_BIC_model, parameter_list
     
-    print('*'*50)
-    print(f'threshold: {parameter_list[best_BIC_model]}')
-    print(f'same basis for feature 0: {same0_basis_list[best_BIC_model]}')
-    print(f'same basis for feature 1: {same1_basis_list[best_BIC_model]}')
-    print(f'same basis for feature 2: {same2_basis_list[best_BIC_model]}')
-
-    return ms, best_BIC_model, parameter_list
+    else:
+        return ms, best_BIC_model
