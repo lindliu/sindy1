@@ -122,16 +122,17 @@ def func4_(x, t, a, b):
     dxdt = [c0*x1 + c1*x1*x2, c2*x2 + c3*x1*x2]
     return dxdt
 
-def func5(x, t, a):
+def func5(x, t, a, b):
     """
     van der pol
     
-    dxdt = 5*(x - y- c0*x^3)
-    dydt = .2*x
+    dxdt = 5*(x - y + c0*x^3), c0=-1/3
+    dydt = c1*x,               c1=0.2
     """
     c0 = a
+    c1 = b
     x1, x2 = x
-    dxdt = [5*(x1 - x2- c0*x1**3), .2*x1]
+    dxdt = [5*(x1 - x2 + c0*x1**3), c1*x1]
     return dxdt
 
 def func6(x, t, a):

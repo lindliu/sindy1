@@ -21,25 +21,22 @@ from GSINDy import *
 MSE = lambda x, y: ((x-y)**2).mean()
 SSE = lambda x, y: ((x-y)**2).sum()
 
-
-def fit_gsindy_2d(func, x0, t, a, num, num_split, real0, real1, monomial, monomial_name, \
-           precision, alpha, opt, deriv_spline, ensemble):
-    #%% generate data
+#%% generate data
+def data_generator(func, x0, t, a, real_list, num=None, num_split=None):
     from utils import get_multi_sol
     sol_org_list = get_multi_sol(func, x0, t, a)
     
     if num==1:    
         ll = t.shape[0]//num_split
-        idx_init = list(range(0,ll*num_split,ll))
+        # idx_init = list(range(0,ll*num_split,ll))
         
         sol_org_list_ = list(sol_org_list[0][:num_split*ll,:].reshape([num_split,ll,-1]))
         t_ = t[:ll]
         x0_ = [list(sub[0]) for sub in sol_org_list_]
         a_ = [a[0] for _ in range(num_split)]
-        
+
         t, x0, a, sol_org_list = t_, x0_, a_, sol_org_list_
-    
-    
+
     ### generate data ###
     num_traj = len(a)
     num_feature = len(x0[0])
@@ -49,13 +46,17 @@ def fit_gsindy_2d(func, x0, t, a, num, num_split, real0, real1, monomial, monomi
     for i in range(num_traj):
         ax.plot(t, sol_org_list[i], 'o', markersize=1, label=f'{a[i]}')
     ax.legend()
-    ax.text(1, .95, f'${real0}$', fontsize=12)
-    ax.text(1, .8, f'${real1}$', fontsize=12)
+    ax.text(1, .95, f'${real_list[0]}$', fontsize=12)
+    ax.text(1, .8, f'${real_list[1]}$', fontsize=12)
+    return t, x0, a, sol_org_list, num_traj, num_feature
 
-    #%% 
-    ########################################
-    ############# group sindy ##############
-    ########################################
+#%% 
+########################################
+############# group sindy ##############
+########################################
+def fit_gsindy_2d(sol_org_list, num_traj, num_feature, t, num, real_list, \
+                  monomial, monomial_name, precision, alpha, opt, deriv_spline, ensemble, print_results=True):
+    
     model_set = []
     threshold_sindy_list = [1e-3, 5e-3, 1e-2, 5e-2, 1e-1]
     threshold_group_list = [1e-3, 1e-2]
@@ -69,10 +70,6 @@ def fit_gsindy_2d(func, x0, t, a, num, num_split, real0, real1, monomial, monomi
     for threshold_sindy in threshold_sindy_list:
         for threshold_group in threshold_group_list:
             for threshold_similarity in threshold_similarity_list:
-                print(f'################### [GSINDy] threshold_sindy: {threshold_sindy} ################')
-                print(f'################### [GSINDy] threshold_group: {threshold_group} ################')
-                print(f'################### [GSINDy] threshold_similarity: {threshold_similarity} ################')
-
                 gsindy = GSINDy(monomial=monomial,
                                 monomial_name=monomial_name, 
                                 num_traj = num_traj, 
@@ -90,35 +87,49 @@ def fit_gsindy_2d(func, x0, t, a, num, num_split, real0, real1, monomial, monomi
                 gsindy.get_multi_sub_series(sol_org_list, t, num_series=100, window_per=.7) ### to get theta_list, sol_deriv_list
                 gsindy.basis_identification(remove_per=.2, plot_dist=False) ##True
                 
-                for split_basis in [True, False]:
+                if num==1:
+                    split_basis = [True]
+                else:
+                    split_basis = [True, False]
+                    
+                for split_basis_ in split_basis:
                     # Xi_final = gsindy.prediction(sol_org_list, t)
-                    Xi_final = gsindy.prediction_(sol_org_list, t, split_basis=split_basis)
+                    Xi_final = gsindy.prediction_(sol_org_list, t, split_basis=split_basis_)
                     
                     model_set.append(Xi_final)
                     
                     all_basis = gsindy.all_basis
                     diff_basis = gsindy.diff_basis
                     same_basis = gsindy.same_basis
-                    print('*'*50)
-                    print(f'real0: {real0}')
-                    print(f'feature 0 with different basis {monomial_name[diff_basis[0]]}: \n {Xi_final[:,0,all_basis[0]]} \n {monomial_name[all_basis[0]]}')
-                    print(f'real1: {real1}')
-                    print(f'feature 1 with different basis {monomial_name[diff_basis[1]]}: \n {Xi_final[:,1,all_basis[1]]} \n {monomial_name[all_basis[1]]}')
-                    
+
                     diff0_basis_list.append(monomial_name[diff_basis[0]])
                     diff1_basis_list.append(monomial_name[diff_basis[1]])
                     same0_basis_list.append(monomial_name[same_basis[0]])
                     same1_basis_list.append(monomial_name[same_basis[1]])
                     parameter_list.append([threshold_sindy, threshold_group, threshold_similarity])
-                
+                    
+                    if print_results:
+                        print(f'################### [GSINDy] threshold_sindy: {threshold_sindy} ################')
+                        print(f'################### [GSINDy] threshold_group: {threshold_group} ################')
+                        print(f'################### [GSINDy] threshold_similarity: {threshold_similarity} ################')
+                        print('*'*50)
+                        print(f'real0: {real_list[0]}')
+                        print(f'feature 0 with different basis {monomial_name[diff_basis[0]]}: \n {Xi_final[:,0,all_basis[0]]} \n {monomial_name[all_basis[0]]}')
+                        print(f'real1: {real_list[1]}')
+                        print(f'feature 1 with different basis {monomial_name[diff_basis[1]]}: \n {Xi_final[:,1,all_basis[1]]} \n {monomial_name[all_basis[1]]}')
 
-    #%% 
-    ###########################
-    ##### model selection #####
-    ###########################
-    
+
+    return model_set, diff0_basis_list, diff1_basis_list, same0_basis_list, same1_basis_list, parameter_list
+
+#%% 
+###########################
+##### model selection #####
+###########################
+def model_selection_gsindy_2d(x0, t, a, real_list, monomial, monomial_name, model_set,\
+                              sol_org_list, same0_basis_list, same1_basis_list, parameter_list):
     from ModelSelection import ModelSelection
     from scipy.integrate import odeint
+    num_traj = len(sol_org_list)
     
     if monomial.__name__ == 'monomial_poly':
         basis_functions = np.array([lambda x,y: 1, \
@@ -197,8 +208,8 @@ def fit_gsindy_2d(func, x0, t, a, num, num_split, real0, real1, monomial, monomi
     
     print('*'*25+'real'+'*'*25)
     print(f'real a: {a}')
-    print(f'real0: {real0}')
-    print(f'real1: {real1}')
+    print(f'real0: {real_list[0]}')
+    print(f'real1: {real_list[1]}')
     print('*'*25+'pred'+'*'*25)
     for i in range(num_traj):
         print('*'*8+f'traj {i+1}'+'*'*8)
@@ -219,3 +230,4 @@ def fit_gsindy_2d(func, x0, t, a, num, num_split, real0, real1, monomial, monomi
     print(f'same basis for feature 0: {same0_basis_list[best_BIC_model]}')
     print(f'same basis for feature 1: {same1_basis_list[best_BIC_model]}')
     
+    return ms, best_BIC_model, parameter_list

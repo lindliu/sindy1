@@ -40,6 +40,7 @@ num_split = 3
 func = func3__
 real0 = "x'=b*y + a*x^2 + c*x^3 - xy^2"
 real1 = "y'=x + a*y + b*x^2y + c*y^3"
+real_list = [real0, real1]
 ##################################################
 
 # ################## 2 variable ####################
@@ -50,6 +51,7 @@ real1 = "y'=x + a*y + b*x^2y + c*y^3"
 # func = func3_
 # real0 = "x'=b*y + a*x^2 - x^3 - xy^2"
 # real1 = "y'=x + a*y + b*x^2y - y^3"
+# real_list = [real0, real1]
 ####################################################
 
 
@@ -61,11 +63,12 @@ real1 = "y'=x + a*y + b*x^2y + c*y^3"
 # func = func3
 # real0 = "x'=-y + a*x^2 - x^3 - xy^2"
 # real1 = "y'=x + a*y - x^2y - y^3"   
+# real_list = [real0, real1]
 ####################################################
 
 
 
 if __name__ == "__main__":
-    fit_sindy_mult_2d(func, x0, t, a, num, num_split, real0, real1, monomial, monomial_name, \
+    fit_sindy_mult_2d(func, x0, t, a, num, num_split, real_list, monomial, monomial_name, \
                precision, alpha, opt, deriv_spline, ensemble)
     

@@ -43,6 +43,7 @@ num_split = 2
 func = func4_
 real0 = "x'=a*x + b*xy"
 real1 = "y'=b*y + a*xy" 
+real_list = [real0, real1]
 ##################################################
 
 # #################### 1 variable ####################
@@ -53,9 +54,10 @@ real1 = "y'=b*y + a*xy"
 # func = func4
 # real0 = "x'=a*x - xy"
 # real1 = "y'=-y + a*xy"
+# real_list = [real0, real1]
 # ##################################################
 
 if __name__ == "__main__":
-    fit_sindy_mult_2d(func, x0, t, a, num, num_split, real0, real1, monomial, monomial_name, \
+    fit_sindy_mult_2d(func, x0, t, a, num, num_split, real_list, monomial, monomial_name, \
                precision, alpha, opt, deriv_spline, ensemble)
     

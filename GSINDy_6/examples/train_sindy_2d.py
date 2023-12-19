@@ -21,24 +21,41 @@ MSE = lambda x, y: ((x-y)**2).mean()
 SSE = lambda x, y: ((x-y)**2).sum()
 
 
-def fit_sindy_2d(func, x0, t, a, real0, real1, monomial, monomial_name, \
-           precision, alpha, opt, deriv_spline, ensemble):
-    #%% generate data
+#%% generate data
+def data_generator(func, x0, t, a, real_list, num=None, num_split=None):
     from utils import get_multi_sol
     sol_org_list = get_multi_sol(func, x0, t, a)
+    
+    if num==1:    
+        ll = t.shape[0]//num_split
+        # idx_init = list(range(0,ll*num_split,ll))
+        
+        sol_org_list_ = list(sol_org_list[0][:num_split*ll,:].reshape([num_split,ll,-1]))
+        t_ = t[:ll]
+        x0_ = [list(sub[0]) for sub in sol_org_list_]
+        a_ = [a[0] for _ in range(num_split)]
+
+        t, x0, a, sol_org_list = t_, x0_, a_, sol_org_list_
 
     ### generate data ###
     num_traj = len(a)
     num_feature = len(x0[0])
-
+    
     ### plot data ###
     fig, ax = plt.subplots(1,1,figsize=[6,3])
     for i in range(num_traj):
         ax.plot(t, sol_org_list[i], 'o', markersize=1, label=f'{a[i]}')
     ax.legend()
-    ax.text(1, .95, f'${real0}$', fontsize=12)
-    ax.text(1, .8, f'${real1}$', fontsize=12)
+    ax.text(1, .95, f'${real_list[0]}$', fontsize=12)
+    ax.text(1, .8, f'${real_list[1]}$', fontsize=12)
+    return t, x0, a, sol_org_list, num_traj, num_feature
 
+def fit_sindy_2d(func, x0, t, a, real_list, monomial, monomial_name, \
+           precision, alpha, opt, deriv_spline, ensemble):
+
+    ### generate data
+    t, x0, a, sol_org_list, num_traj, num_feature = data_generator(func, x0, t, a, real_list)
+    
     #%% pysindy settings
     import pysindy_ as ps
     from pysindy_.feature_library import GeneralizedLibrary, PolynomialLibrary, CustomLibrary
@@ -81,13 +98,13 @@ def fit_sindy_2d(func, x0, t, a, real0, real1, monomial, monomial_name, \
     lib_generalized = GeneralizedLibrary([lib_custom])
     
     
-    
-    #%% 
+    #%%     
     threshold_sindy_list =  [1e-3, 5e-3, 1e-2, 5e-2, 1e-1]
     # threshold_sindy_list =  [1e-2]
     from utils import ode_solver, get_deriv
     from sklearn.linear_model import Lasso
 
+    model_best_list = []
     for traj_i in range(len(a)):
         
         ##################################
@@ -110,10 +127,8 @@ def fit_sindy_2d(func, x0, t, a, real0, real1, monomial, monomial_name, \
             sol_, t_ = ode_solver(func, x0[traj_i], t, a[traj_i])
             _, sol_deriv_, _ = get_deriv(sol_, t, deriv_spline)
             
-            if ensemble:
-                model.fit(sol_, t=t_, x_dot=sol_deriv_, ensemble=True, quiet=True)
-            else:
-                model.fit(sol_, t=t_, x_dot=sol_deriv_)
+            
+            model.fit(sol_, t=t_, x_dot=sol_deriv_, ensemble=ensemble, quiet=True)
             # model.print()
             # model.coefficients()
             
@@ -171,3 +186,8 @@ def fit_sindy_2d(func, x0, t, a, real0, real1, monomial, monomial_name, \
         print('*'*65)
         
         print(f'threshold: {parameter_list[best_BIC_model]}')
+        
+        
+        model_best_list.append(model_best)
+
+    return model_best_list

@@ -34,17 +34,39 @@ dt = .1
 t = np.arange(0,20,dt)
 num = 6
 
-# ################## 1 variable ####################
+# ################## 2 variable ####################
 x0 = [[1.5, -.5], [1.5, -.5], [1.5, -.5], [1.5, -.5], [1.5, -.5], [1.5, -.5]]
-a = [(.5,), (.3,), (.4,),(.2,), (.35,), (.6,)]
+a = [(-.5, .2), (-.3, .2), (-.4, .3),(-.2, .3), (-.35, .4), (-.6, .4)]
 
 func = func5
 real0 = "x'=5*(x - y- a*x^3)"
-real1 = "y'=.2*x"    
+real1 = "y'=b*x"    
+real_list = [real0, real1]
 ####################################################
 
 
 
 if __name__ == "__main__":
-    fit_sindy_2d(func, x0, t, a, real0, real1, monomial, monomial_name, \
-               precision, alpha, opt, deriv_spline, ensemble)
+    model_best_list = fit_sindy_2d(func, x0, t, a, real_list, monomial, monomial_name, \
+                                   precision, alpha, opt, deriv_spline, ensemble)
+
+    import os
+    os.makedirs('results', exist_ok=True)
+    os.makedirs('results/coeff', exist_ok=True)
+    save_path = 'results/sindy_all.txt'
+    open(save_path, 'w').close()
+    
+    for idx in range(len(model_best_list)):
+        coef = model_best_list[idx].coefficients()
+        np.save(f'results/coeff/sindy_{idx}.npy', coef)
+
+        mask0 = np.abs(coef[0]) > precision
+        mask1 = np.abs(coef[1]) > precision
+        with open(save_path, "a") as file2:
+            file2.writelines(['*'*15, f'result of trajectory {idx} ', '*'*15, '\n'])
+            file2.write(f'coef of feature 0: {coef[0,:][mask0]} \n')
+            file2.write(f'basis of feature 0: {monomial_name[mask0]} \n')
+            file2.write(f'coef of feature 1: {coef[1,:][mask1]} \n')
+            file2.write(f'basis of feature 1: {monomial_name[mask1]} \n\n')
+
+        

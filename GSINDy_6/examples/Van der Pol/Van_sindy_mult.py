@@ -10,6 +10,7 @@ Created on Mon Dec 11 18:55:57 2023
 import sys
 sys.path.insert(1, '../../GSINDy')
 sys.path.insert(1, '../..')
+sys.path.insert(1, '..')
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -37,16 +38,17 @@ num = 5
 
 ################## 1 variable ####################
 x0 = [[1.5, -.5]]
-a = [(.5,)]
+a = [(-.5,.2)]
 num_split = 3 
 
 func = func5
 real0 = "x'=5*(x - y- a*x^3)"
-real1 = "y'=.2*x"
+real1 = "y'=b*x"
+real_list = [real0, real1]
 ##################################################
 
 
 if __name__ == "__main__":
-    fit_sindy_mult_2d(func, x0, t, a, num, num_split, real0, real1, monomial, monomial_name, \
+    fit_sindy_mult_2d(func, x0, t, a, num, num_split, real_list, monomial, monomial_name, \
                precision, alpha, opt, deriv_spline, ensemble)
     
