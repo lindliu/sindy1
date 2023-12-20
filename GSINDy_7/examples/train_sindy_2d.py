@@ -8,184 +8,208 @@ Created on Mon Dec 18 22:56:05 2023
 import sys
 sys.path.insert(1, '../../GSINDy')
 sys.path.insert(1, '../..')
+sys.path.insert(1, '..')
 
 import numpy as np
 import matplotlib.pyplot as plt
 from GSINDy import *
+from utils import ode_solver, get_deriv, get_theta
 
 MSE = lambda x, y: ((x-y)**2).mean()
 SSE = lambda x, y: ((x-y)**2).sum()
 
 
-#%% generate data
-def data_generator(func, x0, t, a, real_list, num=None, num_split=None):
-    from utils import get_multi_sol
-    sol_org_list = get_multi_sol(func, x0, t, a)
+#%% pysindy
+import pysindy_ as ps
+from pysindy_.feature_library import GeneralizedLibrary, PolynomialLibrary, CustomLibrary
+from sklearn.linear_model import Lasso
+from sklearn.linear_model import Lasso
+
+def SINDy_by_pysindy(sol_, sol_deriv_, t_, basis, threshold_sindy, opt, ensemble, alpha=0.05):
+    ### pysindy settings
+    basis_functions_list = basis['functions']
+    basis_functions_name_list = basis['names']
     
-    if num==1:    
-        ll = t.shape[0]//num_split
-        # idx_init = list(range(0,ll*num_split,ll))
+    assert (basis_functions_list[0]==basis_functions_list[1]).all(), 'pysindy does not support different features with different basis functions'
+    
+    basis_functions = basis_functions_list[0]
+    basis_functions_name = basis_functions_name_list[0]
         
-        sol_org_list_ = list(sol_org_list[0][:num_split*ll,:].reshape([num_split,ll,-1]))
-        t_ = t[:ll]
-        x0_ = [list(sub[0]) for sub in sol_org_list_]
-        a_ = [a[0] for _ in range(num_split)]
-
-        t, x0, a, sol_org_list = t_, x0_, a_, sol_org_list_
-
-    ### generate data ###
-    num_traj = len(a)
-    num_feature = len(x0[0])
-    
-    ### plot data ###
-    fig, ax = plt.subplots(1,1,figsize=[6,3])
-    for i in range(num_traj):
-        ax.plot(t, sol_org_list[i], 'o', markersize=1, label=f'{a[i]}')
-    ax.legend()
-    ax.text(1, .95, f'${real_list[0]}$', fontsize=12)
-    ax.text(1, .8, f'${real_list[1]}$', fontsize=12)
-    return t, x0, a, sol_org_list, num_traj, num_feature
-
-def fit_sindy_2d(func, x0, t, a, real_list, monomial, monomial_name, \
-           precision, alpha, opt, deriv_spline, ensemble):
-
-    ### generate data
-    t, x0, a, sol_org_list, num_traj, num_feature = data_generator(func, x0, t, a, real_list)
-    
-    #%% pysindy settings
-    import pysindy_ as ps
-    from pysindy_.feature_library import GeneralizedLibrary, PolynomialLibrary, CustomLibrary
-    from sklearn.linear_model import Lasso
-
-    if monomial[0].__name__ == 'monomial_poly':
-        # lib_generalized = PolynomialLibrary(degree=5)
-        basis_functions = [lambda x,y: 1, \
-                lambda x,y: x, lambda x,y: y, \
-                lambda x,y: x**2, lambda x,y: x*y, lambda x,y: y**2, \
-                lambda x,y: x**3, lambda x,y: x**2*y, lambda x,y: x*y**2, lambda x,y: y**3, \
-                lambda x,y: x**4, lambda x,y: x**3*y, lambda x,y: x**2*y**2, lambda x,y: x*y**3, lambda x,y: y**4, \
-                lambda x,y: x**5, lambda x,y: x**4*y, lambda x,y: x**3*y**2, lambda x,y: x**2*y**3, lambda x,y: x*y**4, lambda x,y: y**5]
-        names = [lambda x,y: '1', \
-                lambda x,y: 'x', lambda x,y: 'y', \
-                lambda x,y: 'x^2', lambda x,y: 'xy', lambda x,y: 'y^2', \
-                lambda x,y: 'x^3', lambda x,y: 'x^2y', lambda x,y: 'xy^2', lambda x,y: 'y^3', \
-                lambda x,y: 'x^4', lambda x,y: 'x^3y', lambda x,y: 'x^2y^2', lambda x,y: 'xy^3', lambda x,y: 'y^4', \
-                lambda x,y: 'x^5', lambda x,y: 'x^4y', lambda x,y: 'x^3y^2', lambda x,y: 'x^2y^3', lambda x,y: 'xy^4', lambda x,y: 'y^5']
-
-    if monomial[0].__name__ == 'monomial_all':
-        basis_functions = [lambda x,y: 1, \
-                lambda x,y: x, lambda x,y: y, \
-                lambda x,y: x**2, lambda x,y: x*y, lambda x,y: y**2, \
-                lambda x,y: x**3, lambda x,y: x**2*y, lambda x,y: x*y**2, lambda x,y: y**3, \
-                lambda x,y: x**4, lambda x,y: y**4, \
-                lambda x,y: 1/x, lambda x,y: 1/y, 
-                lambda x,y: np.sin(x), lambda x,y: np.sin(y),lambda x,y: np.cos(x), lambda x,y: np.cos(y),\
-                lambda x,y: np.exp(x), lambda x,y: np.exp(y)]
-        names = [lambda x,y: '1', \
-                lambda x,y: 'x', lambda x,y: 'y', \
-                lambda x,y: 'x^2', lambda x,y: 'xy', lambda x,y: 'y^2', \
-                lambda x,y: 'x^3', lambda x,y: 'x^2y', lambda x,y: 'xy^2', lambda x,y: 'y^3', \
-                lambda x,y: 'x^4', lambda x,y: 'y^4', \
-                lambda x,y: '1/x', lambda x,y: '1/y', \
-                lambda x,y: 'sin(x)', lambda x,y: 'sin(y)',lambda x,y: 'cos(x)', lambda x,y: 'cos(y)',\
-                lambda x,y: 'exp(x)', lambda x,y: 'exp(y)']
-    if monomial[0].__name__ == 'monomial_all_0':
-        pass ### have not find a way to make pysindy works for different feature with different basis functions
-        
-    lib_custom = CustomLibrary(library_functions=basis_functions, function_names=names)
+    lib_custom = CustomLibrary(library_functions=basis_functions, function_names=basis_functions_name)
     lib_generalized = GeneralizedLibrary([lib_custom])
     
+    if opt=='SQTL':
+        optimizer = ps.STLSQ(threshold=threshold_sindy, alpha=alpha)
+    elif opt=='LASSO':
+        optimizer = Lasso(alpha=alpha, max_iter=5000, fit_intercept=False)
+    elif opt=='SR3':
+        optimizer = ps.SR3(threshold=threshold_sindy, nu=.1)
     
-    #%%     
-    threshold_sindy_list =  [1e-3, 5e-3, 1e-2, 5e-2, 1e-1]
-    # threshold_sindy_list =  [1e-2]
-    from utils import ode_solver, get_deriv
-    from sklearn.linear_model import Lasso
+    model = ps.SINDy(feature_names=["x", "y"], feature_library=lib_generalized, optimizer=optimizer)
 
-    model_best_list = []
-    for traj_i in range(len(a)):
+    ### sindy
+    model.fit(sol_, t=t_, x_dot=sol_deriv_, ensemble=ensemble, quiet=True)
+    # model.print()
+    # model.coefficients()
+    
+    return model
+
+def SINDy_by_coeff(sol_, sol_deriv_, t_, basis, threshold_sindy, precision, alpha):
+    basis_functions_list = basis['functions']
+    # basis_functions_name_list = basis['names']
+    
+    Theta0 = get_theta(sol_, basis_functions_list[0])
+    Theta1 = get_theta(sol_, basis_functions_list[1])
+    DXdt0 = sol_deriv_[:,[0]]
+    DXdt1 = sol_deriv_[:,[1]]
+    
+    num_feature, num_basis = sol_deriv_.shape[1], Theta0.shape[1]
+    Xi = np.zeros([num_feature, num_basis])
+    
+    Xi[0,:] = SLS(Theta0, DXdt0, threshold_sindy, precision)[...,0]
+    Xi[1,:] = SLS(Theta1, DXdt1, threshold_sindy, precision)[...,0]
+    
+    return Xi
+
+def fit_sindy_2d(sol_, sol_deriv_, t_, real_list, basis, precision, alpha, opt, deriv_spline, ensemble, \
+                 threshold_sindy_list=[1e-3, 5e-3, 1e-2, 5e-2, 1e-1]):
+    ### sindy 
+    model_set = []
+    for threshold_sindy in threshold_sindy_list:
+        if opt in ['SQTL', 'LASSO', 'SR3']:
+            model = SINDy_by_pysindy(sol_, sol_deriv_, t_, basis, threshold_sindy, opt, ensemble, alpha)
+            
+        elif opt == 'Manually':
+            model = SINDy_by_coeff(sol_, sol_deriv_, t_, basis, threshold_sindy, precision, alpha)
         
-        ##################################
-        ############# sindy ##############
-        ##################################
-        model_set = []
-        parameter_list = []
-        for threshold_sindy in threshold_sindy_list:
-            # optimizer = STLSQ(threshold=threshold_sindy, alpha=alpha)
-            if opt=='SQTL':
-                optimizer = ps.STLSQ(threshold=threshold_sindy, alpha=alpha)
-            elif opt=='LASSO':
-                optimizer = Lasso(alpha=alpha, max_iter=5000, fit_intercept=False)
-            elif opt=='SR3':
-                optimizer = ps.SR3(threshold=threshold_sindy, nu=.1)
-            
-            model = ps.SINDy(feature_names=["x", "y"], feature_library=lib_generalized, optimizer=optimizer)
+        model_set.append(model)
         
-            # print(f'################### [SINDy] threshold: {threshold_sindy} ################')
-            sol_, t_ = ode_solver(func, x0[traj_i], t, a[traj_i])
-            _, sol_deriv_, _ = get_deriv(sol_, t, deriv_spline)
-            
-            
-            model.fit(sol_, t=t_, x_dot=sol_deriv_, ensemble=ensemble, quiet=True)
-            # model.print()
-            # model.coefficients()
-            
-            model_set.append(model)
-            # theta_ = monomial(sol_)
-            # print(SLS(theta_, sol_deriv_, threshold_sindy, precision))
-            
-            parameter_list.append(threshold_sindy)
+    return model_set
 
 
-        ###########################
-        ##### model selection #####
-        ###########################
+
+
+from ModelSelection import ModelSelection
+
+def model_selection_pysindy_2d(model_set, traj_i, x0_i, t, precision=None):
+    t_steps = t.shape[0]
         
-        from ModelSelection import ModelSelection
+    ms = ModelSelection(model_set, t_steps)
+    ms.compute_k_sindy()
+    
+    for model_id, model in enumerate(model_set):    
+        sse_sum = 0
         
-        t_steps = t.shape[0]
-        ms = ModelSelection(model_set, t_steps)
-        ms.compute_k_sindy()
-        
-        for model_id, model in enumerate(model_set):    
-            sse_sum = 0
+        if np.abs(model.coefficients()).sum()>1e3:
+            ms.set_model_SSE(model_id, 1e5)
+            continue
             
-            if np.abs(model.coefficients()).sum()>1e3:
-                ms.set_model_SSE(model_id, 1e5)
-                continue
-                
-            ##### simulations #####
-            simulation = model.simulate(x0[traj_i], t=t, integrator = "odeint")
-            
-            sse_sum += ms.compute_SSE(sol_org_list[traj_i], simulation)
-            
-            # ms.set_model_SSE(model_id, sse_sum/num_traj)
-            ms.set_model_SSE(model_id, sse_sum)
+        ##### simulations #####
+        simulation = model.simulate(x0_i, t=t, integrator = "odeint")
         
-        best_AIC_model = ms.compute_AIC()
-        best_AICc_model = ms.compute_AICc()
-        best_BIC_model = ms.compute_BIC()
+        sse_sum += ms.compute_SSE(traj_i, simulation)
         
-        ### Get best model
-        print("Melhor modelo AIC = " + str(best_AIC_model) + "\n")
-        print("Melhor modelo AICc = " + str(best_AICc_model) + "\n")
-        print("Melhor modelo BIC = " + str(best_BIC_model) + "\n")
-        
+        # ms.set_model_SSE(model_id, sse_sum/num_traj)
+        ms.set_model_SSE(model_id, sse_sum)
+    
+    best_AIC_model = ms.compute_AIC()
+    best_AICc_model = ms.compute_AICc()
+    best_BIC_model = ms.compute_BIC()
+    
+    ### Get best model
+    print("Melhor modelo AIC = " + str(best_AIC_model) + "\n")
+    print("Melhor modelo AICc = " + str(best_AICc_model) + "\n")
+    print("Melhor modelo BIC = " + str(best_BIC_model) + "\n")
+    
+    if precision is not None:
         def count_decimal_places(number):
             return len(str(1e-3).split('.')[1])
-        
         ### best model 
         print('*'*65)
-        print('*'*16+f' The best model of trajectory: {traj_i} '+'*'*16)
+        print('*'*16+' The best model of trajectory '+'*'*16)
         print('*'*65)
         model_best = model_set[best_BIC_model]
         model_best.print(precision=count_decimal_places(precision))
         print('*'*65)
         print('*'*65)
-        
-        print(f'threshold: {parameter_list[best_BIC_model]}')
-        
-        
-        model_best_list.append(model_best)
 
-    return model_best_list
+    return model_best, best_BIC_model
+
+
+
+
+def model_selection_coeff_2d(model_set_, sol_, x0_, t_, a, real_list, basis):
+    def func_simulation(x, t, param, basis_functions_list):
+        mask0 = param[0]!=0
+        mask1 = param[1]!=0
+        
+        x1, x2 = x
+        dx1dt = 0
+        for par,f in zip(param[0][mask0], basis_functions_list[0][mask0]):
+            dx1dt = dx1dt+par*f(x1,x2)
+        
+        dx2dt = 0
+        for par,f in zip(param[1][mask1], basis_functions_list[1][mask1]):
+            dx2dt = dx2dt+par*f(x1,x2)
+            
+        dxdt = [dx1dt, dx2dt]
+        return dxdt
+    
+    from ModelSelection import ModelSelection
+    from scipy.integrate import odeint
+    
+    basis_functions_list = basis['functions']
+    basis_functions_name_list = basis['names']
+    basis_functions_name_list_ = [np.array([f(1,1) for f in basis['names'][0]]), \
+                                 np.array([f(1,1) for f in basis['names'][1]])]
+    t_steps = t_.shape[0]
+    ms = ModelSelection(model_set_, t_steps)
+    ms.compute_k_gsindy()
+    
+    for model_id, Xi in enumerate(model_set_):
+        sse_sum = 0
+        
+        args = (Xi, basis_functions_list)
+        ##### simulations #####
+        simulation = odeint(func_simulation, x0_, t_, args=args)
+        # SSE(sol_org_list[j], simulation)
+        
+        sse_sum += ms.compute_SSE(sol_, simulation)
+            
+        ms.set_model_SSE(model_id, sse_sum)
+        # ms.set_model_SSE(model_id, sse_sum)
+    
+    best_AIC_model = ms.compute_AIC()
+    best_AICc_model = ms.compute_AICc()
+    best_BIC_model = ms.compute_BIC()
+    best_HQIC_model = ms.compute_HQIC()
+    best_BICc_model = ms.compute_BIC_custom()
+    ### Get best model
+    print("Melhor modelo AIC = " + str(best_AIC_model) + "\n")
+    print("Melhor modelo AICc = " + str(best_AICc_model) + "\n")
+    print("Melhor modelo BIC = " + str(best_BIC_model) + "\n")
+    print("Melhor modelo HQIC = " + str(best_HQIC_model) + "\n")
+    print("Melhor modelo BICc = " + str(best_BICc_model) + "\n")
+
+    ### Xi of best model 
+    Xi_best = model_set_[best_BIC_model]
+    
+    print('*'*25+'real'+'*'*25)
+    print(f'real a: {a}')
+    print(f'real0: {real_list[0]}')
+    print(f'real1: {real_list[1]}')
+    print('*'*25+'pred'+'*'*25)
+
+    dx1dt = "x'="
+    dx2dt = "y'="
+    for j,pa in enumerate(Xi_best[0]):
+        if pa!=0:
+            dx1dt = dx1dt+f' + {pa:.4f}{basis_functions_name_list_[0][j]}'
+    for j,pa in enumerate(Xi_best[1]):
+        if pa!=0:
+            dx2dt = dx2dt+f' + {pa:.4f}{basis_functions_name_list_[1][j]}'
+                
+    print(dx1dt)
+    print(dx2dt)
+    
+    return ms, best_BIC_model

@@ -38,7 +38,7 @@ class ModelSelection:
 
 	def compute_k_gsindy(self):
 		for model_id, model in enumerate(self.model_set):
-			self.k[model_id] = np.count_nonzero(model != 0.0)
+			self.k[model_id] = np.count_nonzero(np.absolute(model) >= 5.0e-4)
     
 	def compute_k_sindy(self):
 		for model_id, model in enumerate(self.model_set):

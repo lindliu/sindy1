@@ -38,20 +38,24 @@ def data_generator(func, x0, t, a, real_list, num=None, num_split=None):
     num_feature = len(x0[0])
     
     ### plot data ###
+    plot_mult_traj(sol_org_list, t, a, real_list)
+    return t, x0, a, sol_org_list, num_traj, num_feature
+
+def plot_mult_traj(sol_org_list, t, a, real_list):
     fig, ax = plt.subplots(1,1,figsize=[6,3])
-    for i in range(num_traj):
+    for i in range(len(sol_org_list)):
         ax.plot(t, sol_org_list[i], 'o', markersize=1, label=f'{a[i]}')
     ax.legend()
     ax.text(1, .95, f'${real_list[0]}$', fontsize=12)
     ax.text(1, .8, f'${real_list[1]}$', fontsize=12)
-    return t, x0, a, sol_org_list, num_traj, num_feature
 
 #%% 
 ########################################
 ############# group sindy ##############
 ########################################
 def fit_gsindy_2d(sol_org_list, num_traj, num_feature, t, num, real_list, \
-                  monomial, monomial_name, precision, alpha, opt, deriv_spline, ensemble, print_results=True):
+                  basis, precision, alpha, opt, deriv_spline, ensemble, print_results=True):
+    basis_functions_name_list = basis['names']
     
     model_set = []
     threshold_sindy_list = [1e-3, 5e-3, 1e-2, 5e-2, 1e-1]
@@ -66,8 +70,8 @@ def fit_gsindy_2d(sol_org_list, num_traj, num_feature, t, num, real_list, \
     for threshold_sindy in threshold_sindy_list:
         for threshold_group in threshold_group_list:
             for threshold_similarity in threshold_similarity_list:
-                gsindy = GSINDy(monomial=monomial,
-                                monomial_name=monomial_name, 
+                ### initilization
+                gsindy = GSINDy(basis = basis, 
                                 num_traj = num_traj, 
                                 num_feature = num_feature, 
                                 threshold_sindy = threshold_sindy, 
@@ -77,10 +81,11 @@ def fit_gsindy_2d(sol_org_list, num_traj, num_feature, t, num, real_list, \
                                 alpha=alpha,
                                 deriv_spline=deriv_spline,
                                 max_iter = 20, 
-                                optimizer=opt, ##['Manually', 'SQTL', 'LASSO', 'SR3']
+                                optimizer=opt, 
                                 ensemble=ensemble)    
-                    
+                ### get sub-series for each trajectory
                 gsindy.get_multi_sub_series_2D(sol_org_list, t, num_series=100, window_per=.7) ### to get theta_list, sol_deriv_list
+                ### basis identification for each trajectory
                 gsindy.basis_identification(remove_per=.2, plot_dist=False) ##True
                 
                 if num==1:
@@ -89,8 +94,7 @@ def fit_gsindy_2d(sol_org_list, num_traj, num_feature, t, num, real_list, \
                     split_basis = [True, False]
                     
                 for split_basis_ in split_basis:
-                    # Xi_final = gsindy.prediction(sol_org_list, t)
-                    Xi_final = gsindy.prediction_(sol_org_list, t, split_basis=split_basis_)
+                    Xi_final = gsindy.prediction(sol_org_list, t, split_basis=split_basis_)
                     
                     model_set.append(Xi_final)
                     
@@ -98,10 +102,10 @@ def fit_gsindy_2d(sol_org_list, num_traj, num_feature, t, num, real_list, \
                     diff_basis = gsindy.diff_basis
                     same_basis = gsindy.same_basis
                     
-                    diff0_basis_list.append(monomial_name[0][diff_basis[0]])
-                    diff1_basis_list.append(monomial_name[1][diff_basis[1]])
-                    same0_basis_list.append(monomial_name[0][same_basis[0]])
-                    same1_basis_list.append(monomial_name[1][same_basis[1]])
+                    diff0_basis_list.append(basis_functions_name_list[0][diff_basis[0]])
+                    diff1_basis_list.append(basis_functions_name_list[1][diff_basis[1]])
+                    same0_basis_list.append(basis_functions_name_list[0][same_basis[0]])
+                    same1_basis_list.append(basis_functions_name_list[1][same_basis[1]])
                     parameter_list.append([threshold_sindy, threshold_group, threshold_similarity])
                     
                     if print_results:
@@ -110,9 +114,9 @@ def fit_gsindy_2d(sol_org_list, num_traj, num_feature, t, num, real_list, \
                         print(f'################### [GSINDy] threshold_similarity: {threshold_similarity} ################')
                         print('*'*50)
                         print(f'real0: {real_list[0]}')
-                        print(f'feature 0 with different basis {monomial_name[0][diff_basis[0]]}: \n {Xi_final[:,0,all_basis[0]]} \n {monomial_name[0][all_basis[0]]}')
+                        print(f'feature 0 with different basis {basis_functions_name_list[0][diff_basis[0]]}: \n {Xi_final[:,0,all_basis[0]]} \n {basis_functions_name_list[0][all_basis[0]]}')
                         print(f'real1: {real_list[1]}')
-                        print(f'feature 1 with different basis {monomial_name[1][diff_basis[1]]}: \n {Xi_final[:,1,all_basis[1]]} \n {monomial_name[1][all_basis[1]]}')
+                        print(f'feature 1 with different basis {basis_functions_name_list[1][diff_basis[1]]}: \n {Xi_final[:,1,all_basis[1]]} \n {basis_functions_name_list[1][all_basis[1]]}')
 
 
     return model_set, diff0_basis_list, diff1_basis_list, same0_basis_list, same1_basis_list, parameter_list
@@ -121,66 +125,33 @@ def fit_gsindy_2d(sol_org_list, num_traj, num_feature, t, num, real_list, \
 ###########################
 ##### model selection #####
 ###########################
-def model_selection_gsindy_2d(x0, t, a, real_list, monomial, monomial_name, model_set,\
-                              sol_org_list, same0_basis_list=None, same1_basis_list=None, parameter_list=None):
+
+def func_simulation(x, t, param, basis_functions_list):
+    mask0 = param[0]!=0
+    mask1 = param[1]!=0
+    
+    x1, x2 = x
+    dx1dt = 0
+    for par,f in zip(param[0][mask0], basis_functions_list[0][mask0]):
+        dx1dt = dx1dt+par*f(x1,x2)
+    
+    dx2dt = 0
+    for par,f in zip(param[1][mask1], basis_functions_list[1][mask1]):
+        dx2dt = dx2dt+par*f(x1,x2)
+        
+    dxdt = [dx1dt, dx2dt]
+    return dxdt
+
+def model_selection_gsindy_2d(x0, t, a, real_list, basis, model_set, sol_org_list, \
+                              same0_basis_list=None, same1_basis_list=None, parameter_list=None):
     from ModelSelection import ModelSelection
     from scipy.integrate import odeint
     num_traj = len(sol_org_list)
     
-    if monomial[0].__name__ == 'monomial_poly':
-        basis_functions = [np.array([lambda x,y: 1, \
-            lambda x,y: x, lambda x,y: y, \
-            lambda x,y: x**2, lambda x,y: x*y, lambda x,y: y**2, \
-            lambda x,y: x**3, lambda x,y: x**2*y, lambda x,y: x*y**2, lambda x,y: y**3, \
-            lambda x,y: x**4, lambda x,y: x**3*y, lambda x,y: x**2*y**2, lambda x,y: x*y**3, lambda x,y: y**4, \
-            lambda x,y: x**5, lambda x,y: x**4*y, lambda x,y: x**3*y**2, lambda x,y: x**2*y**3, lambda x,y: x*y**4, lambda x,y: y**5]),
-            np.array([lambda x,y: 1, \
-                lambda x,y: x, lambda x,y: y, \
-                lambda x,y: x**2, lambda x,y: x*y, lambda x,y: y**2, \
-                lambda x,y: x**3, lambda x,y: x**2*y, lambda x,y: x*y**2, lambda x,y: y**3, \
-                lambda x,y: x**4, lambda x,y: x**3*y, lambda x,y: x**2*y**2, lambda x,y: x*y**3, lambda x,y: y**4, \
-                lambda x,y: x**5, lambda x,y: x**4*y, lambda x,y: x**3*y**2, lambda x,y: x**2*y**3, lambda x,y: x*y**4, lambda x,y: y**5])]
-    if monomial[0].__name__ == 'monomial_all':
-        basis_functions = np.array([lambda x,y: 1, \
-            lambda x,y: x, lambda x,y: y, \
-            lambda x,y: x**2, lambda x,y: x*y, lambda x,y: y**2, \
-            lambda x,y: x**3, lambda x,y: x**2*y, lambda x,y: x*y**2, lambda x,y: y**3, \
-            lambda x,y: x**4, lambda x,y: y**4, \
-            lambda x,y: 1/x, lambda x,y: 1/y, 
-            lambda x,y: np.sin(x), lambda x,y: np.sin(y),lambda x,y: np.cos(x), lambda x,y: np.cos(y),\
-            lambda x,y: np.exp(x), lambda x,y: np.exp(y)])
-    if monomial[0].__name__ == 'monomial_all_0':
-        basis_functions = [np.array([lambda x,y: 1, \
-                                    lambda x,y: x, lambda x,y: y, \
-                                    lambda x,y: x**2, lambda x,y: x*y, lambda x,y: y**2, \
-                                    lambda x,y: x**3, lambda x,y: x**2*y, lambda x,y: x*y**2, lambda x,y: y**3, \
-                                    lambda x,y: x**4, lambda x,y: 1/x, 
-                                    lambda x,y: np.sin(x), lambda x,y: np.cos(x), lambda x,y: np.exp(x)]), \
-                           np.array([lambda x,y: 1, \
-                                    lambda x,y: x, lambda x,y: y, \
-                                    lambda x,y: x**2, lambda x,y: x*y, lambda x,y: y**2, \
-                                    lambda x,y: x**3, lambda x,y: x**2*y, lambda x,y: x*y**2, lambda x,y: y**3, \
-                                    lambda x,y: y**4, lambda x,y: 1/y, 
-                                    lambda x,y: np.sin(y), lambda x,y: np.cos(y), lambda x,y: np.exp(y)])]
-                                     
-                           
-                           
+    basis_functions_list = basis['functions']
+    basis_functions_name_list = basis['names']
             
-    def func_simulation(x, t, param, basis):
-        mask0 = param[0]!=0
-        mask1 = param[1]!=0
-        
-        x1, x2 = x
-        dx1dt = 0
-        for par,f in zip(param[0][mask0], basis[0][mask0]):
-            dx1dt = dx1dt+par*f(x1,x2)
-        
-        dx2dt = 0
-        for par,f in zip(param[1][mask1], basis[1][mask1]):
-            dx2dt = dx2dt+par*f(x1,x2)
-            
-        dxdt = [dx1dt, dx2dt]
-        return dxdt
+
     
     t_steps = t.shape[0]
     ms = ModelSelection(model_set, t_steps)
@@ -189,14 +160,12 @@ def model_selection_gsindy_2d(x0, t, a, real_list, monomial, monomial_name, mode
     for model_id, Xi in enumerate(model_set):
         sse_sum = 0
         for j in range(num_traj):
-            # _, sol_deriv_, _ = get_deriv(sol_org_list[j], t, deriv_spline)
-            # sse_sum += ms.compute_SSE(monomial(sol_org_list[j])@Xi[j].T, sol_deriv_)
             
             if np.abs(Xi[j]).sum()>1e3:
                 sse_sum += 1e5
                 continue
             
-            args = (Xi[j], basis_functions)
+            args = (Xi[j], basis_functions_list)
             ##### simulations #####
             simulation = odeint(func_simulation, x0[j], t, args=args)
             # SSE(sol_org_list[j], simulation)
@@ -232,10 +201,10 @@ def model_selection_gsindy_2d(x0, t, a, real_list, monomial, monomial_name, mode
         dx2dt = "y'="
         for j,pa in enumerate(Xi_best[i,0]):
             if pa!=0:
-                dx1dt = dx1dt+f' + {pa:.4f}{monomial_name[0][j]}'
+                dx1dt = dx1dt+f' + {pa:.4f}{basis_functions_name_list[0][j]}'
         for j,pa in enumerate(Xi_best[i,1]):
             if pa!=0:
-                dx2dt = dx2dt+f' + {pa:.4f}{monomial_name[1][j]}'
+                dx2dt = dx2dt+f' + {pa:.4f}{basis_functions_name_list[1][j]}'
                     
         print(dx1dt)
         print(dx2dt)
