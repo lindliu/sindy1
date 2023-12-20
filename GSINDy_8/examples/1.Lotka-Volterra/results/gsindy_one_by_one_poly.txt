@@ -1,0 +1,6 @@
+***************result of trajectory 0 split into 2 pieces***************
+coef of feature 0: [0.7001 -0.8000] 
+basis of feature 0: ['x' 'xy'] 
+coef of feature 1: [-0.8000 0.6999] 
+basis of feature 1: ['y' 'xy'] 
+
