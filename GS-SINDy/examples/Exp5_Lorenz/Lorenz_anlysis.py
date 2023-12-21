@@ -5,6 +5,7 @@ Created on Tue Dec 19 15:15:54 2023
 
 @author: do0236li
 """
+
 import sys
 sys.path.insert(1, '../../GSINDy')
 sys.path.insert(1, '../..')
@@ -13,8 +14,9 @@ sys.path.insert(1, '../tools')
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from Lotka_constants import get_basis_functions
-import Lotka_constants as constants
+from Lorenz_constants import get_basis_functions
+import Lorenz_constants as constants
+
 np.set_printoptions(formatter={'float': lambda x: "{0:.4f}".format(x)})
 
 
@@ -70,16 +72,19 @@ if __name__ == "__main__":
     
     ##### true results
     if basis_type=='poly':
-        coeff_true_ = np.array([(.7,-.8), (1,-1), (.5,-.6), (1.5,-1.5), (1.2,-1.5), (1.3,-1.)])
+        coeff_true_ = np.array(a_list)
         coeff_true = np.zeros([num_traj, num_feature, num_basis])
-        coeff_true[:,0,[1,4]] = coeff_true_[:,[0,1]]
-        coeff_true[:,1,[2,4]] = coeff_true_[:,[1,0]]
-    
-    
+        coeff_true[:,0,[1,2]] = coeff_true_[:,[0,1]]
+        coeff_true[:,1,[1]] = coeff_true_[:,[2]]
+        coeff_true[:,2,[3]] = coeff_true_[:,[3]]
+        
+        coeff_true[:,1,[2,8]] = [-1,-1]
+        coeff_true[:,2,[7]] = [1]
+
     
     basis_idx = np.arange(num_basis)
     ##### true coefficients vs gsindy all coefficients
-    fig, ax = plt.subplots(1,2,figsize=[8,5])
+    fig, ax = plt.subplots(1,3,figsize=[8,5])
     fig.suptitle("True(red) vs GSINDy(blue) all", fontsize=16)
     ax = ax.flatten()
     for i in range(num_feature):
@@ -91,18 +96,16 @@ if __name__ == "__main__":
     
     
     ##### true coefficients vs sindy coefficients
-    fig, ax = plt.subplots(num_traj,2,figsize=[10,15])
+    fig, ax = plt.subplots(num_traj,3,figsize=[10,15])
     fig.suptitle("True(red) vs GSINDy(blue) one vs SINDy(green)", fontsize=16)
     ax = ax.flatten()
     for j in range(num_traj):
         for i in range(num_feature):
-            ax[2*j+i].scatter(basis_idx, coeff_true[j,i,:], c='b', alpha=.5)
-            ax[2*j+i].scatter(basis_idx, coeff_sindy_all[j,i,:], c='g', alpha=.5)
+            ax[3*j+i].scatter(basis_idx, coeff_true[j,i,:], c='b', alpha=.5)
+            ax[3*j+i].scatter(basis_idx, coeff_sindy_all[j,i,:], c='g', alpha=.5)
             for k in range(n_split):
                 ax[2*j+i].scatter(basis_idx, coeff_gsindy_one[k,j,i,:], c='r', alpha=.2)
         
         ax[2*j+i].set_title(f'feature {i}')
     fig.tight_layout()
         
-    
-    

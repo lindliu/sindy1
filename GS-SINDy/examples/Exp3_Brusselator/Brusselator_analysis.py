@@ -71,7 +71,7 @@ if __name__ == "__main__":
     
     ##### true results
     if basis_type=='poly':
-        coeff_true_ = np.array([(1, 3), (.8, 2.5), (.6, 2.6), (.9, 2.8), (.5, 2.8), (.7, 2.8)])
+        coeff_true_ = np.array(a_list)
         coeff_true = np.zeros([num_traj, num_feature, num_basis])
         coeff_true[:,0,[0]] = coeff_true_[:,[0]]
         coeff_true[:,1,[1]] = coeff_true_[:,[1]]

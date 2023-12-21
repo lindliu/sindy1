@@ -5,7 +5,6 @@ Created on Tue Dec 19 15:15:54 2023
 
 @author: do0236li
 """
-
 import sys
 sys.path.insert(1, '../../GSINDy')
 sys.path.insert(1, '../..')
@@ -14,9 +13,8 @@ sys.path.insert(1, '../tools')
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from Brusselator_constants import get_basis_functions
-import Brusselator_constants as constants
-
+from Lotka_constants import get_basis_functions
+import Lotka_constants as constants
 np.set_printoptions(formatter={'float': lambda x: "{0:.4f}".format(x)})
 
 
@@ -72,15 +70,12 @@ if __name__ == "__main__":
     
     ##### true results
     if basis_type=='poly':
-        coeff_true_ = np.array([(-10,10,28,-2.67), (-9,9,30,-2), (-8.5,8.5,28,-2.67), (-10,10,27,-2.67), (-10,10,27,-3), (-10,10,29,-2)])
+        coeff_true_ = np.array(a_list)
         coeff_true = np.zeros([num_traj, num_feature, num_basis])
-        coeff_true[:,0,[1,2]] = coeff_true_[:,[0,1]]
-        coeff_true[:,1,[1]] = coeff_true_[:,[2]]
-        coeff_true[:,2,[3]] = coeff_true_[:,[3]]
-        
-        coeff_true[:,1,[2,8]] = [-1,-1]
-        coeff_true[:,2,[7]] = [1]
-
+        coeff_true[:,0,[1,4]] = coeff_true_[:,[0,1]]
+        coeff_true[:,1,[2,4]] = coeff_true_[:,[1,0]]
+    
+    
     
     basis_idx = np.arange(num_basis)
     ##### true coefficients vs gsindy all coefficients
@@ -109,3 +104,5 @@ if __name__ == "__main__":
         ax[2*j+i].set_title(f'feature {i}')
     fig.tight_layout()
         
+    
+    
