@@ -13,7 +13,7 @@ from utils import basis_functions_mix0, basis_functions_mix1, basis_functions_na
 
 ########## hyper parameters ###########
 ensemble = False
-precision = 1e-3
+precision = 1e-4
 deriv_spline = True#False#
 alpha = .05
 threshold_sindy_list = [1e-3, 5e-3, 1e-2, 5e-2, 1e-1]

@@ -28,10 +28,10 @@ coef of feature 1: [-2.8142 3.6114 1.4540 -0.3385 -0.4678 -0.1791 0.0341 -0.8919
 basis of feature 1: ['1' 'x' 'y' 'x^2' 'xy' 'y^2' 'x^3' 'x^2y' 'xy^2' '1/y' 'sin(y)' 'cos(y)'] 
 
 ***************result of trajectory 4 ***************
-coef of feature 0: [-41.0832 36.5317 4.2735] 
-basis of feature 0: ['1' 'cos(x)' 'exp(x)'] 
-coef of feature 1: [2.0459] 
-basis of feature 1: ['x'] 
+coef of feature 0: [-162.5381 -213.0711 0.9993 125.0028 79.2860 83.7666] 
+basis of feature 0: ['1' 'x' 'x^2y' 'sin(x)' 'cos(x)' 'exp(x)'] 
+coef of feature 1: [-0.0362 3.1411 0.0269 -0.5491 -0.2606 -0.0007 -0.6426 0.0096 0.0023] 
+basis of feature 1: ['1' 'x' 'y' 'x^2' 'xy' 'y^2' 'x^2y' 'xy^2' '1/y'] 
 
 ***************result of trajectory 5 ***************
 coef of feature 0: [0.6969 -4.0052 1.0068] 

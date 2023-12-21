@@ -15,7 +15,7 @@ from utils import basis_functions_mix0_3d, basis_functions_mix1_3d, basis_functi
 
 ########## hyper parameters ###########
 ensemble = False
-precision = 1e-3
+precision = 1e-4
 deriv_spline = True#False#
 alpha = .05
 threshold_sindy_list = [1e-2, 5e-2, 1e-1, 5e-1, 1e0]
@@ -36,7 +36,7 @@ real_list = [real0, real1, real2]
 
 
 ########## basis functions and optimizer ###########
-basis_type = 'mix_diff' ##'mix_same' ## 'poly' ##
+basis_type = 'mix_same' ## 'poly' ##'mix_diff' ##
 
 def get_basis_functions(basis_type, GSINDY=True):
     if GSINDY:
