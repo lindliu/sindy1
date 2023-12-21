@@ -164,7 +164,7 @@ class GSINDy():
             self.basis_functions_1_name = basis_functions_name_list[1]
             self.basis_functions_2 = basis_functions_list[2]
             self.basis_functions_2_name = basis_functions_name_list[2]
-            
+
         self.num_traj = num_traj
         self.num_feature = num_feature
         self.threshold_sindy = threshold_sindy

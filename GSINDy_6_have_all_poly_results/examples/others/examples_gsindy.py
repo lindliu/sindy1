@@ -226,115 +226,115 @@ alpha = .05
 
 
 
-###################################################
-################### quadratic #####################
-###################################################
-################## 2 variable ####################
-alpha = .05
-dt = .1   ## 0,3
-t = np.arange(0,2.,dt)
-num = 1
+# ###################################################
+# ################### quadratic #####################
+# ###################################################
+# ################## 2 variable ####################
+# alpha = .05
+# dt = .1   ## 0,3
+# t = np.arange(0,2.,dt)
+# num = 1
 
-x0_list = [[.5, 1], [.5, 1], [.5, 1]]
-a_list = [(.16, .25), (.3, .4), (.3, .5)]
-if num==1:
-    x0 = x0_list[:num]
-    a = a_list[:num]
-    num_split = 2
+# x0_list = [[.5, 1], [.5, 1], [.5, 1]]
+# a_list = [(.16, .25), (.3, .4), (.3, .5)]
+# if num==1:
+#     x0 = x0_list[:num]
+#     a = a_list[:num]
+#     num_split = 2
     
-elif num>1:
-    x0 = x0_list[:num]
-    a = a_list[:num]
+# elif num>1:
+#     x0 = x0_list[:num]
+#     a = a_list[:num]
 
-func = func12_
-real0 = "x'=a + b*x^2"
-real1 = "y'=-y"
-# monomial = monomial_all
-# monomial_name = monomial_all_name
-monomial = monomial_poly
-monomial_name = monomial_poly_name
-##################################################
+# func = func12_
+# real0 = "x'=a + b*x^2"
+# real1 = "y'=-y"
+# # monomial = monomial_all
+# # monomial_name = monomial_all_name
+# monomial = monomial_poly
+# monomial_name = monomial_poly_name
+# ##################################################
 
-################### 1 variable ####################
-alpha = .05
-dt = .05   ## 0,3
-t = np.arange(0,2.3,dt)
-num = 3
+# ################### 1 variable ####################
+# alpha = .05
+# dt = .05   ## 0,3
+# t = np.arange(0,2.3,dt)
+# num = 3
 
-x0_list = [[.2, 1], [.2, 1], [.1, 1]]
-a_list = [(.12,), (.16,), (.2,)]
-if num==1:
-    x0 = x0_list[:num]
-    a = a_list[:num]
-    num_split = 2
+# x0_list = [[.2, 1], [.2, 1], [.1, 1]]
+# a_list = [(.12,), (.16,), (.2,)]
+# if num==1:
+#     x0 = x0_list[:num]
+#     a = a_list[:num]
+#     num_split = 2
     
-elif num>1:
-    x0 = x0_list[:num]
-    a = a_list[:num]
+# elif num>1:
+#     x0 = x0_list[:num]
+#     a = a_list[:num]
     
-func = func1
-real0 = "x'=a + x^2"
-real1 = "y'=-y"
-# monomial = monomial_all
-# monomial_name = monomial_all_name
-monomial = monomial_poly
-monomial_name = monomial_poly_name
-####################################################
+# func = func1
+# real0 = "x'=a + x^2"
+# real1 = "y'=-y"
+# # monomial = monomial_all
+# # monomial_name = monomial_all_name
+# monomial = monomial_poly
+# monomial_name = monomial_poly_name
+# ####################################################
 
-################### 1 variable ####################
-alpha = .05
-dt = .05   ## 0,3
-t = np.arange(0,2.3,dt)
-num = 3
+# ################### 1 variable ####################
+# alpha = .05
+# dt = .05   ## 0,3
+# t = np.arange(0,2.3,dt)
+# num = 3
 
-x0_list = [[.5, 1], [.5, 1], [.5, 1]]
-a_list = [(.25,), (.3,), (.5,)]
-if num==1:
-    x0 = x0_list[:num]
-    a = a_list[:num]
-    num_split = 2
+# x0_list = [[.5, 1], [.5, 1], [.5, 1]]
+# a_list = [(.25,), (.3,), (.5,)]
+# if num==1:
+#     x0 = x0_list[:num]
+#     a = a_list[:num]
+#     num_split = 2
     
-elif num>1:
-    x0 = x0_list[:num]
-    a = a_list[:num]
+# elif num>1:
+#     x0 = x0_list[:num]
+#     a = a_list[:num]
     
-func = func2
-real0 = "x'=.2 + a*x^2"
-real1 = "y'=-y"
-# monomial = monomial_all
-# monomial_name = monomial_all_name
-monomial = monomial_poly
-monomial_name = monomial_poly_name
-##################################################
+# func = func2
+# real0 = "x'=.2 + a*x^2"
+# real1 = "y'=-y"
+# # monomial = monomial_all
+# # monomial_name = monomial_all_name
+# monomial = monomial_poly
+# monomial_name = monomial_poly_name
+# ##################################################
 
 
-################################################################
-#################### Pendulum motion model #####################
-################################################################
-################### 1 variable ####################
-dt = .2
-t = np.arange(0,3.3,dt)
-num = 2
+# ################################################################
+# #################### Pendulum motion model #####################
+# ################################################################
+# ################### 1 variable ####################
+# dt = .2
+# t = np.arange(0,3.3,dt)
+# num = 2
 
-x0_list = [[np.pi-.1, 0], [np.pi-.1, 0]]
-a_list = [(-.25,), (-.35,)]
-if num==1:
-    x0 = x0_list[:num]
-    a = a_list[:num]
-    num_split = 2
+# x0_list = [[np.pi-.1, 0], [np.pi-.1, 0]]
+# a_list = [(-.25,), (-.35,)]
+# if num==1:
+#     x0 = x0_list[:num]
+#     a = a_list[:num]
+#     num_split = 2
     
-elif num>1:
-    x0 = x0_list[:num]
-    a = a_list[:num]
+# elif num>1:
+#     x0 = x0_list[:num]
+#     a = a_list[:num]
 
-func = func6
-real0 = "x'=y"
-real1 = "y'=a*y-5sin(x)"
-# monomial = monomial_all
-# monomial_name = monomial_all_name
-monomial = monomial_trig
-monomial_name = monomial_trig_name
-###################################################
+# func = func6
+# real0 = "x'=y"
+# real1 = "y'=a*y-5sin(x)"
+# # monomial = monomial_all
+# # monomial_name = monomial_all_name
+# monomial = monomial_trig
+# monomial_name = monomial_trig_name
+# ###################################################
 
 ################### 1 variable ####################
 dt = .1

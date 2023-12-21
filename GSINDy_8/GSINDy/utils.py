@@ -221,6 +221,7 @@ def get_theta(x, basis_functions):
         
     """
     num_step, num_feature = x.shape
+    
     num_basis = len(basis_functions)
     theta = np.zeros([num_step, num_basis])
     for i in range(num_step):
@@ -296,7 +297,7 @@ basis_functions_Lorenz = np.array([lambda x,y,z: 1, lambda x,y,z: x, lambda x,y,
         lambda x,y,z: np.exp(x), lambda x,y,z: np.exp(y), lambda x,y,z: np.exp(z), \
         lambda x,y,z: np.sin(x), lambda x,y,z: np.sin(y), lambda x,y,z: np.sin(z), \
         lambda x,y,z: np.cos(x), lambda x,y,z: np.cos(y), lambda x,y,z: np.cos(z)])
-basis_functions_name_Lorenz = np.array([lambda x,y,z: '1', lambda x,y,z: 'x', lambda x,y,z: 'y', lambda x,y,z: 'z',\
+basis_functions_name_Lorenz = [lambda x,y,z: '1', lambda x,y,z: 'x', lambda x,y,z: 'y', lambda x,y,z: 'z',\
         lambda x,y,z: 'x^2', lambda x,y,z: 'y^2', lambda x,y,z: 'z^2', lambda x,y,z: 'xy', lambda x,y,z: 'xz', lambda x,y,z: 'yz', \
         lambda x,y,z: 'x^3', lambda x,y,z: 'y^3', lambda x,y,z: 'z^3',  \
         lambda x,y,z: 'x^2y', lambda x,y,z: 'xy^2', lambda x,y,z: 'xz^2', lambda x,y,z: 'y^2z', lambda x,y,z: 'yz^2',  \
@@ -304,7 +305,7 @@ basis_functions_name_Lorenz = np.array([lambda x,y,z: '1', lambda x,y,z: 'x', la
         lambda x,y,z: '1/x', lambda x,y,z: '1/y', lambda x,y,z: '1/z', \
         lambda x,y,z: 'exp(x)', lambda x,y,z: 'exp(y)', lambda x,y,z: 'exp(z)', \
         lambda x,y,z: 'sin(x)', lambda x,y,z: 'sin(y)', lambda x,y,z: 'sin(z)', \
-        lambda x,y,z: 'cos(x)', lambda x,y,z: 'cos(y)', lambda x,y,z: 'cos(z)'])
+        lambda x,y,z: 'cos(x)', lambda x,y,z: 'cos(y)', lambda x,y,z: 'cos(z)']
     
     
     
@@ -346,7 +347,8 @@ def plot_mult_traj(sol_org_list, t, a, real_list):
     ax.legend()
     ax.text(1, .95, f'${real_list[0]}$', fontsize=12)
     ax.text(1, .8, f'${real_list[1]}$', fontsize=12)
-    
+    if len(real_list)>2:
+        ax.text(1, .65, f'${real_list[2]}$', fontsize=12)
     
     
 from scipy.integrate import odeint
