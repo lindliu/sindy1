@@ -6,7 +6,6 @@ Created on Mon Dec 18 22:57:56 2023
 @author: dliu
 """
 
-
 import sys
 sys.path.insert(1, '../../GSINDy')
 sys.path.insert(1, '../..')
@@ -25,6 +24,7 @@ ensemble = constants.ensemble
 precision = constants.precision
 deriv_spline = constants.deriv_spline
 alpha = constants.alpha
+threshold_sindy_list = constants.threshold_sindy_list
 
 ########## function variable ###########
 t = constants.t
@@ -44,4 +44,5 @@ suffix = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
 if __name__ == "__main__":
     
     from sindy_3d_train import sindy_3d_train
-    sindy_3d_train(func, t, x0_list, a_list, real_list, suffix, basis, precision, alpha, opt, deriv_spline, ensemble, path_base)
+    sindy_3d_train(func, t, x0_list, a_list, real_list, suffix, basis, precision, \
+                   alpha, opt, deriv_spline, ensemble, path_base, threshold_sindy_list)

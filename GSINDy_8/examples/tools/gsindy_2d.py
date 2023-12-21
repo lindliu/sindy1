@@ -191,22 +191,22 @@ import os
 from glob import glob
 from utils import data_generator
 
-def process_gsindy_one_2D(func, x0_list, a_list, t, real_list, basis, basis_type, num_traj=6, num_feature=2):
+def process_gsindy_one_2D(func, x0_list, a_list, t, real_list, basis, suffix, num_traj=6, num_feature=2):
     basis_functions_list = basis['functions']
     basis_functions_name_list = basis['names']
     
     num_basis = len(basis_functions_list[0])
     
     #### results from gsindy one by one
-    max_split = max([int(os.path.split(path_)[1].split('_')[-2]) for path_ in glob(os.path.join(f'results/coeff/gsindy_one_{basis_type}*.npy'))])
+    max_split = max([int(os.path.split(path_)[1].split('_')[-2]) for path_ in glob(os.path.join(f'results/coeff/gsindy_one_{suffix}*.npy'))])
     n_split = max_split-2+1   ##4
     coeff_gsindy_one = np.zeros([n_split, num_traj, num_feature, num_basis])
     for j in range(num_traj):
         for k in range(n_split):
-            path_ = glob(os.path.join(f'results/coeff/gsindy_one_{basis_type}_{k+2}_{j}.npy'))[0]
+            path_ = glob(os.path.join(f'results/coeff/gsindy_one_{suffix}_{k+2}_{j}.npy'))[0]
             coeff_gsindy_one[k,j,:,:] = np.load(path_)
             
-    save_path = f'results/gsindy_one_by_one_{basis_type}_final.txt'
+    save_path = f'results/gsindy_one_by_one_{suffix}_final.txt'
     open(save_path, 'w').close()
     for i in range(num_traj):
         model_set = coeff_gsindy_one[:,[i],:,:]
@@ -220,7 +220,7 @@ def process_gsindy_one_2D(func, x0_list, a_list, t, real_list, basis, basis_type
         # print(f'{coeff_gsindy_one[best_BIC_model,i,:,:]}')
         
         coef = coeff_gsindy_one[best_BIC_model,i,:,:]
-        np.save(f'results/coeff/gsindy_{basis_type}_{i}.npy', coef)
+        np.save(f'results/coeff/gsindy_{suffix}_{i}.npy', coef)
     
     
         mask0 = coef[0,:]!=0

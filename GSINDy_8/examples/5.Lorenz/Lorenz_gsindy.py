@@ -24,6 +24,9 @@ ensemble = constants.ensemble
 precision = constants.precision
 deriv_spline = constants.deriv_spline
 alpha = constants.alpha
+threshold_sindy_list = constants.threshold_sindy_list
+threshold_group_list = constants.threshold_group_list
+threshold_similarity_list = constants.threshold_similarity_list
 
 ########## function variable ###########
 t = constants.t
@@ -43,5 +46,6 @@ suffix = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
 if __name__ == "__main__":
     
     from gsindy_3d_train import gsindy_3d_train
-    gsindy_3d_train(func, t, x0_list, a_list, real_list, suffix, basis, precision, alpha, opt, deriv_spline, ensemble, path_base)
+    gsindy_3d_train(func, t, x0_list, a_list, real_list, suffix, basis, precision, alpha, opt, deriv_spline, ensemble, path_base, 
+                    threshold_sindy_list, threshold_group_list, threshold_similarity_list)
     

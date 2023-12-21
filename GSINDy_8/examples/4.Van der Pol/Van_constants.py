@@ -7,7 +7,7 @@ Created on Wed Dec 20 20:28:19 2023
 """
 
 import numpy as np
-from utils import func5
+from utils import func_Van_der_Pol
 from utils import basis_functions_mix0, basis_functions_mix1, basis_functions_name_mix0, basis_functions_name_mix1, \
     basis_functions_poly_5, basis_functions_name_poly_5
 
@@ -16,22 +16,24 @@ ensemble = False
 precision = 1e-3
 deriv_spline = True#False#
 alpha = .05
-
-
+threshold_sindy_list = [1e-3, 5e-3, 1e-2, 5e-2, 1e-1]
+threshold_group_list = [1e-3, 1e-2]
+threshold_similarity_list = [[1e-3, 1e-2], [1e-1]]
+                    
 ########## function variable ###########
 dt = .05
 t = np.arange(0,20,dt)
 x0_list = [[1.5, -.5], [1.5, -.5], [1.5, -.5], [1.5, -.5], [1.5, -.5], [1.5, -.5]]
 a_list = [(-.5, .2), (-.3, .2), (-.4, .3),(-.2, .3), (-.35, .4), (-.6, .4)]
 
-func = func5
+func = func_Van_der_Pol
 real0 = "x'=5*(x - y + a*x^3)"
 real1 = "y'=b*x"    
 real_list = [real0, real1]
 
 
 ########## basis functions and optimizer ###########
-basis_type = 'poly' ##'mix'
+basis_type = 'poly' ##'mix' ## 
 
 def get_basis_functions(basis_type, GSINDY=True):
     if GSINDY:

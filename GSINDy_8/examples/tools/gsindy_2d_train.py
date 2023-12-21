@@ -12,7 +12,10 @@ from utils import data_generator
 import os
 import numpy as np
 
-def gsindy_2d_train(func, t, x0_list, a_list, real_list, suffix, basis, precision, alpha, opt, deriv_spline, ensemble, path_base='results'):
+def gsindy_2d_train(func, t, x0_list, a_list, real_list, suffix, basis, precision, alpha, opt, deriv_spline, ensemble, path_base='results', \
+                    threshold_sindy_list = [1e-3, 5e-3, 1e-2, 5e-2, 1e-1], \
+                    threshold_group_list = [1e-3, 1e-2], \
+                    threshold_similarity_list = [[1e-3, 1e-2], [1e-1]]):
     
     os.makedirs(path_base, exist_ok=True)
     os.makedirs(os.path.join(path_base, 'coeff'), exist_ok=True)
@@ -20,11 +23,9 @@ def gsindy_2d_train(func, t, x0_list, a_list, real_list, suffix, basis, precisio
     # basis_functions_list = basis['functions']
     basis_functions_name_list = basis['names']
     
-    for num in [1, len(a_list)]:
-        threshold_sindy_list = [1e-3, 5e-3, 1e-2, 5e-2, 1e-1]
-        threshold_group_list = [1e-3, 1e-2]
-        threshold_similarity_list = [1e-3, 1e-2] if num!=1 else [1e-1]
-        
+    for num in [len(a_list)]:
+        threshold_similarity_list_ = threshold_similarity_list[0] if num!=1 else threshold_similarity_list[1]
+
         if num==1:
             save_path = os.path.join(path_base, f'gsindy_one_by_one_{suffix}.txt')
             open(save_path, 'w').close()
@@ -42,7 +43,7 @@ def gsindy_2d_train(func, t, x0_list, a_list, real_list, suffix, basis, precisio
                                                               basis, precision, alpha, opt, deriv_spline, ensemble, \
                                                               threshold_sindy_list = threshold_sindy_list, \
                                                               threshold_group_list = threshold_group_list,\
-                                                              threshold_similarity_list = threshold_similarity_list, 
+                                                              threshold_similarity_list = threshold_similarity_list_, 
                                                               print_results=False)
                     
                     ms, best_BIC_model, parameter_list = model_selection_gsindy_2d( \
@@ -78,7 +79,7 @@ def gsindy_2d_train(func, t, x0_list, a_list, real_list, suffix, basis, precisio
                                                       basis, precision, alpha, opt, deriv_spline, ensemble, \
                                                       threshold_sindy_list = threshold_sindy_list, \
                                                       threshold_group_list = threshold_group_list,\
-                                                      threshold_similarity_list = threshold_similarity_list, 
+                                                      threshold_similarity_list = threshold_similarity_list_, 
                                                       print_results=False)
             
             ms, best_BIC_model, parameter_list = model_selection_gsindy_2d( \

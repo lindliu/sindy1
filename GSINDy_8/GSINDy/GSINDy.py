@@ -407,7 +407,7 @@ class GSINDy():
         idx_activ = np.abs(Xi0_group_r.mean(1)).mean(0)>self.threshold_group
         Xi0_group_r[:,:,~idx_activ] = 0
         
-        ##### Xi0_group_r normalization for calculate distance of distributions ##### !!!!!! for func3
+        ##### Xi0_group_r normalization for calculate distance of distributions ##### 
         norm_each_coef = np.linalg.norm(np.vstack(Xi0_group_r),axis=0)  ## num_basis
         # norm_each_coef = np.mean(np.abs(np.vstack(Xi0_group_r)),axis=0)  ## num_basis
         Xi0_group_r[:,:,idx_activ] = Xi0_group_r[:,:,idx_activ]/norm_each_coef[idx_activ]

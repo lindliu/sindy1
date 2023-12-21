@@ -12,8 +12,9 @@ from utils import ode_solver, get_deriv
 import os
 import numpy as np
 
-def sindy_2d_train(func, t, x0_list, a_list, real_list, suffix, basis, precision, alpha, opt, deriv_spline, ensemble, path_base='results'):
-    threshold_sindy_list =  [1e-3, 5e-3, 1e-2, 5e-2, 1e-1]
+def sindy_2d_train(func, t, x0_list, a_list, real_list, suffix, basis, precision, alpha, opt, deriv_spline, ensemble, path_base='results', \
+                   threshold_sindy_list=[1e-3, 5e-3, 1e-2, 5e-2, 1e-1]):
+    
     model_best_list = []
     for idx in range(len(a_list)):
         x0 = x0_list[idx]

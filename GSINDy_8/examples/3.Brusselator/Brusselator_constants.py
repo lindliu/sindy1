@@ -7,7 +7,7 @@ Created on Wed Dec 20 20:28:19 2023
 """
 
 import numpy as np
-from utils import func8
+from utils import func_Brusselator
 from utils import basis_functions_mix0, basis_functions_mix1, basis_functions_name_mix0, basis_functions_name_mix1, \
     basis_functions_poly_5, basis_functions_name_poly_5
 
@@ -16,7 +16,9 @@ ensemble = False
 precision = 1e-3
 deriv_spline = True#False#
 alpha = .05
-
+threshold_sindy_list = [1e-3, 5e-3, 1e-2, 5e-2, 1e-1]
+threshold_group_list = [1e-3, 1e-2]
+threshold_similarity_list = [[1e-3, 1e-2], [1e-1]]
 
 ########## function variable ###########
 dt = .1    
@@ -24,14 +26,14 @@ t = np.arange(0,20,dt)
 x0_list = [[.4, 1], [.4, 1], [.4, 1], [.4, 1], [.4, 1], [.4, 1]]
 a_list = [(1, 3), (.8, 2.5), (.6, 2.6), (.9, 2.8), (.5, 2.8), (.7, 2.8)]
 
-func = func8
+func = func_Brusselator
 real0 = "x'=a-4x+x^2y"
 real1 = "y'=bx-x^2y"
 real_list = [real0, real1]
 
 
 ########## basis functions and optimizer ###########
-basis_type = 'poly' ##'mix'
+basis_type = 'mix' ##'poly' ##
 
 def get_basis_functions(basis_type, GSINDY=True):
     if GSINDY:

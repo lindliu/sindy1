@@ -12,8 +12,9 @@ from utils import ode_solver, get_deriv
 import os
 import numpy as np
 
-def sindy_3d_train(func, t, x0_list, a_list, real_list, basis_type, basis, precision, alpha, opt, deriv_spline, ensemble, path_base='results'):
-    threshold_sindy_list =  [1e-2, 5e-2, 1e-1, 5e-1, 1e0]
+def sindy_3d_train(func, t, x0_list, a_list, real_list, suffix, basis, precision, alpha, opt, deriv_spline, ensemble, path_base='results', \
+                   threshold_sindy_list=[1e-2, 5e-2, 1e-1, 5e-1, 1e0]):
+    
     model_best_list = []
     for idx in range(len(a_list)):
         x0 = x0_list[idx]
@@ -50,13 +51,13 @@ def sindy_3d_train(func, t, x0_list, a_list, real_list, basis_type, basis, preci
 
     os.makedirs(path_base, exist_ok=True)
     os.makedirs(os.path.join(path_base, 'coeff'), exist_ok=True)
-    save_path = os.path.join(path_base, f'sindy_all_{basis_type}.txt')
+    save_path = os.path.join(path_base, f'sindy_all_{suffix}.txt')
     open(save_path, 'w').close()
     
     for idx in range(len(model_best_list)):
         # coef = model_best_list[idx].coefficients()
         coef = model_best_list[idx]
-        np.save(os.path.join(path_base, 'coeff/sindy_{basis_type}_{idx}.npy'), coef)
+        np.save(os.path.join(path_base, f'coeff/sindy_{suffix}_{idx}.npy'), coef)
 
         mask0 = np.abs(coef[0]) > precision
         mask1 = np.abs(coef[1]) > precision
@@ -67,6 +68,6 @@ def sindy_3d_train(func, t, x0_list, a_list, real_list, basis_type, basis, preci
             file2.write(f'coef of feature 0: {coef[0,:][mask0]} \n')
             file2.write(f'basis of feature 0: {basis_functions_name_list_[0][mask0]} \n')
             file2.write(f'coef of feature 1: {coef[1,:][mask1]} \n')
-            file2.write(f'basis of feature 1: {basis_functions_name_list_[1][mask1]} \n\n')
+            file2.write(f'basis of feature 1: {basis_functions_name_list_[1][mask1]} \n')
             file2.write(f'coef of feature 2: {coef[2,:][mask2]} \n')
             file2.write(f'basis of feature 2: {basis_functions_name_list_[2][mask2]} \n\n')

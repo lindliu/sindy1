@@ -7,7 +7,7 @@ Created on Wed Dec 20 20:28:19 2023
 """
 
 import numpy as np
-from utils import func4_
+from utils import func_Lotka_Voltera
 from utils import basis_functions_mix0, basis_functions_mix1, basis_functions_name_mix0, basis_functions_name_mix1, \
     basis_functions_poly_5, basis_functions_name_poly_5
 
@@ -16,6 +16,13 @@ ensemble = False
 precision = 1e-3
 deriv_spline = True#False#
 alpha = .05
+threshold_sindy_list = [1e-3, 5e-3, 1e-2, 5e-2, 1e-1]
+threshold_group_list = [1e-3, 1e-2]
+threshold_similarity_list = [[1e-3, 1e-2], [1e-1]]   
+# first list is for multi series. 
+# if only one series, we will split it into several pieces, 
+# but we know it comes from the same series, 
+# so the coefficient should be the same, so threshold should be big
 
 
 ########## function variable ###########
@@ -24,14 +31,14 @@ t = np.arange(0,8,dt)
 x0_list = [[3, 1], [3, 1], [3, 1], [3, 1], [3, 1], [3, 1]]
 a_list = [(.7,-.8), (1,-1), (.5,-.6), (1.5,-1.5), (1.2,-1.5), (1.3,-1.)]
 
-func = func4_
+func = func_Lotka_Voltera
 real0 = "x'=a*x + b*xy"
 real1 = "y'=b*y + a*xy"
 real_list = [real0, real1]
 
 
 ########## basis functions and optimizer ###########
-basis_type = 'poly' ##'mix'
+basis_type = 'poly' ##'mix'##
 
 def get_basis_functions(basis_type, GSINDY=True):
     if GSINDY:

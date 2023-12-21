@@ -7,7 +7,7 @@ Created on Wed Dec 20 20:28:19 2023
 """
 
 import numpy as np
-from utils import func3__
+from utils import func_M_Lotka_Voltera
 from utils import basis_functions_mix0, basis_functions_mix1, basis_functions_name_mix0, basis_functions_name_mix1, \
     basis_functions_poly_5, basis_functions_name_poly_5
 
@@ -16,7 +16,9 @@ ensemble = False
 precision = 1e-3
 deriv_spline = True#False#
 alpha = .05
-
+threshold_sindy_list = [1e-3, 5e-3, 1e-2, 5e-2, 1e-1]
+threshold_group_list = [1e-3, 1e-2]
+threshold_similarity_list = [[1e-3, 1e-2], [1e-1]]
 
 ########## function variable ###########
 dt = .1      ## 2,3,6,8;     1,2,7,9
@@ -24,14 +26,14 @@ t = np.arange(0,10,dt)
 x0_list = [[.4, 1], [.4, 1], [.4, 1], [.4, 1], [.4, 1], [.4, 1]]
 a_list = [(.2, -.6, -.5), (.4, -.8, -.7), (.2, -.6, -1), (.4, -.8, -1), (.4, -1, -1), (.6, -1, -1)]
 
-func = func3__
+func = func_M_Lotka_Voltera
 real0 = "x'=b*y + a*x^2 + c*x^3 - xy^2"
 real1 = "y'=x + a*y + b*x^2y + c*y^3"
 real_list = [real0, real1]
 
 
 ########## basis functions and optimizer ###########
-basis_type = 'poly' ##'mix'
+basis_type = 'poly' ##'mix'##
 
 def get_basis_functions(basis_type, GSINDY=True):
     if GSINDY:

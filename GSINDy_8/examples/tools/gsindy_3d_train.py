@@ -12,7 +12,10 @@ from utils import data_generator
 import os
 import numpy as np
 
-def gsindy_3d_train(func, t, x0_list, a_list, real_list, basis_type, basis, precision, alpha, opt, deriv_spline, ensemble, path_base='results'):
+def gsindy_3d_train(func, t, x0_list, a_list, real_list, suffix, basis, precision, alpha, opt, deriv_spline, ensemble, path_base='results', \
+                    threshold_sindy_list = [1e-2, 5e-2, 1e-1, 5e-1, 1e0], \
+                    threshold_group_list = [1e-3, 1e-2], \
+                    threshold_similarity_list = [[1e-3, 1e-2], [1e-1]]):
     
     os.makedirs(path_base, exist_ok=True)
     os.makedirs(os.path.join(path_base, 'coeff'), exist_ok=True)
@@ -21,12 +24,10 @@ def gsindy_3d_train(func, t, x0_list, a_list, real_list, basis_type, basis, prec
     basis_functions_name_list = basis['names']
     
     for num in [1, len(a_list)]:
-        threshold_sindy_list = [1e-2, 5e-2, 1e-1, 5e-1, 1e0]
-        threshold_group_list = [1e-3, 1e-2]
-        threshold_similarity_list = [1e-3, 1e-2] if num!=1 else [1e-1]
+        threshold_similarity_list_ = threshold_similarity_list[0] if num!=1 else threshold_similarity_list[1]
         
         if num==1:
-            save_path = os.path.join(path_base, f'gsindy_one_by_one_{basis_type}.txt')
+            save_path = os.path.join(path_base, f'gsindy_one_by_one_{suffix}.txt')
             open(save_path, 'w').close()
             
             max_split = 5
@@ -42,7 +43,7 @@ def gsindy_3d_train(func, t, x0_list, a_list, real_list, basis_type, basis, prec
                                                               basis, precision, alpha, opt, deriv_spline, ensemble, \
                                                               threshold_sindy_list = threshold_sindy_list, \
                                                               threshold_group_list = threshold_group_list,\
-                                                              threshold_similarity_list = threshold_similarity_list, 
+                                                              threshold_similarity_list = threshold_similarity_list_, 
                                                               print_results=False)
                     
                     ms, best_BIC_model, parameter_list = model_selection_gsindy_3d( \
@@ -50,7 +51,7 @@ def gsindy_3d_train(func, t, x0_list, a_list, real_list, basis_type, basis, prec
                                                             sol_org_list, same0_basis_list, same1_basis_list, same2_basis_list, parameter_list)
     
                     coef = model_set[best_BIC_model].mean(0)
-                    np.save(os.path.join(path_base, f'coeff/gsindy_one_{basis_type}_{num_split}_{idx}.npy'), coef)
+                    np.save(os.path.join(path_base, f'coeff/gsindy_one_{suffix}_{num_split}_{idx}.npy'), coef)
                     
                     mask0 = coef[0,:]!=0
                     mask1 = coef[1,:]!=0
@@ -60,15 +61,15 @@ def gsindy_3d_train(func, t, x0_list, a_list, real_list, basis_type, basis, prec
                         file1.write(f'coef of feature 0: {coef[0,:][mask0]} \n')
                         file1.write(f'basis of feature 0: {basis_functions_name_list[0][mask0]} \n')
                         file1.write(f'coef of feature 1: {coef[1,:][mask1]} \n')
-                        file1.write(f'basis of feature 1: {basis_functions_name_list[1][mask1]} \n\n')
+                        file1.write(f'basis of feature 1: {basis_functions_name_list[1][mask1]} \n')
                         file1.write(f'coef of feature 2: {coef[2,:][mask2]} \n')
                         file1.write(f'basis of feature 2: {basis_functions_name_list[2][mask2]} \n\n')
                     
                         
-            process_gsindy_one_3d(func, x0_list, a_list, t, real_list, basis, basis_type, num_traj=len(a_list), num_feature=3)
+            process_gsindy_one_3d(func, x0_list, a_list, t, real_list, basis, suffix, num_traj=len(a_list), num_feature=3)
         
         if num>1:
-            save_path = os.path.join(path_base, f'gsindy_all_{basis_type}.txt')
+            save_path = os.path.join(path_base, f'gsindy_all_{suffix}.txt')
             open(save_path, 'w').close()
             
             x0 = x0_list[:num]
@@ -76,20 +77,20 @@ def gsindy_3d_train(func, t, x0_list, a_list, real_list, basis_type, basis, prec
             
             t_, x0, a, sol_org_list, num_traj, num_feature = data_generator(func, x0, t, a, real_list, num)
             
-            model_set, diff0_basis_list, diff1_basis_list, same0_basis_list, same1_basis_list, parameter_list = \
+            model_set, diff0_basis_list, diff1_basis_list, diff2_basis_list, same0_basis_list, same1_basis_list, same2_basis_list, parameter_list = \
                                         fit_gsindy_3d(sol_org_list, num_traj, t_, num, real_list, \
                                                       basis, precision, alpha, opt, deriv_spline, ensemble, \
                                                       threshold_sindy_list = threshold_sindy_list, \
                                                       threshold_group_list = threshold_group_list,\
-                                                      threshold_similarity_list = threshold_similarity_list, 
+                                                      threshold_similarity_list = threshold_similarity_list_, 
                                                       print_results=False)
             
             ms, best_BIC_model, parameter_list = model_selection_gsindy_3d( \
-                                                    x0, t_, a, real_list, basis, model_set, \
-                                                    sol_org_list, same0_basis_list, same1_basis_list, parameter_list)
+                                                    x0, t_, a, real_list, basis, model_set, sol_org_list, \
+                                                    same0_basis_list, same1_basis_list, same2_basis_list, parameter_list)
 
             coef = model_set[best_BIC_model] ### num_traj, num_feature, num_basis
-            np.save(os.path.join(path_base, f'coeff/gsindy_all_{basis_type}_{num}.npy'), coef)
+            np.save(os.path.join(path_base, f'coeff/gsindy_all_{suffix}_{num}.npy'), coef)
 
             mask0 = coef[:,0,:]!=0
             mask1 = coef[:,1,:]!=0
@@ -100,6 +101,6 @@ def gsindy_3d_train(func, t, x0_list, a_list, real_list, basis_type, basis, prec
                     file2.write(f'coef of feature 0: {coef[idx,0,:][mask0[idx]]} \n')
                     file2.write(f'basis of feature 0: {basis_functions_name_list[0][mask0[idx]]} \n')
                     file2.write(f'coef of feature 1: {coef[idx,1,:][mask1[idx]]} \n')
-                    file2.write(f'basis of feature 1: {basis_functions_name_list[1][mask1[idx]]} \n\n')
+                    file2.write(f'basis of feature 1: {basis_functions_name_list[1][mask1[idx]]} \n')
                     file2.write(f'coef of feature 1: {coef[idx,2,:][mask2[idx]]} \n')
                     file2.write(f'basis of feature 1: {basis_functions_name_list[2][mask2[idx]]} \n\n')
