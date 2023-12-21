@@ -9,7 +9,7 @@ Created on Mon Dec 18 22:41:15 2023
 import sys
 sys.path.insert(1, '../../GSINDy')
 sys.path.insert(1, '../..')
-sys.path.insert(1, '..')
+sys.path.insert(1, '../tools')
 
 import os
 import numpy as np
@@ -41,9 +41,9 @@ basis_functions_name_list = basis['names']
 
 
 path_base = os.path.join(os.getcwd(), 'results')
-
+suffix = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
 if __name__ == "__main__":
     
     from gsindy_2d_train import gsindy_2d_train
-    gsindy_2d_train(func, t, x0_list, a_list, real_list, basis_type, basis, precision, alpha, opt, deriv_spline, ensemble, path_base)
+    gsindy_2d_train(func, t, x0_list, a_list, real_list, suffix, basis, precision, alpha, opt, deriv_spline, ensemble, path_base)
     

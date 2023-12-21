@@ -1,6 +1,0 @@
-***************result of trajectory 0 split into 2 pieces***************
-coef of feature 0: [-0.6000 0.2000 -0.5000 -0.9998] 
-basis of feature 0: ['y' 'x^2' 'x^3' 'xy^2'] 
-coef of feature 1: [1.0000 0.2000 -0.5995 -0.4999] 
-basis of feature 1: ['x' 'y' 'x^2y' 'y^3'] 
-

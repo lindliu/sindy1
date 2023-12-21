@@ -6,11 +6,10 @@ Created on Mon Dec 18 22:57:56 2023
 @author: dliu
 """
 
-
 import sys
 sys.path.insert(1, '../../GSINDy')
 sys.path.insert(1, '../..')
-sys.path.insert(1, '..')
+sys.path.insert(1, '../tools')
 
 import os
 import numpy as np
@@ -42,8 +41,8 @@ basis_functions_name_list = basis['names']
 
 
 path_base = os.path.join(os.getcwd(), 'results')
-
+suffix = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
 if __name__ == "__main__":
     
     from sindy_2d_train import sindy_2d_train
-    sindy_2d_train(func, t, x0_list, a_list, real_list, basis_type, basis, precision, alpha, opt, deriv_spline, ensemble, path_base)
+    sindy_2d_train(func, t, x0_list, a_list, real_list, suffix, basis, precision, alpha, opt, deriv_spline, ensemble, path_base)

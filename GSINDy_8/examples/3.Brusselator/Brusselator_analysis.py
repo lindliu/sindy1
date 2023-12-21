@@ -8,7 +8,7 @@ Created on Tue Dec 19 15:15:54 2023
 import sys
 sys.path.insert(1, '../../GSINDy')
 sys.path.insert(1, '../..')
-sys.path.insert(1, '..')
+sys.path.insert(1, '../tools')
 
 import os
 import numpy as np
@@ -41,29 +41,29 @@ basis_functions_name_list = basis['names']
 
 
 path_base = os.path.join(os.getcwd(), 'results')
-
+suffix = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
 if __name__ == "__main__":
     from glob import glob
     
     #### results from gsindy all together
-    path_gsindy_all = glob(os.path.join(path_base, f'coeff/gsindy_all_{basis_type}*.npy'))
+    path_gsindy_all = glob(os.path.join(path_base, f'coeff/gsindy_all_{suffix}*.npy'))
     coeff_gsindy_all = np.load(path_gsindy_all[0])
     num_traj, num_feature, num_basis = coeff_gsindy_all.shape
     
     
     #### results from gsindy one by one
     max_split = max([int(os.path.split(path_)[1].split('_')[-2]) for path_ in \
-                     glob(os.path.join(path_base, f'coeff/gsindy_one_{basis_type}*.npy'))])
+                     glob(os.path.join(path_base, f'coeff/gsindy_one_{suffix}*.npy'))])
     n_split = max_split-2+1   ##4
     coeff_gsindy_one = np.zeros([n_split, num_traj, num_feature, num_basis])
     for j in range(num_traj):
         for k in range(n_split):
-            path_ = glob(os.path.join(path_base, f'coeff/gsindy_one_{basis_type}_{k+2}_{j}.npy'))[0]
+            path_ = glob(os.path.join(path_base, f'coeff/gsindy_one_{suffix}_{k+2}_{j}.npy'))[0]
             coeff_gsindy_one[k,j,:,:] = np.load(path_)
             
             
     #### results from sindy
-    path_sindy_all = glob(os.path.join(path_base, f'coeff/sindy_{basis_type}*.npy'))
+    path_sindy_all = glob(os.path.join(path_base, f'coeff/sindy_{suffix}*.npy'))
     coeff_sindy_all = np.zeros([num_traj, num_feature, num_basis])
     for i, path_ in enumerate(path_sindy_all):
         coeff_sindy_all[i,:,:] = np.load(path_)
