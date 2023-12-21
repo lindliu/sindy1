@@ -76,16 +76,16 @@ def func_Van_der_Pol(x, t, a, b):
     dxdt = [5*(x1 - x2 + c0*x1**3), c1*x1]
     return dxdt
 
-def func_Lorenz(x, t, a, d, b, c):
+def func_Lorenz(x, t, a, b, c, d):
     """
     Lorenz
     
-    dxdt = a(y-x),       a=10
-    dydt = x(b-z)-y,    b=28
-    dzdt = xy - cz,   c=8/3
+    dxdt = by+ax,       a=10
+    dydt = x(c-z)-y,    b=28
+    dzdt = xy - dz,   c=8/3
     """
     x1, x2, x3 = x
-    dxdt = [d*x2+a*x1, x1*(b-x3)-x2, x1*x2+c*x3]
+    dxdt = [b*x2+a*x1, x1*(c-x3)-x2, x1*x2+d*x3]
     return dxdt
 
 
