@@ -23,9 +23,9 @@ def gsindy_2d_train(func, t, x0_list, a_list, real_list, suffix, basis, precisio
     # basis_functions_list = basis['functions']
     basis_functions_name_list = basis['names']
     
-    for num in [len(a_list)]:
+    for num in [1, len(a_list)]:
         threshold_similarity_list_ = threshold_similarity_list[0] if num!=1 else threshold_similarity_list[1]
-
+        
         if num==1:
             save_path = os.path.join(path_base, f'gsindy_one_by_one_{suffix}.txt')
             open(save_path, 'w').close()

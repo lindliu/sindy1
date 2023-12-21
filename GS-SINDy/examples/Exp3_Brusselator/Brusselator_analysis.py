@@ -78,7 +78,15 @@ if __name__ == "__main__":
     
         coeff_true[:,0,[1,7]] = [-4, 1]
         coeff_true[:,1,[7]] = -1
+
+    if basis_type=='mix':
+        coeff_true_ = np.array(a_list)
+        coeff_true = np.zeros([num_traj, num_feature, num_basis])
+        coeff_true[:,0,[0]] = coeff_true_[:,[0]]
+        coeff_true[:,1,[1]] = coeff_true_[:,[1]]
     
+        coeff_true[:,0,[1,7]] = [-4, 1]
+        coeff_true[:,1,[7]] = -1
     
     
     basis_idx = np.arange(num_basis)

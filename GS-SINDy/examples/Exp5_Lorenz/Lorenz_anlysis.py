@@ -80,7 +80,27 @@ if __name__ == "__main__":
         
         coeff_true[:,1,[2,8]] = [-1,-1]
         coeff_true[:,2,[7]] = [1]
-
+        
+    if basis_type=='mix_diff':
+        coeff_true_ = np.array(a_list)
+        coeff_true = np.zeros([num_traj, num_feature, num_basis])
+        coeff_true[:,0,[1,2]] = coeff_true_[:,[0,1]]
+        coeff_true[:,1,[1]] = coeff_true_[:,[2]]
+        coeff_true[:,2,[3]] = coeff_true_[:,[3]]
+        
+        coeff_true[:,1,[2,8]] = [-1,-1]
+        coeff_true[:,2,[7]] = [1]
+    
+    if basis_type=='mix_same':
+        coeff_true_ = np.array(a_list)
+        coeff_true = np.zeros([num_traj, num_feature, num_basis])
+        coeff_true[:,0,[1,2]] = coeff_true_[:,[0,1]]
+        coeff_true[:,1,[1]] = coeff_true_[:,[2]]
+        coeff_true[:,2,[3]] = coeff_true_[:,[3]]
+        
+        coeff_true[:,1,[2,8]] = [-1,-1]
+        coeff_true[:,2,[7]] = [1]
+    
     
     basis_idx = np.arange(num_basis)
     ##### true coefficients vs gsindy all coefficients

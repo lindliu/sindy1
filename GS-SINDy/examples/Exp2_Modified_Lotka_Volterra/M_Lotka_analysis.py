@@ -77,7 +77,16 @@ if __name__ == "__main__":
     
         coeff_true[:,0,[8]] = [-1]
         coeff_true[:,1,[1]] = [1]
+        
+    if basis_type=='mix':
+        coeff_true_ = np.array(a_list)
+        coeff_true = np.zeros([num_traj, num_feature, num_basis])
+        coeff_true[:,0,[2,3,6]] = coeff_true_[:,[1,0,2]]
+        coeff_true[:,1,[2,7,9]] = coeff_true_[:,[0,1,2]]
     
+        coeff_true[:,0,[8]] = [-1]
+        coeff_true[:,1,[1]] = [1]
+        
         # real0 = "x'=b*y + a*x^2 + c*x^3 - xy^2"
         # real1 = "y'=x + a*y + b*x^2y + c*y^3"
     

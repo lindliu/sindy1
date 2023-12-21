@@ -38,27 +38,6 @@ def SLS(Theta, DXdt, threshold, precision=1e-3, alpha=.05):
             # Xi[biginds,ind] = np.linalg.lstsq(Theta[:,biginds],DXdt[:,ind], rcond=None)[0]
             # Xi[biginds,ind] = solve_minnonzero(Theta[:,biginds],DXdt[:,ind])
         
-    # reg = LinearRegression(fit_intercept=False)
-    # ind_ = np.abs(Xi.T) > 1e-14
-    # ind_[:,:num_traj] = True
-    # num_basis = ind_.sum()
-    # while True:
-    #     coef = np.zeros((DXdt.shape[1], Theta.shape[1]))
-    #     for i in range(ind_.shape[0]):
-    #         if np.any(ind_[i]):
-    #             coef[i, ind_[i]] = reg.fit(Theta[:, ind_[i]], DXdt[:, i]).coef_
-                
-    #             ind_[i, np.abs(coef[i,:])<precision] = False
-    #             ind_[i,:num_traj] = True
-        
-    #     if num_basis==ind_.sum():
-    #         break
-    #     num_basis = ind_.sum()
-        
-    # Xi = coef.T
-    # Xi[np.abs(Xi)<precision] = 0
-
-
     reg = LinearRegression(fit_intercept=False)
     ind_ = np.abs(Xi.T) > 1e-14
     coef = np.zeros((DXdt.shape[1], Theta.shape[1]))

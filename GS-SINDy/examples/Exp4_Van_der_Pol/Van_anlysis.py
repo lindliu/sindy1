@@ -81,7 +81,13 @@ if __name__ == "__main__":
         
         # real0 = "x'=5*(x - y + a*x^3)"
         # real1 = "y'=b*x"  
-
+    if basis_type=='mix':
+        coeff_true_ = np.array(a_list)
+        coeff_true = np.zeros([num_traj, num_feature, num_basis])
+        coeff_true[:,0,[6]] = 5*coeff_true_[:,[0]]
+        coeff_true[:,1,[1]] = coeff_true_[:,[1]]
+        
+        coeff_true[:,0,[1,2]] = [5,-5]
 
     
     basis_idx = np.arange(num_basis)
