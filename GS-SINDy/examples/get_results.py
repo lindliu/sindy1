@@ -280,37 +280,44 @@ if __name__ == "__main__":
         rmse_gsindy_one = np.linalg.norm(coeff_true-coeff_gsindy_one, axis=(1,2)) / np.linalg.norm(coeff_true, axis=(1,2))
         rmse_gsindy_all = np.linalg.norm(coeff_true-coeff_gsindy_all, axis=(1,2)) / np.linalg.norm(coeff_true, axis=(1,2))
 
-        np.set_printoptions(formatter={'float': lambda x: "{:.2e}".format(x)})
-        file1.writelines(['*'*15, ' rmse_sindy ', '*'*15, '\n'])
-        file1.write(f'{rmse_sindy} \n')
-        file1.writelines(['*'*15, ' rmse_gsindy_one ', '*'*15, '\n'])
-        file1.write(f'{rmse_gsindy_one} \n')
-        file1.writelines(['*'*15, ' rmse_gsindy_all ', '*'*15, '\n'])
-        file1.write(f'{rmse_gsindy_all} \n\n')
-        
-        
         mp_sindy      = ((coeff_true*coeff_sindy_all)!=0).sum(axis=(1,2)) /  (coeff_sindy_all!=0).sum(axis=(1,2))
         mp_gsindy_one = ((coeff_true*coeff_gsindy_one)!=0).sum(axis=(1,2)) / (coeff_gsindy_one!=0).sum(axis=(1,2))
         mp_gsindy_all = ((coeff_true*coeff_gsindy_all)!=0).sum(axis=(1,2)) / (coeff_gsindy_all!=0).sum(axis=(1,2))
 
-        np.set_printoptions(formatter={'float': lambda x: "{:.2f}".format(x)})
-        file1.writelines(['*'*15, ' metric precision sindy ', '*'*15, '\n'])
-        file1.write(f'{mp_sindy} \n')
-        file1.writelines(['*'*15, ' metric precision gsindy one ', '*'*15, '\n'])
-        file1.write(f'{mp_gsindy_one} \n')
-        file1.writelines(['*'*15, ' metric precision gsindy all ', '*'*15, '\n'])
-        file1.write(f'{mp_gsindy_all} \n\n')
-        
-        
         mr_sindy      = ((coeff_true*coeff_sindy_all)!=0).sum(axis=(1,2)) / (coeff_true!=0).sum(axis=(1,2))
         mr_gsindy_one = ((coeff_true*coeff_gsindy_one)!=0).sum(axis=(1,2)) / (coeff_true!=0).sum(axis=(1,2))
         mr_gsindy_all = ((coeff_true*coeff_gsindy_all)!=0).sum(axis=(1,2)) / (coeff_true!=0).sum(axis=(1,2))
         
+
+        ### rmse precision recall for sindy
+        np.set_printoptions(formatter={'float': lambda x: "{:.2e}".format(x)})
+        file1.writelines(['*'*15, ' rmse_sindy ', '*'*15, '\n'])
+        file1.write(f'{rmse_sindy} \n')
         np.set_printoptions(formatter={'float': lambda x: "{:.2f}".format(x)})
+        file1.writelines(['*'*15, ' metric precision sindy ', '*'*15, '\n'])
+        file1.write(f'{mp_sindy} \n')
         file1.writelines(['*'*15, ' metric recall sindy ', '*'*15, '\n'])
         file1.write(f'{mr_sindy} \n')
+        file1.write('\n')
+        
+        ### rmse precision recall for gsindy_one
+        np.set_printoptions(formatter={'float': lambda x: "{:.2e}".format(x)})
+        file1.writelines(['*'*15, ' rmse_gsindy_one ', '*'*15, '\n'])
+        file1.write(f'{rmse_gsindy_one} \n')
+        np.set_printoptions(formatter={'float': lambda x: "{:.2f}".format(x)})
+        file1.writelines(['*'*15, ' metric precision gsindy one ', '*'*15, '\n'])
+        file1.write(f'{mp_gsindy_one} \n')
         file1.writelines(['*'*15, ' metric recall gsindy one ', '*'*15, '\n'])
         file1.write(f'{mr_gsindy_one} \n')
+        file1.write('\n')
+        
+        ### rmse precision recall for gsindy_all
+        np.set_printoptions(formatter={'float': lambda x: "{:.2e}".format(x)})
+        file1.writelines(['*'*15, ' rmse_gsindy_all ', '*'*15, '\n'])
+        file1.write(f'{rmse_gsindy_all} \n')
+        np.set_printoptions(formatter={'float': lambda x: "{:.2f}".format(x)})
+        file1.writelines(['*'*15, ' metric precision gsindy all ', '*'*15, '\n'])
+        file1.write(f'{mp_gsindy_all} \n')
         file1.writelines(['*'*15, ' metric recall gsindy all ', '*'*15, '\n'])
         file1.write(f'{mr_gsindy_all} \n\n')
-        
+        file1.write('\n')
