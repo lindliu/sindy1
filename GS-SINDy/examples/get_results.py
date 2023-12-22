@@ -36,7 +36,7 @@ if exp_idx == 1:
     path_data = path_Exp1
     num_traj, num_feature = 6, 2
     
-    basis_type = 'mix'##'poly' ##
+    basis_type = 'poly' ##'mix'##
     basis, opt = get_basis_functions(basis_type, GSINDY=True)
     suffix = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
     
@@ -58,7 +58,7 @@ elif exp_idx == 2:
     path_data = path_Exp2
     num_traj, num_feature = 6, 2
     
-    basis_type = 'mix'##'poly' ##
+    basis_type = 'poly' ##'mix'##
     basis, opt = get_basis_functions(basis_type, GSINDY=True)
     suffix = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
     
@@ -83,7 +83,7 @@ elif exp_idx == 3:
     path_data = path_Exp3
     num_traj, num_feature = 6, 2
     
-    basis_type = 'mix'##'poly' ##
+    basis_type = 'poly' ##'mix'##
     basis, opt = get_basis_functions(basis_type, GSINDY=True)
     suffix = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
     
@@ -108,7 +108,7 @@ elif exp_idx == 4:
     path_data = path_Exp4
     num_traj, num_feature = 6, 2
     
-    basis_type = 'mix'##'poly' ##
+    basis_type = 'poly' ##'mix'##
     basis, opt = get_basis_functions(basis_type, GSINDY=True)
     suffix = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
     
@@ -132,7 +132,7 @@ elif exp_idx == 5:
     path_data = path_Exp5
     num_traj, num_feature = 6, 3
     
-    basis_type = 'mix_diff' ##'poly' ##'mix_same' ## 
+    basis_type = 'poly' ##'mix_diff' ####'mix_same' ## 
     basis, opt = get_basis_functions(basis_type, GSINDY=True)
     suffix = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
     
@@ -321,6 +321,13 @@ if __name__ == "__main__":
     open(save_path, 'w').close()
     
     with open(save_path, "a") as file1:
+        file1.write(f'the coefficients will keep if its absolute value >= {constants.precision}')
+        bound = constants.precision
+        coeff_sindy_all[np.abs(coeff_sindy_all)<bound] = 0
+        coeff_gsindy_one[np.abs(coeff_gsindy_one)<bound] = 0
+        coeff_gsindy_all[np.abs(coeff_gsindy_all)<bound] = 0 
+
+
         rmse_sindy = np.linalg.norm(coeff_true-coeff_sindy_all, axis=(1,2)) / np.linalg.norm(coeff_true, axis=(1,2))
         rmse_gsindy_one = np.linalg.norm(coeff_true-coeff_gsindy_one, axis=(1,2)) / np.linalg.norm(coeff_true, axis=(1,2))
         rmse_gsindy_all = np.linalg.norm(coeff_true-coeff_gsindy_all, axis=(1,2)) / np.linalg.norm(coeff_true, axis=(1,2))
@@ -333,7 +340,8 @@ if __name__ == "__main__":
         mr_gsindy_one = ((coeff_true*coeff_gsindy_one)!=0).sum(axis=(1,2)) / (coeff_true!=0).sum(axis=(1,2))
         mr_gsindy_all = ((coeff_true*coeff_gsindy_all)!=0).sum(axis=(1,2)) / (coeff_true!=0).sum(axis=(1,2))
         
-
+        
+        
         ### rmse precision recall for sindy
         np.set_printoptions(formatter={'float': lambda x: "{:.2e}".format(x)})
         file1.writelines(['\n', '*'*15, ' sindy: rmse, precision, recall in each row ', '*'*15, '\n'])
@@ -360,14 +368,12 @@ if __name__ == "__main__":
 
 
         
-        file1.writelines(['\n', '*'*15, ' mean of rmse: sindy, gsindy_one, gsindy_all ', '*'*15, '\n'])
-        file1.write(f'{rmse_sindy.mean():.2e}, {rmse_gsindy_one.mean():.2e}, {rmse_gsindy_all.mean():.2e} ')
-        file1.writelines(['\n', '*'*15, ' mean of precision: sindy, gsindy_one, gsindy_all ', '*'*15, '\n'])
-        file1.write(f'{mp_sindy.mean():.2f}, {mp_gsindy_one.mean():.2f}, {mp_gsindy_all.mean():.2f} ')
-        file1.writelines(['\n', '*'*15, ' mean of recall: sindy, gsindy_one, gsindy_all ', '*'*15, '\n'])
-        file1.write(f'{mr_sindy.mean():.2f}, {mr_gsindy_one.mean()}, {mr_gsindy_all.mean():.2f} ')
+        file1.writelines(['\n', '*'*15, ' sindy: mean of rmse, precision, recall ', '*'*15, '\n'])
+        file1.write(f'{rmse_sindy.mean():.2e}, {mp_sindy.mean():.2f}, {mr_sindy.mean():.2f} ')
+        file1.writelines(['\n', '*'*15, ' gsindy_one: mean of rmse, precision, recall ', '*'*15, '\n'])
+        file1.write(f'{rmse_gsindy_one.mean():.2e}, {mp_gsindy_one.mean():.2f}, {mr_gsindy_one.mean():.2f} ')
+        file1.writelines(['\n', '*'*15, ' gsindy_all: mean of rmse, precision, recall ', '*'*15, '\n'])
+        file1.write(f'{rmse_gsindy_all.mean():.2e}, {mp_gsindy_all.mean():.2f}, {mr_gsindy_all.mean():.2f} ')
 
-        
-        
         
         

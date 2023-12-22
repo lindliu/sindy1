@@ -1,4 +1,4 @@
-
+the coefficients will keep if its absolute value >= 0.0001
 *************** sindy: rmse, precision, recall in each row ***************
 [1.14e+01 4.71e+00 5.88e+01 8.30e-01 1.01e+02 9.83e-01] 
 [0.16 0.18 0.16 0.21 0.17 0.14] 
@@ -14,9 +14,9 @@
 [0.44 0.50 0.50 0.44 0.50 1.00] 
 [0.80 1.00 1.00 0.80 1.00 1.00] 
 
-*************** mean of rmse: sindy, gsindy_one, gsindy_all ***************
-2.97e+01, 3.65e+00, 3.29e-01 
-*************** mean of precision: sindy, gsindy_one, gsindy_all ***************
-0.17, 0.57, 0.56 
-*************** mean of recall: sindy, gsindy_one, gsindy_all ***************
-0.80, 1.0, 0.93 
+*************** sindy: mean of rmse, precision, recall ***************
+2.97e+01, 0.17, 0.80 
+*************** gsindy_one: mean of rmse, precision, recall ***************
+3.65e+00, 0.57, 1.00 
+*************** gsindy_all: mean of rmse, precision, recall ***************
+3.29e-01, 0.56, 0.93 

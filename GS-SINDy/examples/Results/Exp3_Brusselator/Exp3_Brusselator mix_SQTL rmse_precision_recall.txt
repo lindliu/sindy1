@@ -14,9 +14,9 @@
 [0.83 0.83 0.83 0.83 0.83 0.83] 
 [1.00 1.00 1.00 1.00 1.00 1.00] 
 
-*************** mean of rmse: sindy, gsindy_one, gsindy_all ***************
-2.48e+03, 2.09e+01, 3.27e-02 
-*************** mean of precision: sindy, gsindy_one, gsindy_all ***************
-0.23, 0.34, 0.83 
-*************** mean of recall: sindy, gsindy_one, gsindy_all ***************
-0.97, 0.7999999999999999, 1.00 
+*************** sindy: mean of rmse, precision, recall ***************
+2.48e+03, 0.23, 0.97 
+*************** gsindy_one: mean of rmse, precision, recall ***************
+2.09e+01, 0.34, 0.80 
+*************** gsindy_all: mean of rmse, precision, recall ***************
+3.27e-02, 0.83, 1.00 

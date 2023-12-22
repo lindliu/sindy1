@@ -14,9 +14,9 @@
 [1.00 1.00 1.00 1.00 1.00 1.00] 
 [1.00 1.00 1.00 1.00 1.00 1.00] 
 
-*************** mean of rmse: sindy, gsindy_one, gsindy_all ***************
-1.67e+00, 4.46e-03, 1.77e-04 
-*************** mean of precision: sindy, gsindy_one, gsindy_all ***************
-0.31, 0.89, 1.00 
-*************** mean of recall: sindy, gsindy_one, gsindy_all ***************
-1.00, 1.0, 1.00 
+*************** sindy: mean of rmse, precision, recall ***************
+1.67e+00, 0.31, 1.00 
+*************** gsindy_one: mean of rmse, precision, recall ***************
+4.46e-03, 0.89, 1.00 
+*************** gsindy_all: mean of rmse, precision, recall ***************
+1.77e-04, 1.00, 1.00 
