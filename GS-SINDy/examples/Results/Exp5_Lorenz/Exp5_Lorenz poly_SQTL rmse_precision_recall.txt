@@ -1,22 +1,22 @@
-*************** rmse_sindy ***************
+
+*************** sindy: rmse, precision, recall in each row ***************
 [2.17e-03 1.07e-03 4.27e-02 1.30e+00 2.28e-03 2.52e-03] 
-*************** metric precision sindy ***************
 [1.00 1.00 0.58 1.00 1.00 1.00] 
-*************** metric recall sindy ***************
 [1.00 1.00 1.00 0.57 1.00 1.00] 
 
-*************** rmse_gsindy_one ***************
+*************** gsindy one: rmse, precision, recall in each row ***************
 [1.68e-03 9.46e-04 1.18e-02 2.10e-02 1.91e-02 2.47e-03] 
-*************** metric precision gsindy one ***************
 [1.00 1.00 0.88 0.54 1.00 1.00] 
-*************** metric recall gsindy one ***************
 [1.00 1.00 1.00 1.00 1.00 1.00] 
 
-*************** rmse_gsindy_all ***************
+*************** gsindy all: rmse, precision, recall in each row ***************
 [2.17e-03 1.07e-03 1.32e-03 1.40e-03 2.28e-03 2.52e-03] 
-*************** metric precision gsindy all ***************
 [1.00 1.00 1.00 1.00 1.00 1.00] 
-*************** metric recall gsindy all ***************
 [1.00 1.00 1.00 1.00 1.00 1.00] 
 
-
+*************** mean of rmse: sindy, gsindy_one, gsindy_all ***************
+2.25e-01, 9.49e-03, 1.80e-03 
+*************** mean of precision: sindy, gsindy_one, gsindy_all ***************
+0.93, 0.90, 1.00 
+*************** mean of recall: sindy, gsindy_one, gsindy_all ***************
+0.93, 1.0, 1.00 

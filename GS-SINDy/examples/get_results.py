@@ -26,7 +26,7 @@ path_Exp4 = os.path.join(os.getcwd(), 'Exp4_Van_der_Pol/results/')
 path_Exp5 = os.path.join(os.getcwd(), 'Exp5_Lorenz/results/')
 
 
-exp_idx = 5 ###1,2,3,4,5
+exp_idx = 1 ###1,2,3,4,5
 
 if exp_idx == 1:
     import Lotka_constants as constants
@@ -36,7 +36,7 @@ if exp_idx == 1:
     path_data = path_Exp1
     num_traj, num_feature = 6, 2
     
-    basis_type = 'poly' ##'mix'##
+    basis_type = 'mix'##'poly' ##
     basis, opt = get_basis_functions(basis_type, GSINDY=True)
     suffix = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
     
@@ -58,7 +58,7 @@ elif exp_idx == 2:
     path_data = path_Exp2
     num_traj, num_feature = 6, 2
     
-    basis_type = 'poly' ##'mix'##
+    basis_type = 'mix'##'poly' ##
     basis, opt = get_basis_functions(basis_type, GSINDY=True)
     suffix = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
     
@@ -83,7 +83,7 @@ elif exp_idx == 3:
     path_data = path_Exp3
     num_traj, num_feature = 6, 2
     
-    basis_type = 'poly' ##'mix'##
+    basis_type = 'mix'##'poly' ##
     basis, opt = get_basis_functions(basis_type, GSINDY=True)
     suffix = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
     
@@ -108,7 +108,7 @@ elif exp_idx == 4:
     path_data = path_Exp4
     num_traj, num_feature = 6, 2
     
-    basis_type = 'poly' ##'mix'##
+    basis_type = 'mix'##'poly' ##
     basis, opt = get_basis_functions(basis_type, GSINDY=True)
     suffix = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
     
@@ -132,7 +132,7 @@ elif exp_idx == 5:
     path_data = path_Exp5
     num_traj, num_feature = 6, 3
     
-    basis_type = 'poly' ##'mix_same' ## 'mix_diff' ##
+    basis_type = 'mix_diff' ##'poly' ##'mix_same' ## 
     basis, opt = get_basis_functions(basis_type, GSINDY=True)
     suffix = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
     
@@ -224,24 +224,53 @@ if __name__ == "__main__":
     
     with open(save_path, "a") as file:
         np.set_printoptions(formatter={'float': lambda x: "{:.4f}".format(x)})
-        for i in range(num_traj):
-            for j in range(num_feature):
-                mask = (np.c_[coeff_sindy_all[:,j,:].any(0), coeff_gsindy_one[:,j,:].any(0), coeff_gsindy_all[:,j,:].any(0)]).any(1)
+        # for i in range(num_traj):
+        #     for j in range(num_feature):
+        #         mask = (np.c_[coeff_sindy_all[:,j,:].any(0), coeff_gsindy_one[:,j,:].any(0), coeff_gsindy_all[:,j,:].any(0)]).any(1)
 
-                file.writelines(['*'*15, f' trajectory {i} feature {j} ', '*'*15, '\n'])
-                file.writelines([f'{basis_function_name[j][mask]}\n'])
-                file.writelines(['*'*15, '  coeff_sindy_all ', '*'*15, '\n'])
-                file.writelines([f'{coeff_sindy_all[i,j,:][mask]}\n'])
-                file.writelines(['*'*15, ' coeff_gsindy_one ', '*'*15, '\n'])
-                file.writelines([f'{coeff_gsindy_one[i,j,:][mask]}\n'])
-                file.writelines(['*'*15, ' coeff_gsindy_all ', '*'*15, '\n'])
-                file.writelines([f'{coeff_gsindy_all[i,j,:][mask]}\n'])
-                file.writelines(['*'*15, ' coeff_true ', '*'*15, '\n'])
-                file.writelines([f'{coeff_true[i,j,:][mask]}\n\n'])
+        #         file.writelines(['*'*15, f' trajectory {i} feature {j} ', '*'*15, '\n'])
+        #         file.writelines([f'{basis_function_name[j][mask]}\n'])
+        #         file.writelines(['*'*15, '  coeff_sindy_all ', '*'*15, '\n'])
+        #         file.writelines([f'{coeff_sindy_all[i,j,:][mask]}\n'])
+        #         file.writelines(['*'*15, ' coeff_gsindy_one ', '*'*15, '\n'])
+        #         file.writelines([f'{coeff_gsindy_one[i,j,:][mask]}\n'])
+        #         file.writelines(['*'*15, ' coeff_gsindy_all ', '*'*15, '\n'])
+        #         file.writelines([f'{coeff_gsindy_all[i,j,:][mask]}\n'])
+        #         file.writelines(['*'*15, ' coeff_true ', '*'*15, '\n'])
+        #         file.writelines([f'{coeff_true[i,j,:][mask]}\n\n'])
+        
+        file.writelines(['\n', '*'*15, f'  coeff_sindy_all for {num_traj} trajectories', '*'*15, '\n'])
+        mask = (coeff_sindy_all!=0).any(0)
+        for j in range(num_feature):
+            file.write(f'{basis_function_name[j][mask[j]]}')
+        file.write('\n')
+        for i in range(num_traj):
+            file.write(f'{coeff_sindy_all[i][mask]}\n')
             
+            
+        file.writelines(['\n', '*'*15, f'  coeff_gsindy_one for {num_traj} trajectories', '*'*15, '\n'])
+        mask = (coeff_gsindy_one!=0).any(0)
+        for j in range(num_feature):
+            file.write(f'{basis_function_name[j][mask[j]]}')
+        file.write('\n')
+        for i in range(num_traj):
+            file.write(f'{coeff_gsindy_one[i][mask]}\n')
         
         
-        
+        file.writelines(['\n', '*'*15, f'  coeff_gsindy_all for {num_traj} trajectories', '*'*15, '\n'])
+        mask = (coeff_gsindy_all!=0).any(0)
+        for j in range(num_feature):
+            file.write(f'{basis_function_name[j][mask[j]]}')
+        file.write('\n')
+        for i in range(num_traj):
+            file.write(f'{coeff_gsindy_all[i][mask]}\n')
+            
+            
+            
+            
+            
+            
+            
         
     ### record true and predicted coefficients of true basis functions
     save_path = os.path.join(path_base, f'{func_name} {suffix} coefficients.txt')
@@ -249,19 +278,35 @@ if __name__ == "__main__":
     
     with open(save_path, "a") as file:
         np.set_printoptions(formatter={'float': lambda x: "{:.4f}".format(x)})
+        mask_true = (coeff_true!=0).any(0)
+        
+        file.writelines(['\n', '*'*15, f'  coeff_sindy_all for {num_traj} trajectories', '*'*15, '\n'])
+        for j in range(num_feature):
+            file.write(f'{basis_function_name[j][mask_true[j]]}')
+        file.write('\n')
         for i in range(num_traj):
-            mask_true = coeff_true[i]!=0
+            file.write(f'{coeff_sindy_all[i][mask_true]}\n')
+        
+        file.writelines(['\n', '*'*15, f'  coeff_gsindy_one for {num_traj} trajectories', '*'*15, '\n'])
+        for j in range(num_feature):
+            file.write(f'{basis_function_name[j][mask_true[j]]}')
+        file.write('\n')
+        for i in range(num_traj):
+            file.write(f'{coeff_gsindy_one[i][mask_true]}\n')
             
-            file.writelines(['*'*15, f' trajectory {i} ', '*'*15, '\n'])
-            file.writelines([f'{basis_function_name[mask_true]}\n'])
-            file.writelines(['*'*15, '  coeff_sindy_all ', '*'*15, '\n'])
-            file.writelines([f'{coeff_sindy_all[i][mask_true]}\n'])
-            file.writelines(['*'*15, ' coeff_gsindy_one ', '*'*15, '\n'])
-            file.writelines([f'{coeff_gsindy_one[i][mask_true]}\n'])
-            file.writelines(['*'*15, ' coeff_gsindy_all ', '*'*15, '\n'])
-            file.writelines([f'{coeff_gsindy_all[i][mask_true]}\n'])
-            file.writelines(['*'*15, ' coeff_true ', '*'*15, '\n'])
-            file.writelines([f'{coeff_true[i][mask_true]}\n\n'])
+        file.writelines(['\n', '*'*15, f'  coeff_gsindy_all for {num_traj} trajectories', '*'*15, '\n'])
+        for j in range(num_feature):
+            file.write(f'{basis_function_name[j][mask_true[j]]}')
+        file.write('\n')
+        for i in range(num_traj):
+            file.write(f'{coeff_gsindy_all[i][mask_true]}\n')
+            
+        file.writelines(['\n', '*'*15, f' coeff_true for {num_traj} trajectories ', '*'*15, '\n'])
+        for j in range(num_feature):
+            file.write(f'{basis_function_name[j][mask_true[j]]}')
+        file.write('\n')
+        for i in range(num_traj):
+            file.write(f'{coeff_true[i][mask_true]}\n')
             
             
             
@@ -291,33 +336,38 @@ if __name__ == "__main__":
 
         ### rmse precision recall for sindy
         np.set_printoptions(formatter={'float': lambda x: "{:.2e}".format(x)})
-        file1.writelines(['*'*15, ' rmse_sindy ', '*'*15, '\n'])
+        file1.writelines(['\n', '*'*15, ' sindy: rmse, precision, recall in each row ', '*'*15, '\n'])
         file1.write(f'{rmse_sindy} \n')
         np.set_printoptions(formatter={'float': lambda x: "{:.2f}".format(x)})
-        file1.writelines(['*'*15, ' metric precision sindy ', '*'*15, '\n'])
         file1.write(f'{mp_sindy} \n')
-        file1.writelines(['*'*15, ' metric recall sindy ', '*'*15, '\n'])
         file1.write(f'{mr_sindy} \n')
-        file1.write('\n')
         
         ### rmse precision recall for gsindy_one
         np.set_printoptions(formatter={'float': lambda x: "{:.2e}".format(x)})
-        file1.writelines(['*'*15, ' rmse_gsindy_one ', '*'*15, '\n'])
+        file1.writelines(['\n', '*'*15, ' gsindy one: rmse, precision, recall in each row ', '*'*15, '\n'])
         file1.write(f'{rmse_gsindy_one} \n')
         np.set_printoptions(formatter={'float': lambda x: "{:.2f}".format(x)})
-        file1.writelines(['*'*15, ' metric precision gsindy one ', '*'*15, '\n'])
         file1.write(f'{mp_gsindy_one} \n')
-        file1.writelines(['*'*15, ' metric recall gsindy one ', '*'*15, '\n'])
         file1.write(f'{mr_gsindy_one} \n')
-        file1.write('\n')
         
         ### rmse precision recall for gsindy_all
         np.set_printoptions(formatter={'float': lambda x: "{:.2e}".format(x)})
-        file1.writelines(['*'*15, ' rmse_gsindy_all ', '*'*15, '\n'])
+        file1.writelines(['\n', '*'*15, ' gsindy all: rmse, precision, recall in each row ', '*'*15, '\n'])
         file1.write(f'{rmse_gsindy_all} \n')
         np.set_printoptions(formatter={'float': lambda x: "{:.2f}".format(x)})
-        file1.writelines(['*'*15, ' metric precision gsindy all ', '*'*15, '\n'])
         file1.write(f'{mp_gsindy_all} \n')
-        file1.writelines(['*'*15, ' metric recall gsindy all ', '*'*15, '\n'])
-        file1.write(f'{mr_gsindy_all} \n\n')
-        file1.write('\n')
+        file1.write(f'{mr_gsindy_all} \n')
+
+
+        
+        file1.writelines(['\n', '*'*15, ' mean of rmse: sindy, gsindy_one, gsindy_all ', '*'*15, '\n'])
+        file1.write(f'{rmse_sindy.mean():.2e}, {rmse_gsindy_one.mean():.2e}, {rmse_gsindy_all.mean():.2e} ')
+        file1.writelines(['\n', '*'*15, ' mean of precision: sindy, gsindy_one, gsindy_all ', '*'*15, '\n'])
+        file1.write(f'{mp_sindy.mean():.2f}, {mp_gsindy_one.mean():.2f}, {mp_gsindy_all.mean():.2f} ')
+        file1.writelines(['\n', '*'*15, ' mean of recall: sindy, gsindy_one, gsindy_all ', '*'*15, '\n'])
+        file1.write(f'{mr_sindy.mean():.2f}, {mr_gsindy_one.mean()}, {mr_gsindy_all.mean():.2f} ')
+
+        
+        
+        
+        
