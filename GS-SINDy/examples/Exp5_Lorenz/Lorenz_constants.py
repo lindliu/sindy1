@@ -36,7 +36,7 @@ real_list = [real0, real1, real2]
 
 
 ########## basis functions and optimizer ###########
-basis_type = 'mix_same' ## 'poly' ##'mix_diff' ##
+basis_type = 'poly' ##'mix_same' ## 'mix_diff' ##
 
 def get_basis_functions(basis_type, GSINDY=True):
     if GSINDY:
