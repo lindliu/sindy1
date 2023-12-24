@@ -40,7 +40,7 @@ def gsindy_3d_train(func, t, x0_list, a_list, real_list, suffix, basis, precisio
                     
                     model_set, diff0_basis_list, diff1_basis_list, diff2_basis_list, same0_basis_list, same1_basis_list, same2_basis_list, parameter_list = \
                                                 fit_gsindy_3d(sol_org_list, num_traj, t_, num, real_list, \
-                                                              basis, precision, alpha, opt, deriv_spline, ensemble, \
+                                                              basis, alpha, opt, deriv_spline, ensemble, \
                                                               threshold_sindy_list = threshold_sindy_list, \
                                                               threshold_group_list = threshold_group_list,\
                                                               threshold_similarity_list = threshold_similarity_list_, 
@@ -53,9 +53,9 @@ def gsindy_3d_train(func, t, x0_list, a_list, real_list, suffix, basis, precisio
                     coef = model_set[best_BIC_model].mean(0)
                     np.save(os.path.join(path_base, f'coeff/gsindy_one_{suffix}_{num_split}_{idx}.npy'), coef)
                     
-                    mask0 = coef[0,:]!=0
-                    mask1 = coef[1,:]!=0
-                    mask2 = coef[2,:]!=0
+                    mask0 = np.abs(coef[0,:])>precision
+                    mask1 = np.abs(coef[1,:])>precision
+                    mask2 = np.abs(coef[2,:])>precision
                     with open(save_path, "a") as file1:
                         file1.writelines(['*'*15, f'result of trajectory {idx} split into {num_split} pieces', '*'*15, '\n'])
                         file1.write(f'coef of feature 0: {coef[0,:][mask0]} \n')
@@ -79,7 +79,7 @@ def gsindy_3d_train(func, t, x0_list, a_list, real_list, suffix, basis, precisio
             
             model_set, diff0_basis_list, diff1_basis_list, diff2_basis_list, same0_basis_list, same1_basis_list, same2_basis_list, parameter_list = \
                                         fit_gsindy_3d(sol_org_list, num_traj, t_, num, real_list, \
-                                                      basis, precision, alpha, opt, deriv_spline, ensemble, \
+                                                      basis, alpha, opt, deriv_spline, ensemble, \
                                                       threshold_sindy_list = threshold_sindy_list, \
                                                       threshold_group_list = threshold_group_list,\
                                                       threshold_similarity_list = threshold_similarity_list_, 
@@ -92,9 +92,9 @@ def gsindy_3d_train(func, t, x0_list, a_list, real_list, suffix, basis, precisio
             coef = model_set[best_BIC_model] ### num_traj, num_feature, num_basis
             np.save(os.path.join(path_base, f'coeff/gsindy_all_{suffix}_{num}.npy'), coef)
 
-            mask0 = coef[:,0,:]!=0
-            mask1 = coef[:,1,:]!=0
-            mask2 = coef[:,2,:]!=0
+            mask0 = np.abs(coef[:,0,:])>precision
+            mask1 = np.abs(coef[:,1,:])>precision
+            mask2 = np.abs(coef[:,2,:])>precision
             for idx in range(num_traj):
                 with open(save_path, "a") as file2:
                     file2.writelines(['*'*15, f'result of trajectory {idx} ', '*'*15, '\n'])

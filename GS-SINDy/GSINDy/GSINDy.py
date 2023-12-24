@@ -18,7 +18,7 @@ from utils import get_deriv, get_theta
 # MSE = lambda x: np.linalg.norm(x)
 
     
-def SLS(Theta, DXdt, threshold, precision=1e-3, alpha=.05):
+def SLS(Theta, DXdt, threshold, alpha=.05):
     n_feature = DXdt.shape[1]
     Xi = ridge_regression(Theta,DXdt, alpha=alpha).T
     # Xi = np.linalg.lstsq(Theta,DXdt, rcond=None)[0]
@@ -45,7 +45,7 @@ def SLS(Theta, DXdt, threshold, precision=1e-3, alpha=.05):
         if np.any(ind_[i]):
             coef[i, ind_[i]] = reg.fit(Theta[:, ind_[i]], DXdt[:, i]).coef_
     Xi = coef.T
-    Xi[np.abs(Xi)<precision] = 0
+    # Xi[np.abs(Xi)<precision] = 0
 
     return Xi
 
@@ -117,7 +117,7 @@ def Axes_transfer(theta_):
 class GSINDy():
     def __init__(self, basis, \
                      num_traj, num_feature, \
-                     threshold_sindy=1e-2, threshold_group=1e-3, threshold_similarity=1e-2, precision=1e-3, \
+                     threshold_sindy=1e-2, threshold_group=1e-3, threshold_similarity=1e-2, \
                      alpha=0.05, deriv_spline=True, max_iter=20, optimizer='Manually', ensemble=False):
         basis_functions_list = basis['functions']
         basis_functions_name_list = basis['names']
@@ -149,7 +149,7 @@ class GSINDy():
         self.threshold_sindy = threshold_sindy
         self.threshold_group = threshold_group
         self.threshold_similarity = threshold_similarity
-        self.precision = precision
+        # self.precision = precision
         self.alpha = alpha
         self.deriv_spline = deriv_spline
         self.max_iter = 20
@@ -325,7 +325,7 @@ class GSINDy():
                 
                 if self.optimizer=='Manually':
                     ### using own solver, should be the same in sindy without ensemble case
-                    Xi0_ = SLS(Theta, dXdt, self.threshold_sindy, self.precision, self.alpha)[...,0]
+                    Xi0_ = SLS(Theta, dXdt, self.threshold_sindy, self.alpha)[...,0]
                 else:
                     ### using pysindy solver
                     Theta_ = Axes_transfer(Theta)
@@ -467,7 +467,7 @@ class GSINDy():
             
             if self.optimizer=='Manually':
                 ### using own solver, should be the same in sindy without ensemble case
-                Xi0_ = SLS(Theta, dXdt, self.threshold_sindy, self.precision, self.alpha)[...,0]
+                Xi0_ = SLS(Theta, dXdt, self.threshold_sindy, self.alpha)[...,0]
             else:
                 ### using pysindy solver
                 Theta_ = Axes_transfer(Theta)
@@ -483,12 +483,11 @@ class GSINDy():
             Xi_final[:,k,same_basis[k]] = Xi0_[num_diff_:]
             
             
-        Xi_final[np.abs(Xi_final)<self.precision] = 0
+        # Xi_final[np.abs(Xi_final)<self.precision] = 0
         
-        # mask_tol = np.abs(Xi_final.mean(0))>self.precision  
-        mask_tol = (Xi_final!=0).any(0)
-        all_basis[0] = np.logical_and(mask_tol[0],all_basis[0])
-        all_basis[1] = np.logical_and(mask_tol[1],all_basis[1])
+        # mask_tol = (Xi_final!=0).any(0)
+        # all_basis[0] = np.logical_and(mask_tol[0],all_basis[0])
+        # all_basis[1] = np.logical_and(mask_tol[1],all_basis[1])
     
         if split_basis:
             self.all_basis = copy.deepcopy(all_basis)

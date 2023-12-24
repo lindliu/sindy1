@@ -54,7 +54,7 @@ def SINDy_by_pysindy(sol_, sol_deriv_, t_, basis, threshold_sindy, opt, ensemble
     
     return model
 
-def SINDy_by_coeff(sol_, sol_deriv_, t_, basis, threshold_sindy, precision, alpha):
+def SINDy_by_coeff(sol_, sol_deriv_, t_, basis, threshold_sindy, alpha):
     basis_functions_list = basis['functions']
     # basis_functions_name_list = basis['names']
     
@@ -66,12 +66,12 @@ def SINDy_by_coeff(sol_, sol_deriv_, t_, basis, threshold_sindy, precision, alph
     num_feature, num_basis = sol_deriv_.shape[1], Theta0.shape[1]
     Xi = np.zeros([num_feature, num_basis])
     
-    Xi[0,:] = SLS(Theta0, DXdt0, threshold_sindy, precision)[...,0]
-    Xi[1,:] = SLS(Theta1, DXdt1, threshold_sindy, precision)[...,0]
+    Xi[0,:] = SLS(Theta0, DXdt0, threshold_sindy, alpha)[...,0]
+    Xi[1,:] = SLS(Theta1, DXdt1, threshold_sindy, alpha)[...,0]
     
     return Xi
 
-def fit_sindy_2d(sol_, sol_deriv_, t_, real_list, basis, precision, alpha, opt, deriv_spline, ensemble, \
+def fit_sindy_2d(sol_, sol_deriv_, t_, real_list, basis, alpha, opt, deriv_spline, ensemble, \
                  threshold_sindy_list=[1e-3, 5e-3, 1e-2, 5e-2, 1e-1]):
     ### sindy 
     model_set = []
@@ -80,7 +80,7 @@ def fit_sindy_2d(sol_, sol_deriv_, t_, real_list, basis, precision, alpha, opt, 
             model = SINDy_by_pysindy(sol_, sol_deriv_, t_, basis, threshold_sindy, opt, ensemble, alpha)
             
         elif opt == 'Manually':
-            model = SINDy_by_coeff(sol_, sol_deriv_, t_, basis, threshold_sindy, precision, alpha)
+            model = SINDy_by_coeff(sol_, sol_deriv_, t_, basis, threshold_sindy, alpha)
         
         model_set.append(model)
         

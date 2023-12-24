@@ -21,7 +21,7 @@ SSE = lambda x, y: ((x-y)**2).sum()
 ############# group sindy ##############
 ########################################
 def fit_gsindy_2d(sol_org_list, num_traj, t, num, real_list, \
-                  basis, precision, alpha, opt, deriv_spline, ensemble, 
+                  basis, alpha, opt, deriv_spline, ensemble, 
                   threshold_sindy_list = [1e-3, 5e-3, 1e-2, 5e-2, 1e-1], \
                   threshold_group_list = [1e-3, 1e-2],\
                   threshold_similarity_list = [1e-3, 1e-2], \
@@ -44,7 +44,7 @@ def fit_gsindy_2d(sol_org_list, num_traj, t, num, real_list, \
                                 threshold_sindy = threshold_sindy, 
                                 threshold_group=threshold_group, 
                                 threshold_similarity=threshold_similarity, 
-                                precision = precision, 
+                                # precision = precision, 
                                 alpha=alpha,
                                 deriv_spline=deriv_spline,
                                 max_iter = 20, 

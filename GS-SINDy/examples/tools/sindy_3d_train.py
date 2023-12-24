@@ -26,7 +26,7 @@ def sindy_3d_train(func, t, x0_list, a_list, real_list, suffix, basis, precision
         
         if opt in ['SQTL', 'LASSO', 'SR3']:
             ### sindy
-            model_set = fit_sindy_3d(sol_, sol_deriv_, t_, real_list, basis, precision, alpha, opt, \
+            model_set = fit_sindy_3d(sol_, sol_deriv_, t_, real_list, basis, alpha, opt, \
                                      deriv_spline, ensemble, threshold_sindy_list)
             ### model selection
             ms, best_BIC_model = model_selection_pysindy_3d(model_set, sol_, x0, t_, precision)
@@ -34,7 +34,7 @@ def sindy_3d_train(func, t, x0_list, a_list, real_list, suffix, basis, precision
             
         elif opt == 'Manually':
             ### sindy
-            model_set = fit_sindy_3d(sol_, sol_deriv_, t_, real_list, basis, precision, alpha, opt, \
+            model_set = fit_sindy_3d(sol_, sol_deriv_, t_, real_list, basis, alpha, opt, \
                                      deriv_spline, ensemble, threshold_sindy_list)
             ### model selection
             ms, best_BIC_model = model_selection_coeff_3d(model_set, sol_, x0, t_, a, real_list, basis)
