@@ -54,8 +54,6 @@ def gsindy_2d_train(func, t, x0_list, a_list, real_list, suffix, basis, precisio
                     np.save(os.path.join(path_base, f'coeff/gsindy_one_{suffix}_{num_split}_{idx}.npy'), coef)
                     
                     
-                    # mask0 = coef[0,:]!=0
-                    # mask1= coef[1,:]!=0
                     mask0 = np.abs(coef[0,:]) > precision
                     mask1 = np.abs(coef[1,:]) > precision
                     with open(save_path, "a") as file1:

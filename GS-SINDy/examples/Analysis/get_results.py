@@ -26,7 +26,7 @@ path_Exp4 = os.path.join(os.getcwd(), '../Exp4_Van_der_Pol/results/')
 path_Exp5 = os.path.join(os.getcwd(), '../Exp5_Lorenz/results/')
 
 
-exp_idx = 4 ###1,2,3,4,5
+exp_idx = 5 ###1,2,3,4,5
 
 if exp_idx == 1:
     import Lotka_constants as constants
