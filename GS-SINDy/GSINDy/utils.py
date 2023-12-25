@@ -51,6 +51,22 @@ def  func_M_Lotka_Voltera(x, t, a, b, c):
     dxdt = [b*x2+a*x1**2+c*x1**3-x1*x2**2, x1+a*x2+b*x2*x1**2+c*x2**3]
     return dxdt
 
+# def  func_M_Lotka_Voltera(x, t, a, b, c):
+#     """
+#     P81, differential equations, dynamical systems, and an introduction to chaos
+#     Modified Lotka-Voltera
+    
+#     dxdt = a*x - y - x*(x^2 + y^2) =      -y + a*x - x^3 - xy^2
+#     dydt = x + a*y - y*(x^2 + y^2)   = x + a*y                      - x^2y - y^3
+    
+    
+#     dxdt = a*x + b*y + c*x*(x^2 + y^2)
+#     dydt = -b*x + a*y + c*y*(x^2 + y^2)
+#     """
+#     x1, x2 = x
+#     dxdt = [a*x1+b*x2+c*x1**3+c*x1*x2**2, b*x2-b*x1+c*x2*x1**2+c*x2**3]
+#     return dxdt
+
 def func_Brusselator(x, t, a, b):
     """
     Brusselator
