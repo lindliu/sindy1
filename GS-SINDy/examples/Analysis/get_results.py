@@ -362,7 +362,7 @@ if __name__ == "__main__":
     def get_latex_line(input_list, print_type='.2f'):
         
         line = []
-        line.append(input_list[0])
+        line.append('$'+input_list[0]+'$')
         line.append('&')
         for ele in input_list[1:]:
             if print_type[-1]=='f':
@@ -453,7 +453,8 @@ if __name__ == "__main__":
     
     def get_latex_line(input_list, print_type='.4f'):
         line = ['&']
-        line.append('$'+input_list[0]+'$'+'&')
+        line.append('$'+input_list[0]+'$')
+        line.append('&')
         for ele in input_list[1:]:
             if ele==0:
                 line.append(' ')
