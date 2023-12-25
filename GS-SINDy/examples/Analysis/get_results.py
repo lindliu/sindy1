@@ -309,7 +309,7 @@ if __name__ == "__main__":
     
     
     
-
+    
     ######################################################
     ############# generate rmse mp mr table###############
     ######################################################
@@ -368,7 +368,11 @@ if __name__ == "__main__":
             if print_type[-1]=='f':
                 line.append(f'{ele:{print_type}}'.rstrip('0'))
             else:
-                line.append(f'{ele:{print_type}}')
+                ss = f'{ele:{print_type}}'
+                if ss[-2]=='0':
+                    line.append(ss[:-2]+ss[-1])
+                else:
+                    line.append(ss)
             line.append('&')
         line = line[:-1]
         line.append('\\\ \n')
@@ -379,7 +383,7 @@ if __name__ == "__main__":
     open(save_path, 'w').close()
     
     with open(save_path, "a") as file:
-        file.write(f'the coefficients will keep if its absolute value >= {constants.precision} \n')
+        file.write(f'the coefficients will keep if its absolute value >= {bound} \n')
         file.writelines(['columns: traj1(poly, mix), traj2(poly, mix), traj3(poly, mix), traj4(poly, mix), traj5(poly, mix), traj6(poly, mix)', '\n'])
         
         
@@ -423,6 +427,23 @@ if __name__ == "__main__":
         file.writelines(['\n', '*'*15, ' gsindy_all: mean of rmse, precision, recall ', '*'*15, '\n'])
         file.write(f'{rmse_gsindy_all_mix.mean():.2e}, {mp_gsindy_all_mix.mean():.2f}, {mr_gsindy_all_mix.mean():.2f} ')
             
+        
+        
+        
+        
+        os.makedirs(os.path.join('Results/average'), exist_ok=True)
+        Mean_poly = np.array([[rmse_sindy_poly.mean(), mp_sindy_poly.mean(), mr_sindy_poly.mean()],
+                              [rmse_gsindy_one_poly.mean(), mp_gsindy_one_poly.mean(), mr_gsindy_one_poly.mean()],
+                              [rmse_gsindy_all_poly.mean(), mp_gsindy_all_poly.mean(), mr_gsindy_all_poly.mean()]])
+                    
+        Mean_mix = np.array([[rmse_sindy_mix.mean(), mp_sindy_mix.mean(), mr_sindy_mix.mean()],
+                              [rmse_gsindy_one_mix.mean(), mp_gsindy_one_mix.mean(), mr_gsindy_one_mix.mean()],
+                              [rmse_gsindy_all_mix.mean(), mp_gsindy_all_mix.mean(), mr_gsindy_all_mix.mean()]])
+        
+        np.save(os.path.join('Results/average', f'mean_poly_{func_name}.npy'), Mean_poly)
+        np.save(os.path.join('Results/average', f'mean_mix_{func_name}.npy'), Mean_mix)
+
+        
         
         
     
@@ -557,7 +578,7 @@ if __name__ == "__main__":
             
         fig.tight_layout()
         # fig.subplots_adjust(top=0.88)
-        fig.savefig(os.path.join(path_base, f'figures/{func_name} {suffix_mix} with trajectory {i}'), dpi=200)
+        fig.savefig(os.path.join(path_base, f'figures/{func_name} {suffix_mix} with trajectory {i}'), dpi=100)
         
         
         
