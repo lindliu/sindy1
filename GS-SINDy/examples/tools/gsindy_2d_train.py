@@ -37,7 +37,10 @@ def gsindy_2d_train(func, t, x0_list, a_list, real_list, suffix, basis, precisio
                     a = [a_list[idx]]
                     
                     t_, x0, a, sol_org_list, num_traj, num_feature = data_generator(func, x0, t, a, real_list, num, num_split)
-                    
+                    # ## add noise
+                    # for i in range(len(sol_org_list)):
+                    #     sol_org_list[i] = sol_org_list[i] + np.random.randn(*sol_org_list[i].shape)*sol_org_list[i]*.01
+
                     model_set, diff0_basis_list, diff1_basis_list, same0_basis_list, same1_basis_list, parameter_list = \
                                                 fit_gsindy_2d(sol_org_list, num_traj, t_, num, real_list, \
                                                               basis, alpha, opt, deriv_spline, ensemble, \
@@ -74,7 +77,10 @@ def gsindy_2d_train(func, t, x0_list, a_list, real_list, suffix, basis, precisio
             a = a_list[:num]
             
             t_, x0, a, sol_org_list, num_traj, num_feature = data_generator(func, x0, t, a, real_list, num)
-            
+            # ## add noise
+            # for i in range(len(sol_org_list)):
+            #     sol_org_list[i] = sol_org_list[i] + np.random.randn(*sol_org_list[i].shape)*sol_org_list[i]*.01
+
             model_set, diff0_basis_list, diff1_basis_list, same0_basis_list, same1_basis_list, parameter_list = \
                                         fit_gsindy_2d(sol_org_list, num_traj, t_, num, real_list, \
                                                       basis, alpha, opt, deriv_spline, ensemble, \

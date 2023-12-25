@@ -22,6 +22,8 @@ def sindy_2d_train(func, t, x0_list, a_list, real_list, suffix, basis, precision
         
         ### get trajectory
         sol_, t_ = ode_solver(func, x0, t, a)
+        # ## add noise
+        # sol_ = sol_ + np.random.randn(*sol_.shape)*sol_*.01
         _, sol_deriv_, _ = get_deriv(sol_, t_, deriv_spline)
         
         if opt in ['SQTL', 'LASSO', 'SR3']:
