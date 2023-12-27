@@ -26,7 +26,7 @@ path_Exp4 = os.path.join(os.getcwd(), '../Exp4_Van_der_Pol/results/')
 path_Exp5 = os.path.join(os.getcwd(), '../Exp5_Lorenz/results/')
 
 
-exp_idx = 1 ###1,2,3,4,5
+exp_idx = 5 ###1,2,3,4,5
 
 if exp_idx == 1:
     import Lotka_constants as constants
@@ -361,7 +361,7 @@ if __name__ == "__main__":
     table_metrics = np.zeros([13,10], dtype=object)
     table_metrics[:,0] = ['Metric', 'traj. 1', 'traj. 2', 'traj. 3','traj. 4','traj. 5','traj. 6', \
                           'traj. 1', 'traj. 2', 'traj. 3','traj. 4','traj. 5','traj. 6']
-    table_metrics[:,1:] = np.r_[table_sindy, table_gindy_one, table_gindy_all].T
+    table_metrics[:,1:] = np.r_[table_gindy_all, table_gindy_one, table_sindy].T
     
     def get_latex_line(input_list):
         print_type = ['.2e', '.2f', '.2f', '.2e', '.2f', '.2f', '.2e', '.2f', '.2f']
@@ -389,7 +389,7 @@ if __name__ == "__main__":
     
     with open(save_path, "a") as file:
         file.write(f'the coefficients will keep if its absolute value >= {bound} \n')
-        file.writelines(['columns: M1, M2, M3', '\n', '\n'])
+        file.writelines(['columns: GS-SINDy all, GS-SINDy one, SINDy', '\n', '\n'])
 
         
         # line_first = [table_metrics[0,0]]
@@ -429,13 +429,13 @@ if __name__ == "__main__":
         
         
         os.makedirs(os.path.join(f'{directory}/average'), exist_ok=True)
-        Mean_poly = np.array([[rmse_sindy_poly.mean(), mp_sindy_poly.mean(), mr_sindy_poly.mean()],
+        Mean_poly = np.array([[rmse_gsindy_all_poly.mean(), mp_gsindy_all_poly.mean(), mr_gsindy_all_poly.mean()],
                               [rmse_gsindy_one_poly.mean(), mp_gsindy_one_poly.mean(), mr_gsindy_one_poly.mean()],
-                              [rmse_gsindy_all_poly.mean(), mp_gsindy_all_poly.mean(), mr_gsindy_all_poly.mean()]])
+                              [rmse_sindy_poly.mean(), mp_sindy_poly.mean(), mr_sindy_poly.mean()],])
                     
-        Mean_mix = np.array([[rmse_sindy_mix.mean(), mp_sindy_mix.mean(), mr_sindy_mix.mean()],
-                              [rmse_gsindy_one_mix.mean(), mp_gsindy_one_mix.mean(), mr_gsindy_one_mix.mean()],
-                              [rmse_gsindy_all_mix.mean(), mp_gsindy_all_mix.mean(), mr_gsindy_all_mix.mean()]])
+        Mean_mix = np.array([[rmse_gsindy_all_mix.mean(), mp_gsindy_all_mix.mean(), mr_gsindy_all_mix.mean()],
+                             [rmse_gsindy_one_mix.mean(), mp_gsindy_one_mix.mean(), mr_gsindy_one_mix.mean()],
+                             [rmse_sindy_mix.mean(), mp_sindy_mix.mean(), mr_sindy_mix.mean()]])
         
         np.save(os.path.join(f'{directory}/average', f'mean_poly_{func_name}.npy'), Mean_poly)
         np.save(os.path.join(f'{directory}/average', f'mean_mix_{func_name}.npy'), Mean_mix)

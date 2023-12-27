@@ -1,0 +1,36 @@
+***************result of trajectory 0 ***************
+coef of feature 0: [0.9999] 
+basis of feature 0: ['y'] 
+coef of feature 1: [-0.2501 -5.0006] 
+basis of feature 1: ['y' 'sin(x)'] 
+
+***************result of trajectory 1 ***************
+coef of feature 0: [0.9999] 
+basis of feature 0: ['y'] 
+coef of feature 1: [-0.2000 -4.4985] 
+basis of feature 1: ['y' 'sin(x)'] 
+
+***************result of trajectory 2 ***************
+coef of feature 0: [0.9998] 
+basis of feature 0: ['y'] 
+coef of feature 1: [-0.2498 -5.5006] 
+basis of feature 1: ['y' 'sin(x)'] 
+
+***************result of trajectory 3 ***************
+coef of feature 0: [1.0001] 
+basis of feature 0: ['y'] 
+coef of feature 1: [-0.2304 -3.9998] 
+basis of feature 1: ['y' 'sin(x)'] 
+
+***************result of trajectory 4 ***************
+coef of feature 0: [1.0001] 
+basis of feature 0: ['y'] 
+coef of feature 1: [-0.3002 -3.9996] 
+basis of feature 1: ['y' 'sin(x)'] 
+
+***************result of trajectory 5 ***************
+coef of feature 0: [0.9999] 
+basis of feature 0: ['y'] 
+coef of feature 1: [-0.2003 -4.8007] 
+basis of feature 1: ['y' 'sin(x)'] 
+

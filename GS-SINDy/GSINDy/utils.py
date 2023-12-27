@@ -105,6 +105,22 @@ def func_Lorenz(x, t, a, b, c, d):
     return dxdt
 
 
+def func_Pendulum(x, t, a, b):
+    """
+    SINDy-SA: Pendulum motion model
+    
+    dxdt = 1*y
+    dydt = c0*y + c1*sin(x)
+    
+    c0 = -.25, c1=-5.0
+    x0, y0 = pi-.1, 0
+    """
+    
+    c0 = a
+    c1 = b
+    x1, x2 = x
+    dxdt = [x2, c0*x2+c1*np.sin(x1)]
+    return dxdt
 
 ##########################################
 ######### obtain basis functions #########
@@ -194,7 +210,26 @@ basis_functions_name_poly_5 = [lambda x,y: '1', \
         lambda x,y: 'x^4', lambda x,y: 'x^3y', lambda x,y: 'x^2y^2', lambda x,y: 'xy^3', lambda x,y: 'y^4', \
         lambda x,y: 'x^5', lambda x,y: 'x^4y', lambda x,y: 'x^3y^2', lambda x,y: 'x^2y^3', lambda x,y: 'xy^4', lambda x,y: 'y^5']
 
+    
+############ trigonometric basis functions 2d ################
+basis_functions_trig = np.array([lambda x,y: 1, \
+        lambda x,y: x, lambda x,y: y, \
+        lambda x,y: x**2, lambda x,y: x*y, lambda x,y: y**2, \
+        lambda x,y: x**3, lambda x,y: x**2*y, lambda x,y: x*y**2, lambda x,y: y**3, \
+        lambda x,y: x**4, lambda x,y: x**3*y, lambda x,y: x**2*y**2, lambda x,y: x*y**3, lambda x,y: y**4, \
+        lambda x,y: x**5, lambda x,y: x**4*y, lambda x,y: x**3*y**2, lambda x,y: x**2*y**3, lambda x,y: x*y**4, lambda x,y: y**5, \
+        lambda x,y: np.sin(x), lambda x,y: np.sin(y), lambda x,y: np.cos(x), lambda x,y: np.cos(y), \
+        lambda x,y: np.exp(x), lambda x,y: np.exp(y)])
 
+basis_functions_name_trig = [lambda x,y: '1', \
+        lambda x,y: 'x', lambda x,y: 'y', \
+        lambda x,y: 'x^2', lambda x,y: 'xy', lambda x,y: 'y^2', \
+        lambda x,y: 'x^3', lambda x,y: 'x^2y', lambda x,y: 'xy^2', lambda x,y: 'y^3', \
+        lambda x,y: 'x^4', lambda x,y: 'x^3y', lambda x,y: 'x^2y^2', lambda x,y: 'xy^3', lambda x,y: 'y^4', \
+        lambda x,y: 'x^5', lambda x,y: 'x^4y', lambda x,y: 'x^3y^2', lambda x,y: 'x^2y^3', lambda x,y: 'xy^4', lambda x,y: 'y^5', \
+        lambda x,y: 'sin(x)', lambda x,y: 'sin(y)', lambda x,y: 'cos(x)', lambda x,y: 'cos(y)',\
+        lambda x,y: 'exp(x)', lambda x,y: 'exp(y)']
+    
     
     
 ############ mix basis functions 3d ################

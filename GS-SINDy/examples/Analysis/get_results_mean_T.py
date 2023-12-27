@@ -31,8 +31,8 @@ mean_all[:,6:] = mean_mix_all
 mean_all = mean_all.T
 
 table_mean_all = np.zeros([11,10], dtype=object)
-table_mean_all[:,0] = ['Metric', 'System 1', 'System 2', 'System 3','System 4','System 5', \
-                      'System 1', 'System 2', 'System 3','System 4','System 5']
+table_mean_all[:,0] = ['Metric', 'Lotka-Volterra', 'Modified Lotka-Volterra', 'Brusselator','Van der Pol','Lorenz', \
+                      'Lotka-Volterra', 'Modified Lotka-Volterra', 'Brusselator','Van der Pol','Lorenz']
 table_mean_all[:,1:] = mean_all
 
 def get_latex_line(input_list):
@@ -60,7 +60,7 @@ open(save_path, 'w').close()
 
 with open(save_path, "a") as file:
     file.write(f'Mean of 6 trajectories for each system \n')
-    file.writelines(['columns: M1, M2, M3', '\n', '\n'])
+    file.writelines(['columns: GS-SINDy all, GS-SINDy one, SINDy', '\n', '\n'])
 
     
     # line_first = [table_metrics[0,0]]
@@ -68,13 +68,13 @@ with open(save_path, "a") as file:
     line_first.append("\\\ \n")
     file.writelines(line_first)
     file.writelines(['\n', '\midrule', '\n','\n'])
-    file.write('\multirow{6}{*}{\\rotatebox[origin=c]{90}{Polynomial}} \n')
+    file.write('\multirow{5}{*}{\\rotatebox[origin=c]{90}{Polynomial}} \n')
     for i in range(1,6):
         line_ = get_latex_line(table_mean_all[i,:])
         file.writelines(line_)
         
     file.writelines(['\n', '\midrule', '\n','\n'])
-    file.write('\multirow{6}{*}{\\rotatebox[origin=c]{90}{Mixed}} \n')
+    file.write('\multirow{5}{*}{\\rotatebox[origin=c]{90}{Mixed}} \n')
     for i in range(6,11):
         line_ = get_latex_line(table_mean_all[i,:])
         file.writelines(line_)
