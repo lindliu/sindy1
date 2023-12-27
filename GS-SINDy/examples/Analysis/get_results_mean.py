@@ -12,18 +12,19 @@ from glob import glob
 
 
 
+path_base = os.path.join('Results')
 
 mean_poly_all = np.zeros([9,5])
 mean_mix_all = np.zeros([9,5])
 for i in range(1,6):
-    path_poly = glob(os.path.join('Results/average', f'mean_poly_Exp{i}*.npy'))[0]
-    path_mix = glob(os.path.join('Results/average', f'mean_mix_Exp{i}*.npy'))[0]
+    path_poly = glob(os.path.join(path_base, 'average', f'mean_poly_Exp{i}*.npy'))[0]
+    path_mix = glob(os.path.join(path_base, 'average', f'mean_mix_Exp{i}*.npy'))[0]
     mean_poly_all[:,i-1] = np.load(path_poly).flatten()
     mean_mix_all[:,i-1] = np.load(path_mix).flatten()
 
 
 mean_all = np.zeros([9,11],dtype=object)
-mean_all[:,0] = ['rmes', 'Mp', 'Mr','rmes', 'Mp', 'Mr','rmes', 'Mp', 'Mr']
+mean_all[:,0] = ['RMES', 'Mp', 'Mr','rmes', 'Mp', 'Mr','rmes', 'Mp', 'Mr']
 mean_all[:,1:6] = mean_poly_all
 mean_all[:,6:] = mean_mix_all
 
@@ -32,7 +33,7 @@ mean_all[:,6:] = mean_mix_all
 
 def get_latex_line(input_list, print_type='.2f'):
     
-    line = []
+    line = ['&']
     line.append('$'+input_list[0]+'$')
     line.append('&')
     for ele in input_list[1:]:
@@ -49,7 +50,7 @@ def get_latex_line(input_list, print_type='.2f'):
     line.append('\\\ \n')
     return line
 
-save_path = os.path.join('Results/average', 'mean metrics table.txt')
+save_path = os.path.join(path_base, 'average', 'mean metrics table.txt')
 open(save_path, 'w').close()
 
 with open(save_path, "a") as file:
