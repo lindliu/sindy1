@@ -290,7 +290,7 @@ if __name__ == "__main__":
     # coeff_true_mix
     
     
-    directory = 'Results_T'
+    directory = 'Results'
     path_base = os.path.join(f'{directory}/{func_name}')
     os.makedirs(path_base, exist_ok=True)
     
