@@ -1,0 +1,24 @@
+the coefficients will keep if its absolute value >= 0.001 
+columns: GS-SINDy all, GS-SINDy one, SINDy
+
+&Metric&$RMSE$&$Mp$&$Mr$&$RMSE$&$Mp$&$Mr$&$RMSE$&$Mp$&$Mr$\\ 
+
+\midrule
+
+\multirow{6}{*}{\rotatebox[origin=c]{90}{Mixed}} 
+&traj. 1&1.75e-5&1.&1.&1.84e-4&1.&1.&9.30e-1&0.14&1.\\ 
+&traj. 2&9.20e-5&1.&1.&1.18e+0&0.21&1.&3.81e+0&0.18&0.67\\ 
+&traj. 3&3.92e-5&1.&1.&5.41e-5&1.&1.&1.49e+0&0.13&1.\\ 
+&traj. 4&1.19e-4&1.&1.&2.04e-4&1.&1.&5.94e-3&0.33&1.\\ 
+&traj. 5&9.23e-5&1.&1.&1.38e-4&1.&1.&7.60e-3&0.33&1.\\ 
+&traj. 6&4.03e-5&1.&1.&3.07e-4&1.&1.&3.51e-1&0.17&1.\\ 
+
+
+
+*************** Mixed basis functions ***************
+
+*************** gsindy_all: mean of rmse, precision, recall ***************
+6.67e-05, 1.00, 1.00 
+*************** gsindy_one: mean of rmse, precision, recall ***************
+1.97e-01, 0.87, 1.00 *************** sindy: mean of rmse, precision, recall ***************
+1.10e+00, 0.21, 0.94 

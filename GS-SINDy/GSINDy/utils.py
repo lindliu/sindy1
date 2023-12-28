@@ -185,14 +185,43 @@ basis_functions_name_mix0 = [lambda x,y: '1', \
         lambda x,y: 'x^2', lambda x,y: 'xy', lambda x,y: 'y^2', \
         lambda x,y: 'x^3', lambda x,y: 'x^2y', lambda x,y: 'xy^2', lambda x,y: 'y^3', \
         lambda x,y: 'x^4', lambda x,y: '1/x', \
-        lambda x,y: 'sin(x)', lambda x,y: 'cos(x)', lambda x,y: 'exp(x)']
+        lambda x,y: 'sin(x)', lambda x,y: 'cos(x)', lambda x,y: 'e^x']
 
 basis_functions_name_mix1 = [lambda x,y: '1', \
         lambda x,y: 'x', lambda x,y: 'y', \
         lambda x,y: 'x^2', lambda x,y: 'xy', lambda x,y: 'y^2', \
         lambda x,y: 'x^3', lambda x,y: 'x^2y', lambda x,y: 'xy^2', lambda x,y: 'y^3', \
         lambda x,y: 'y^4', lambda x,y: '1/y', \
-        lambda x,y: 'sin(y)', lambda x,y: 'cos(y)', lambda x,y: 'exp(y)']
+        lambda x,y: 'sin(y)', lambda x,y: 'cos(y)', lambda x,y: 'e^y']
+    
+    
+# basis_functions_mix0 = np.array([lambda x,y: 1, \
+#         lambda x,y: x, lambda x,y: y, \
+#         lambda x,y: x**2, lambda x,y: x*y, lambda x,y: y**2, \
+#         lambda x,y: x**3, lambda x,y: x**2*y, lambda x,y: x*y**2, lambda x,y: y**3, \
+#         lambda x,y: np.sin(x), lambda x,y: np.cos(x), lambda x,y: np.sin(y), lambda x,y: np.cos(y), \
+#         lambda x,y: x**4, lambda x,y: 1/x, lambda x,y: np.exp(x)])
+
+# basis_functions_mix1 = np.array([lambda x,y: 1, \
+#         lambda x,y: x, lambda x,y: y, \
+#         lambda x,y: x**2, lambda x,y: x*y, lambda x,y: y**2, \
+#         lambda x,y: x**3, lambda x,y: x**2*y, lambda x,y: x*y**2, lambda x,y: y**3, \
+#         lambda x,y: np.sin(x), lambda x,y: np.cos(x), lambda x,y: np.sin(y), lambda x,y: np.cos(y), \
+#         lambda x,y: y**4, lambda x,y: 1/y, lambda x,y: np.exp(y)])
+
+# basis_functions_name_mix0 = [lambda x,y: '1', \
+#         lambda x,y: 'x', lambda x,y: 'y', \
+#         lambda x,y: 'x^2', lambda x,y: 'xy', lambda x,y: 'y^2', \
+#         lambda x,y: 'x^3', lambda x,y: 'x^2y', lambda x,y: 'xy^2', lambda x,y: 'y^3', \
+#         lambda x,y: 'sin(x)', lambda x,y: 'cos(x)', lambda x,y: 'sin(y)', lambda x,y: 'cos(y)', 
+#         lambda x,y: 'x^4', lambda x,y: '1/x', lambda x,y: 'e^x']
+
+# basis_functions_name_mix1 = [lambda x,y: '1', \
+#         lambda x,y: 'x', lambda x,y: 'y', \
+#         lambda x,y: 'x^2', lambda x,y: 'xy', lambda x,y: 'y^2', \
+#         lambda x,y: 'x^3', lambda x,y: 'x^2y', lambda x,y: 'xy^2', lambda x,y: 'y^3', \
+#         lambda x,y: 'sin(x)', lambda x,y: 'cos(x)', lambda x,y: 'sin(y)', lambda x,y: 'cos(y)', 
+#         lambda x,y: 'y^4', lambda x,y: '1/y', lambda x,y: 'e^y']
     
     
 ############ polynomial basis functions 2d ################
@@ -228,7 +257,7 @@ basis_functions_name_trig = [lambda x,y: '1', \
         lambda x,y: 'x^4', lambda x,y: 'x^3y', lambda x,y: 'x^2y^2', lambda x,y: 'xy^3', lambda x,y: 'y^4', \
         lambda x,y: 'x^5', lambda x,y: 'x^4y', lambda x,y: 'x^3y^2', lambda x,y: 'x^2y^3', lambda x,y: 'xy^4', lambda x,y: 'y^5', \
         lambda x,y: 'sin(x)', lambda x,y: 'sin(y)', lambda x,y: 'cos(x)', lambda x,y: 'cos(y)',\
-        lambda x,y: 'exp(x)', lambda x,y: 'exp(y)']
+        lambda x,y: 'e^x', lambda x,y: 'e^y']
     
     
     
@@ -267,7 +296,7 @@ basis_functions_name_mix0_3d = [
         lambda x,y,z: 'y^2x', lambda x,y,z: 'y^2z', \
         lambda x,y,z: 'z^2x', lambda x,y,z: 'z^2y', \
         lambda x,y,z: 'x^3', lambda x,y,z: 'y^3', lambda x,y,z: 'z^3',  \
-        lambda x,y,z: 'x^4', lambda x,y,z: '1/x', lambda x,y,z: 'exp(x)', lambda x,y,z: 'sin(x)', lambda x,y,z: 'cos(x)']
+        lambda x,y,z: 'x^4', lambda x,y,z: '1/x', lambda x,y,z: 'e^x', lambda x,y,z: 'sin(x)', lambda x,y,z: 'cos(x)']
     
 basis_functions_name_mix1_3d = [
         lambda x,y,z: '1', lambda x,y,z: 'x', lambda x,y,z: 'y', lambda x,y,z: 'z',\
@@ -276,7 +305,7 @@ basis_functions_name_mix1_3d = [
         lambda x,y,z: 'y^2x', lambda x,y,z: 'y^2z', \
         lambda x,y,z: 'z^2x', lambda x,y,z: 'z^2y', \
         lambda x,y,z: 'x^3', lambda x,y,z: 'y^3', lambda x,y,z: 'z^3',  \
-        lambda x,y,z: 'y^4', lambda x,y,z: '1/y', lambda x,y,z: 'exp(y)', lambda x,y,z: 'sin(y)', lambda x,y,z: 'cos(y)']
+        lambda x,y,z: 'y^4', lambda x,y,z: '1/y', lambda x,y,z: 'e^y', lambda x,y,z: 'sin(y)', lambda x,y,z: 'cos(y)']
 
 basis_functions_name_mix2_3d = [
         lambda x,y,z: '1', lambda x,y,z: 'x', lambda x,y,z: 'y', lambda x,y,z: 'z',\
@@ -285,7 +314,7 @@ basis_functions_name_mix2_3d = [
         lambda x,y,z: 'y^2x', lambda x,y,z: 'y^2z', \
         lambda x,y,z: 'z^2x', lambda x,y,z: 'z^2y', \
         lambda x,y,z: 'x^3', lambda x,y,z: 'y^3', lambda x,y,z: 'z^3',  \
-        lambda x,y,z: 'z^4', lambda x,y,z: '1/z', lambda x,y,z: 'exp(z)', lambda x,y,z: 'sin(z)', lambda x,y,z: 'cos(z)']
+        lambda x,y,z: 'z^4', lambda x,y,z: '1/z', lambda x,y,z: 'e^z', lambda x,y,z: 'sin(z)', lambda x,y,z: 'cos(z)']
     
     
 ############ mix same basis functions 3d ################
@@ -311,7 +340,7 @@ basis_functions_name_3d = [
         lambda x,y,z: 'x^3', lambda x,y,z: 'y^3', lambda x,y,z: 'z^3',  \
         lambda x,y,z: 'x^4',  lambda x,y,z: 'y^4',  lambda x,y,z: 'z^4', \
         lambda x,y,z: '1/x', lambda x,y,z: '1/y', lambda x,y,z: '1/z', \
-        lambda x,y,z: 'exp(x)', lambda x,y,z: 'exp(y)', lambda x,y,z: 'exp(z)', \
+        lambda x,y,z: 'e^x', lambda x,y,z: 'e^y', lambda x,y,z: 'e^z', \
         lambda x,y,z: 'sin(x)', lambda x,y,z: 'sin(y)', lambda x,y,z: 'sin(z)', \
         lambda x,y,z: 'cos(x)', lambda x,y,z: 'cos(y)', lambda x,y,z: 'cos(z)']
     
