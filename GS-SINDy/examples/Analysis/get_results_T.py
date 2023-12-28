@@ -462,7 +462,7 @@ if __name__ == "__main__":
             os.makedirs(os.path.join(f'{directory}/average'), exist_ok=True)
             Mean_poly = np.array([[rmse_gsindy_all_poly.mean(), mp_gsindy_all_poly.mean(), mr_gsindy_all_poly.mean()],
                                   [rmse_gsindy_one_poly.mean(), mp_gsindy_one_poly.mean(), mr_gsindy_one_poly.mean()],
-                                  [rmse_sindy_poly.mean(), mp_sindy_poly.mean(), mr_sindy_poly.mean()],])
+                                  [rmse_sindy_poly.mean(), mp_sindy_poly.mean(), mr_sindy_poly.mean()]])
             np.save(os.path.join(f'{directory}/average', f'mean_poly_{func_name}.npy'), Mean_poly)
 
         
