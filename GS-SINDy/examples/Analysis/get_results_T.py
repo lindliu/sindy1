@@ -28,7 +28,7 @@ path_Exp5 = os.path.join(os.getcwd(), '../Exp5_Lorenz/results/')
 path_Exp6 = os.path.join(os.getcwd(), '../Exp6_Pendulum/results/')
 
 
-exp_idx = 6 ###1,2,3,4,5,6
+exp_idx = 1 ###1,2,3,4,5,6
 
 if exp_idx == 1:
     import Lotka_constants as constants
@@ -505,7 +505,7 @@ if __name__ == "__main__":
     features = ['x', 'y', 'z']
     with open(save_path, "a") as file:
         file.write(f'the coefficients will keep if its absolute value >= {constants.precision} \n')
-        file.writelines(['columns: traj1(poly, mix), traj2(poly, mix), traj3(poly, mix), traj4(poly, mix), traj5(poly, mix), traj6(poly, mix)', '\n'])
+        file.writelines(['columns Mixed: traj1, traj2, traj3, traj4, traj5, traj6', '\n'])
         file.writelines(['for each trajectory: true, gsindy all, gsindy one, sindy', '\n'])
         
         for j in range(num_feature):
@@ -534,7 +534,7 @@ if __name__ == "__main__":
         
         with open(save_path, "a") as file:
             file.write(f'the coefficients will keep if its absolute value >= {constants.precision} \n')
-            file.writelines(['columns: traj1(poly, mix), traj2(poly, mix), traj3(poly, mix), traj4(poly, mix), traj5(poly, mix), traj6(poly, mix)', '\n'])
+            file.writelines(['columns Polynomial: traj1, traj2, traj3, traj4, traj5, traj6', '\n'])
             file.writelines(['for each trajectory: true, gsindy all, gsindy one, sindy', '\n'])
             
             for j in range(num_feature):

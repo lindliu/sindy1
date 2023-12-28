@@ -1,5 +1,5 @@
 the coefficients will keep if its absolute value >= 0.0001 
-columns: traj1(poly, mix), traj2(poly, mix), traj3(poly, mix), traj4(poly, mix), traj5(poly, mix), traj6(poly, mix)
+columns Polynomial: traj1, traj2, traj3, traj4, traj5, traj6
 for each trajectory: true, gsindy all, gsindy one, sindy
 
 %*************** feature 0 ***************
