@@ -39,7 +39,7 @@ real_list = constants.real_list
 
 ########## basis functions and optimizer ###########
 basis_type = constants.basis_type
-basis, opt = get_basis_functions(basis_type=basis_type, GSINDY=True)
+basis, opt = get_basis_functions(basis_type=basis_type, GSINDY=False)
 
 basis_functions_list = basis['functions']
 
@@ -69,7 +69,6 @@ Xi = np.zeros([num_feature, num_basis])
 
 Xi[0,:] = SLS(Theta0, DXdt0, threshold_sindy)[...,0]
 Xi[1,:] = SLS(Theta1, DXdt1, threshold_sindy)[...,0]
-
 
 
 ###########################################################
