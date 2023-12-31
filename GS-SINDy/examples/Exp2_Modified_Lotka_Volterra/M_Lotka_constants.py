@@ -9,7 +9,7 @@ Created on Wed Dec 20 20:28:19 2023
 import numpy as np
 from utils import func_M_Lotka_Voltera
 from utils import basis_functions_mix0, basis_functions_mix1, basis_functions_name_mix0, basis_functions_name_mix1, \
-    basis_functions_poly_5, basis_functions_name_poly_5
+    basis_functions_poly_5, basis_functions_name_poly_5, basis_functions_poly_4, basis_functions_name_poly_4
 
 ########## hyper parameters ###########
 ensemble = False
@@ -21,19 +21,20 @@ threshold_group_list = [1e-3, 1e-2]
 threshold_similarity_list = [[1e-3, 1e-2], [1e-1]]
 
 ########## function variable ###########
-dt = .1      ## 2,3,6,8;     1,2,7,9
+dt = .05      ## 2,3,6,8;     1,2,7,9
 t = np.arange(0,10,dt)
 x0_list = [[.4, 1], [.4, 1], [.4, 1], [.4, 1], [.4, 1], [.4, 1]]
-a_list = [(.2, -.6, -.5), (.4, -.8, -.7), (.2, -.6, -1), (.4, -.8, -1), (.4, -1, -1), (.6, -1, -1)]
+# a_list = [(1, 1, -1), (.4, .8, -.7), (.2, .6, -1), (.4, 1, -1), (1, .7, -1), (.6, 1, -.8)]
+a_list = [(1, 1, -1), (.2, .8, -.7), (0, 1, -1), (-.1, 1, -1), (1, .7, -1), (.6, 1, -.8)]
 
 func = func_M_Lotka_Voltera
-real0 = "x'=b*y + a*x^2 + c*x^3 - xy^2"
-real1 = "y'=x + a*y + b*x^2y + c*y^3"
+real0 = "x' = a*x - b*y + c*x(x^2 + y^2)"
+real1 = "y' = b*x + a*y + c*y(x^2 + y^2)"
 real_list = [real0, real1]
 
 
 ########## basis functions and optimizer ###########
-basis_type = 'poly' ##'mix'##
+basis_type = 'mix'##'poly' ##
 
 def get_basis_functions(basis_type, GSINDY=True):
     if GSINDY:
@@ -43,9 +44,9 @@ def get_basis_functions(basis_type, GSINDY=True):
                                          np.array([f(1,1) for f in basis_functions_name_mix1])]     ### corresponding names of the basis functions
             opt = 'SQTL'  ##['Manually', 'SQTL', 'LASSO', 'SR3']
         if basis_type == 'poly':
-            basis_functions_list = [basis_functions_poly_5, basis_functions_poly_5]              ### basis functions for each feature
-            basis_functions_name_list = [np.array([f(1,1) for f in basis_functions_name_poly_5]), \
-                                         np.array([f(1,1) for f in basis_functions_name_poly_5])]     ### corresponding names of the basis functions
+            basis_functions_list = [basis_functions_poly_4, basis_functions_poly_4]              ### basis functions for each feature
+            basis_functions_name_list = [np.array([f(1,1) for f in basis_functions_name_poly_4]), \
+                                         np.array([f(1,1) for f in basis_functions_name_poly_4])]     ### corresponding names of the basis functions
             opt = 'SQTL'  ##['Manually', 'SQTL', 'LASSO', 'SR3']
     else:
         if basis_type == 'mix':
@@ -54,8 +55,8 @@ def get_basis_functions(basis_type, GSINDY=True):
             opt = 'Manually' ## only 'Manually' works
 
         if basis_type == 'poly':
-            basis_functions_list = [basis_functions_poly_5, basis_functions_poly_5]              ### basis functions for each feature
-            basis_functions_name_list = [basis_functions_name_poly_5, basis_functions_name_poly_5]    ### corresponding names of the basis functions
+            basis_functions_list = [basis_functions_poly_4, basis_functions_poly_4]              ### basis functions for each feature
+            basis_functions_name_list = [basis_functions_name_poly_4, basis_functions_name_poly_4]    ### corresponding names of the basis functions
             opt = 'SQTL' ##['Manually', 'SQTL', 'LASSO', 'SR3']
 
     basis = {'functions': basis_functions_list, 'names': basis_functions_name_list}

@@ -17,55 +17,29 @@ def func_Lotka_Voltera(x, t, a, b):
     """
     classical Lotka-Voltera
     
-    dxdt = c0*x + c1*x*y
-    dydt = c2*y + c3*x*y
+    dxdt = a*x + b*x*y
+    dydt = b*y + a*x*y
     
-    c0=1, c1=-1, c2=-1, c3=1.
+    a=1, b=-1
     x0, y0 = 4, 1
-    
-    [0, c0, 0,  0, c1, 0, ...]
-    [0, 0,  c2, 0, c3, 0, ...]
     """
-    # c0, c1, c2, c3 = 1, -1, -1, 1
-    c1 = b
-    c2 = b
-    c0 = a
-    c3 = a
     x1, x2 = x
-    dxdt = [c0*x1 + c1*x1*x2, c2*x2 + c3*x1*x2]
+    dxdt = [a*x1 + b*x1*x2, 
+            b*x2 + a*x1*x2]
     return dxdt
-
 
 def  func_M_Lotka_Voltera(x, t, a, b, c):
     """
     P81, differential equations, dynamical systems, and an introduction to chaos
     Modified Lotka-Voltera
     
-    dxdt = a*x^2 - y - x*(x^2 + y^2) =      -y + a*x^2 - x^3 - xy^2
-    dydt = x + a*y - y*(x^2 + y^2)   = x + a*y                      - x^2y - y^3
-    
-    [0, 0, -1, a, 0, 0, -1,  0, -1,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    [0, 1, a,  0, 0, 0,  0, -1,  0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    dxdt =  a*x - b*y + c*x(x^2 + y^2)
+    dydt =  b*x + a*y + c*y(x^2 + y^2)
     """
     x1, x2 = x
-    dxdt = [b*x2+a*x1**2+c*x1**3-x1*x2**2, x1+a*x2+b*x2*x1**2+c*x2**3]
+    dxdt = [a*x1-b*x2+c*x1**3+c*x1*x2**2, 
+            b*x1+a*x2+c*x2*x1**2+c*x2**3]
     return dxdt
-
-# def  func_M_Lotka_Voltera(x, t, a, b, c):
-#     """
-#     P81, differential equations, dynamical systems, and an introduction to chaos
-#     Modified Lotka-Voltera
-    
-#     dxdt = a*x - y - x*(x^2 + y^2) =      -y + a*x - x^3 - xy^2
-#     dydt = x + a*y - y*(x^2 + y^2)   = x + a*y                      - x^2y - y^3
-    
-    
-#     dxdt = a*x + b*y + c*x*(x^2 + y^2)
-#     dydt = -b*x + a*y + c*y*(x^2 + y^2)
-#     """
-#     x1, x2 = x
-#     dxdt = [a*x1+b*x2+c*x1**3+c*x1*x2**2, b*x2-b*x1+c*x2*x1**2+c*x2**3]
-#     return dxdt
 
 def func_Brusselator(x, t, a, b):
     """
@@ -76,20 +50,20 @@ def func_Brusselator(x, t, a, b):
     
     """
     x1, x2 = x
-    dxdt = [a-4*x1+x1**2*x2, b*x1-x1**2*x2]
+    dxdt = [a-4*x1+x1**2*x2, 
+            b*x1-x1**2*x2]
     return dxdt
 
 def func_Van_der_Pol(x, t, a, b):
     """
     van der pol
     
-    dxdt = 5*(x - y + c0*x^3), c0=-1/3
-    dydt = c1*x,               c1=0.2
+    dxdt = 5*(x - y + a*x^3), c0=-1/3
+    dydt = b*x,               c1=0.2
     """
-    c0 = a
-    c1 = b
     x1, x2 = x
-    dxdt = [5*(x1 - x2 + c0*x1**3), c1*x1]
+    dxdt = [5*(x1 - x2 + a*x1**3), 
+            b*x1]
     return dxdt
 
 def func_Lorenz(x, t, a, b, c, d):
@@ -98,10 +72,12 @@ def func_Lorenz(x, t, a, b, c, d):
     
     dxdt = by+ax,       a=10
     dydt = x(c-z)-y,    b=28
-    dzdt = xy - dz,   c=8/3
+    dzdt = xy + dz,   c=8/3
     """
     x1, x2, x3 = x
-    dxdt = [b*x2+a*x1, x1*(c-x3)-x2, x1*x2+d*x3]
+    dxdt = [b*x2+a*x1, 
+            x1*(c-x3)-x2, 
+            x1*x2+d*x3]
     return dxdt
 
 
@@ -115,11 +91,8 @@ def func_Pendulum(x, t, a, b):
     c0 = -.25, c1=-5.0
     x0, y0 = pi-.1, 0
     """
-    
-    c0 = a
-    c1 = b
     x1, x2 = x
-    dxdt = [x2, c0*x2+c1*np.sin(x1)]
+    dxdt = [x2, a*x2+b*np.sin(x1)]
     return dxdt
 
 ##########################################
@@ -195,35 +168,6 @@ basis_functions_name_mix1 = [lambda x,y: '1', \
         lambda x,y: 'sin(y)', lambda x,y: 'cos(y)', lambda x,y: 'e^y']
     
     
-# basis_functions_mix0 = np.array([lambda x,y: 1, \
-#         lambda x,y: x, lambda x,y: y, \
-#         lambda x,y: x**2, lambda x,y: x*y, lambda x,y: y**2, \
-#         lambda x,y: x**3, lambda x,y: x**2*y, lambda x,y: x*y**2, lambda x,y: y**3, \
-#         lambda x,y: np.sin(x), lambda x,y: np.cos(x), lambda x,y: np.sin(y), lambda x,y: np.cos(y), \
-#         lambda x,y: x**4, lambda x,y: 1/x, lambda x,y: np.exp(x)])
-
-# basis_functions_mix1 = np.array([lambda x,y: 1, \
-#         lambda x,y: x, lambda x,y: y, \
-#         lambda x,y: x**2, lambda x,y: x*y, lambda x,y: y**2, \
-#         lambda x,y: x**3, lambda x,y: x**2*y, lambda x,y: x*y**2, lambda x,y: y**3, \
-#         lambda x,y: np.sin(x), lambda x,y: np.cos(x), lambda x,y: np.sin(y), lambda x,y: np.cos(y), \
-#         lambda x,y: y**4, lambda x,y: 1/y, lambda x,y: np.exp(y)])
-
-# basis_functions_name_mix0 = [lambda x,y: '1', \
-#         lambda x,y: 'x', lambda x,y: 'y', \
-#         lambda x,y: 'x^2', lambda x,y: 'xy', lambda x,y: 'y^2', \
-#         lambda x,y: 'x^3', lambda x,y: 'x^2y', lambda x,y: 'xy^2', lambda x,y: 'y^3', \
-#         lambda x,y: 'sin(x)', lambda x,y: 'cos(x)', lambda x,y: 'sin(y)', lambda x,y: 'cos(y)', 
-#         lambda x,y: 'x^4', lambda x,y: '1/x', lambda x,y: 'e^x']
-
-# basis_functions_name_mix1 = [lambda x,y: '1', \
-#         lambda x,y: 'x', lambda x,y: 'y', \
-#         lambda x,y: 'x^2', lambda x,y: 'xy', lambda x,y: 'y^2', \
-#         lambda x,y: 'x^3', lambda x,y: 'x^2y', lambda x,y: 'xy^2', lambda x,y: 'y^3', \
-#         lambda x,y: 'sin(x)', lambda x,y: 'cos(x)', lambda x,y: 'sin(y)', lambda x,y: 'cos(y)', 
-#         lambda x,y: 'y^4', lambda x,y: '1/y', lambda x,y: 'e^y']
-    
-    
 ############ polynomial basis functions 2d ################
 basis_functions_poly_5 = np.array([lambda x,y: 1, \
         lambda x,y: x, lambda x,y: y, \
@@ -239,6 +183,18 @@ basis_functions_name_poly_5 = [lambda x,y: '1', \
         lambda x,y: 'x^4', lambda x,y: 'x^3y', lambda x,y: 'x^2y^2', lambda x,y: 'xy^3', lambda x,y: 'y^4', \
         lambda x,y: 'x^5', lambda x,y: 'x^4y', lambda x,y: 'x^3y^2', lambda x,y: 'x^2y^3', lambda x,y: 'xy^4', lambda x,y: 'y^5']
 
+basis_functions_poly_4 = np.array([lambda x,y: 1, \
+        lambda x,y: x, lambda x,y: y, \
+        lambda x,y: x**2, lambda x,y: x*y, lambda x,y: y**2, \
+        lambda x,y: x**3, lambda x,y: x**2*y, lambda x,y: x*y**2, lambda x,y: y**3, \
+        lambda x,y: x**4, lambda x,y: x**3*y, lambda x,y: x**2*y**2, lambda x,y: x*y**3, lambda x,y: y**4])
+
+basis_functions_name_poly_4 = [lambda x,y: '1', \
+        lambda x,y: 'x', lambda x,y: 'y', \
+        lambda x,y: 'x^2', lambda x,y: 'xy', lambda x,y: 'y^2', \
+        lambda x,y: 'x^3', lambda x,y: 'x^2y', lambda x,y: 'xy^2', lambda x,y: 'y^3', \
+        lambda x,y: 'x^4', lambda x,y: 'x^3y', lambda x,y: 'x^2y^2', lambda x,y: 'xy^3', lambda x,y: 'y^4']
+    
     
 ############ trigonometric basis functions 2d ################
 basis_functions_trig = np.array([lambda x,y: 1, \

@@ -6,7 +6,6 @@ Created on Mon Dec 18 22:41:15 2023
 @author: dliu
 """
 
-
 import sys
 sys.path.insert(1, '../../GSINDy')
 sys.path.insert(1, '../..')

@@ -28,7 +28,7 @@ path_Exp5 = os.path.join(os.getcwd(), '../Exp5_Lorenz/results/')
 path_Exp6 = os.path.join(os.getcwd(), '../Exp6_Pendulum/results/')
 
 
-exp_idx = 1 ###1,2,3,4,5,6
+exp_idx = 2 ###1,2,3,4,5,6
 
 if exp_idx == 1:
     import Lotka_constants as constants
@@ -84,11 +84,12 @@ elif exp_idx == 2:
     ### true results
     coeff_true_ = np.array(a_list)
     coeff_true_poly = np.zeros([num_traj, num_feature, num_basis_poly])
-    coeff_true_poly[:,0,[2,3,6]] = coeff_true_[:,[1,0,2]]
-    coeff_true_poly[:,1,[2,7,9]] = coeff_true_[:,[0,1,2]]
-
-    coeff_true_poly[:,0,[8]] = [-1]
-    coeff_true_poly[:,1,[1]] = [1]
+    coeff_true_poly[:,0,[1]] = coeff_true_[:,[0]]
+    coeff_true_poly[:,0,[2]] = -coeff_true_[:,[1]]
+    coeff_true_poly[:,0,[6,8]] = coeff_true_[:,[2]]
+    coeff_true_poly[:,1,[1,2]] = coeff_true_[:,[1,0]]
+    coeff_true_poly[:,1,[7,9]] = coeff_true_[:,[2]]
+    
     
     ########## mix basis functions ############
     basis_type = 'mix'
@@ -100,11 +101,11 @@ elif exp_idx == 2:
     ### true results
     coeff_true_ = np.array(a_list)
     coeff_true_mix = np.zeros([num_traj, num_feature, num_basis_mix])
-    coeff_true_mix[:,0,[2,3,6]] = coeff_true_[:,[1,0,2]]
-    coeff_true_mix[:,1,[2,7,9]] = coeff_true_[:,[0,1,2]]
-
-    coeff_true_mix[:,0,[8]] = [-1]
-    coeff_true_mix[:,1,[1]] = [1]
+    coeff_true_mix[:,0,[1]] = coeff_true_[:,[0]]
+    coeff_true_mix[:,0,[2]] = -coeff_true_[:,[1]]
+    coeff_true_mix[:,0,[6,8]] = coeff_true_[:,[2]]
+    coeff_true_mix[:,1,[1,2]] = coeff_true_[:,[1,0]]
+    coeff_true_mix[:,1,[7,9]] = coeff_true_[:,[2]]
     
 elif exp_idx == 3:
     import Brusselator_constants as constants

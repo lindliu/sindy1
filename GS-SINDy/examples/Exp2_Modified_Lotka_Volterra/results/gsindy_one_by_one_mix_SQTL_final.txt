@@ -1,36 +1,37 @@
 ***************result of trajectory 0 ***************
-coef of feature 0: [-0.3511 -0.6000 0.3754 -0.4990 -0.9997 -0.0133 -0.0002 0.3511] 
-basis of feature 0: ['1' 'y' 'x^2' 'x^3' 'xy^2' 'x^4' 'sin(x)' 'cos(x)'] 
-coef of feature 1: [1.0000 0.2000 -0.5995 -0.4999] 
-basis of feature 1: ['x' 'y' 'x^2y' 'y^3'] 
+coef of feature 0: [0.9995 -1.0000 -0.9995 -0.9995] 
+basis of feature 0: ['x' 'y' 'x^3' 'xy^2'] 
+coef of feature 1: [0.9999 1.0000 0.0001 -1.0000 0.0001 -1.0000] 
+basis of feature 1: ['x' 'y' 'x^3' 'x^2y' 'xy^2' 'y^3'] 
 
 ***************result of trajectory 1 ***************
-coef of feature 0: [-0.7999 0.4001 -0.7001 -0.9994] 
-basis of feature 0: ['y' 'x^2' 'x^3' 'xy^2'] 
-coef of feature 1: [1.0001 0.3998 -0.7988 -0.6998] 
+coef of feature 0: [0.1999 -0.8000 0.0000 -0.6997 -0.6997] 
+basis of feature 0: ['x' 'y' 'x^2' 'x^3' 'xy^2'] 
+coef of feature 1: [0.8000 0.2000 -0.6999 -0.7000] 
 basis of feature 1: ['x' 'y' 'x^2y' 'y^3'] 
 
 ***************result of trajectory 2 ***************
-coef of feature 0: [-6.3302 -0.6000 -0.9955 6.1258 -0.2027 0.2026] 
-basis of feature 0: ['x' 'y' 'xy^2' 'sin(x)' 'cos(x)' 'exp(x)'] 
-coef of feature 1: [3.2583 1.0046 0.1402 -0.4794 1.6512 -1.7301 -1.5313] 
-basis of feature 1: ['1' 'x' 'xy^2' 'y^4' 'sin(y)' 'cos(y)' 'exp(y)'] 
+coef of feature 0: [-1.0000 -1.0002 -0.9984] 
+basis of feature 0: ['y' 'x^3' 'xy^2'] 
+coef of feature 1: [1.0001 -0.9980 -0.9999] 
+basis of feature 1: ['x' 'x^2y' 'y^3'] 
 
 ***************result of trajectory 3 ***************
-coef of feature 0: [-0.7998 0.4003 -1.0004 -0.9969] 
-basis of feature 0: ['y' 'x^2' 'x^3' 'xy^2'] 
-coef of feature 1: [1.0002 0.3995 -0.7955 -0.9993] 
-basis of feature 1: ['x' 'y' 'x^2y' 'y^3'] 
+coef of feature 0: [-6.1472 -1.0000 -0.9977 6.0472] 
+basis of feature 0: ['x' 'y' 'xy^2' 'sin(x)'] 
+coef of feature 1: [1.0000 -1.4642 -0.0002 0.0001 2.3279 -0.9953 3.6923 2.3281 -2.3281] 
+basis of feature 1: ['x' 'y' 'x^2' 'xy' 'y^2' 'x^2y' 'sin(y)' 'cos(y)' 'e^y'] 
 
 ***************result of trajectory 4 ***************
-coef of feature 0: [-0.9997 0.4005 -1.0005 -0.9953] 
-basis of feature 0: ['y' 'x^2' 'x^3' 'xy^2'] 
-coef of feature 1: [1.0003 0.3992 -0.9932 -0.9986] 
+coef of feature 0: [-0.0133 0.9995 -0.6952 0.0091 0.0048 -0.9995 -0.0048 -0.9995 -0.0048
+ -0.0003 0.0085] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'y^2' 'x^3' 'x^2y' 'xy^2' 'y^3' 'x^4' 'cos(x)'] 
+coef of feature 1: [0.7000 1.0000 -1.0000 -1.0000] 
 basis of feature 1: ['x' 'y' 'x^2y' 'y^3'] 
 
 ***************result of trajectory 5 ***************
-coef of feature 0: [-0.0008 -0.9998 0.6000 -0.9976 -0.9972] 
-basis of feature 0: ['x' 'y' 'x^2' 'x^3' 'xy^2'] 
-coef of feature 1: [1.0001 0.4194 -0.9976 -0.9707 0.1804] 
-basis of feature 1: ['x' 'y' 'x^2y' 'y^3' 'sin(y)'] 
+coef of feature 0: [0.5998 -1.0000 -0.7998 -0.7998] 
+basis of feature 0: ['x' 'y' 'x^3' 'xy^2'] 
+coef of feature 1: [1.0000 0.6000 -0.8000 -0.8000] 
+basis of feature 1: ['x' 'y' 'x^2y' 'y^3'] 
 

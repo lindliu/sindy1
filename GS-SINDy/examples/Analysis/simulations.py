@@ -26,8 +26,8 @@ from utils import func_Lotka_Voltera, func_M_Lotka_Voltera, func_Brusselator, fu
 from utils import basis_functions_mix0, basis_functions_mix1, basis_functions_name_mix0, basis_functions_name_mix1, \
     basis_functions_poly_5, basis_functions_name_poly_5
 
-from Van_constants import get_basis_functions
-import Van_constants as constants
+from M_Lotka_constants import get_basis_functions
+import M_Lotka_constants as constants
 np.set_printoptions(formatter={'float': lambda x: "{0:.4f}".format(x)})
 
 
@@ -60,7 +60,7 @@ threshold_sindy = .01
 ######################################################
 ################## get data ##########################
 ######################################################
-i = 2
+i = 1
 
 x0 = x0_list[i]
 a = a_list[i]
@@ -70,8 +70,8 @@ _, sol_deriv_, _ = get_deriv(sol_, t_, deriv_spline)
 
 
 ### load Xi ###
-Xi_gsindy_all = np.load(glob(os.path.join(f'../Exp4_Van_der_Pol/results/coeff/gsindy_all_{basis_type}*6.npy'))[0])[i]
-Xi_sindy = np.load(glob(os.path.join(f'../Exp4_Van_der_Pol/results/coeff/sindy_{basis_type}*{i}.npy'))[0])
+Xi_gsindy_all = np.load(glob(os.path.join(f'../Exp2_Modified_Lotka_Volterra/results/coeff/gsindy_all_{basis_type}*6.npy'))[0])[i]
+Xi_sindy = np.load(glob(os.path.join(f'../Exp2_Modified_Lotka_Volterra/results/coeff/sindy_{basis_type}*{i}.npy'))[0])
 
 
 
