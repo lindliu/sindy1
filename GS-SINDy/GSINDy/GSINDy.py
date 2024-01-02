@@ -45,7 +45,6 @@ def SLS(Theta, DXdt, threshold, alpha=.05):
         if np.any(ind_[i]):
             coef[i, ind_[i]] = reg.fit(Theta[:, ind_[i]], DXdt[:, i]).coef_
     Xi = coef.T
-    # Xi[np.abs(Xi)<precision] = 0
 
     return Xi
 
@@ -83,10 +82,8 @@ def plot_distribution(Xi0_group, nth_feature, epoch, basis_functions_name, idx):
     fig, ax = plt.subplots(5,5,figsize=(12,12), constrained_layout=True)
     ax = ax.flatten()
     for i in idx:
-        # for j in range(num_traj):
         ax[i].hist(list(Xi0_group[:,:,i]), alpha = 0.5, label=basis_functions_name[i])
         ax[i].set_title(basis_functions_name[i])
-        # ax[i].legend()
     fig.suptitle(f'{nth_feature}th feature with iteration:{epoch}', fontsize=20)
 
 
@@ -115,8 +112,7 @@ def Axes_transfer(theta_):
 
 
 class GSINDy():
-    def __init__(self, basis, \
-                     num_traj, num_feature, \
+    def __init__(self, basis, num_traj, num_feature, \
                      threshold_sindy=1e-2, threshold_group=1e-3, threshold_similarity=1e-2, \
                      alpha=0.05, deriv_spline=True, max_iter=20, optimizer='Manually', ensemble=False):
         basis_functions_list = basis['functions']
@@ -149,7 +145,6 @@ class GSINDy():
         self.threshold_sindy = threshold_sindy
         self.threshold_group = threshold_group
         self.threshold_similarity = threshold_similarity
-        # self.precision = precision
         self.alpha = alpha
         self.deriv_spline = deriv_spline
         self.max_iter = 20
@@ -191,12 +186,10 @@ class GSINDy():
         length_sub = length*window_per
         
         dt = t[1]-t[0]
-        # num_series = int(100*(1-window_per))*2
         step = (1-window_per)/num_series 
         
         theta0, theta1 = [], []   ### num_series, length
         sol0_deriv, sol1_deriv = [], [] ### num_series, length
-        Xi0_list_, Xi1_list_ = [], []
         for k in range(num_traj):
             for i in range(num_series):
                 # t_new = np.sort(t[0] + np.random.rand(100)*length)
@@ -246,7 +239,6 @@ class GSINDy():
         length_sub = length*window_per
         
         dt = t[1]-t[0]
-        # num_series = int(100*(1-window_per))*2
         step = (1-window_per)/num_series 
         
         theta0, theta1, theta2 = [], [], []   ### num_series, length
@@ -332,9 +324,9 @@ class GSINDy():
                     lib_generalized = Shell_custom_theta(theta=Theta_)###此处Shell_custom_theta只是壳，方便带入Theta_，无实际意义
                     model = ps.SINDy(feature_names=["x", "y"], feature_library=lib_generalized, optimizer=self.optimizer)
                     if self.ensemble:
-                        model.fit(np.ones([1]), t=1, x_dot=dXdt, ensemble=True, quiet=True) ###first 2 inputs has no meanings
+                        model.fit(np.ones([1]), t=1, x_dot=dXdt, ensemble=True, quiet=True) ###first 2 inputs has no meanings, since theta and dXdt has been fixed
                     else:
-                        model.fit(np.ones([1]), t=1, x_dot=dXdt) ###first 2 inputs has no meanings
+                        model.fit(np.ones([1]), t=1, x_dot=dXdt) ###first 2 inputs has no meanings, since theta and dXdt has been fixed
                     Xi0_ = model.coefficients()[0,...]
         
         
@@ -379,8 +371,6 @@ class GSINDy():
             for q in range(num_basis):
                 i_min = self.find_interval(Xi0_group[p,:,q], tail)
                 Xi0_group_r[p,:,q] = Xi0_group[p, i_min:num_series-(tail-i_min), q]
-                # Xi0_group[p,tail:,q] = Xi0_group[p, i_min:num_series-(tail-i_min), q]
-                # Xi0_group[p,:tail,q] = 0  ##only use statistical meaning later, so doesn't mater where are zeros
                 
         ### group threshold ###
         idx_activ = np.abs(Xi0_group_r.mean(1)).mean(0)>self.threshold_group
@@ -481,13 +471,6 @@ class GSINDy():
             num_diff_ = diff_basis[k].sum()*self.num_traj
             Xi_final[:,k,diff_basis[k]] = Xi0_[:num_diff_].reshape([self.num_traj,-1])
             Xi_final[:,k,same_basis[k]] = Xi0_[num_diff_:]
-            
-            
-        # Xi_final[np.abs(Xi_final)<self.precision] = 0
-        
-        # mask_tol = (Xi_final!=0).any(0)
-        # all_basis[0] = np.logical_and(mask_tol[0],all_basis[0])
-        # all_basis[1] = np.logical_and(mask_tol[1],all_basis[1])
     
         if split_basis:
             self.all_basis = copy.deepcopy(all_basis)

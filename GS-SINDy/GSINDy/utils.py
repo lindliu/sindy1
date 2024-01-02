@@ -168,7 +168,7 @@ basis_functions_name_mix1 = [lambda x,y: '1', \
         lambda x,y: 'sin(y)', lambda x,y: 'cos(y)', lambda x,y: 'e^y']
     
     
-############ polynomial basis functions 2d ################
+############ polynomial basis functions(degree 5) 2d ################
 basis_functions_poly_5 = np.array([lambda x,y: 1, \
         lambda x,y: x, lambda x,y: y, \
         lambda x,y: x**2, lambda x,y: x*y, lambda x,y: y**2, \
@@ -182,7 +182,7 @@ basis_functions_name_poly_5 = [lambda x,y: '1', \
         lambda x,y: 'x^3', lambda x,y: 'x^2y', lambda x,y: 'xy^2', lambda x,y: 'y^3', \
         lambda x,y: 'x^4', lambda x,y: 'x^3y', lambda x,y: 'x^2y^2', lambda x,y: 'xy^3', lambda x,y: 'y^4', \
         lambda x,y: 'x^5', lambda x,y: 'x^4y', lambda x,y: 'x^3y^2', lambda x,y: 'x^2y^3', lambda x,y: 'xy^4', lambda x,y: 'y^5']
-
+############ polynomial basis functions(degree 4) 2d ################
 basis_functions_poly_4 = np.array([lambda x,y: 1, \
         lambda x,y: x, lambda x,y: y, \
         lambda x,y: x**2, lambda x,y: x*y, lambda x,y: y**2, \

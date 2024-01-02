@@ -56,7 +56,6 @@ def sindy_2d_train(func, t, x0_list, a_list, real_list, suffix, basis, precision
     open(save_path, 'w').close()
     
     for idx in range(len(model_best_list)):
-        # coef = model_best_list[idx].coefficients()
         coef = model_best_list[idx]
         np.save(os.path.join(path_base, f'coeff/sindy_{suffix}_{idx}.npy'), coef)
 
