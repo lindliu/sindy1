@@ -95,6 +95,24 @@ def func_Pendulum(x, t, a, b):
     dxdt = [x2, a*x2+b*np.sin(x1)]
     return dxdt
 
+
+def func_FitzHugh(x, t, a, b, c, d):
+    """
+    P272, differential equations, dynamical systems, and an introduction to chaos
+    FitzHugh–Nagumo model
+    
+    dxdt = x + y - 1/3*x^3 + d
+    dydt = a*x + by + c 
+    
+    0<3/2(1-a)<b<1
+    x0, y0 = 1, -1
+    """
+    
+    x1, x2 = x
+    dxdt = [x1 + x2 - 1/3*x1**3 + d, 
+            a*x1 + b*x2 + c]
+    return dxdt
+    
 ##########################################
 ######### obtain basis functions #########
 ##########################################

@@ -13,6 +13,7 @@ sys.path.insert(1, '../Exp3_Brusselator')
 sys.path.insert(1, '../Exp4_Van_der_Pol')
 sys.path.insert(1, '../Exp5_Lorenz')
 sys.path.insert(1, '../Exp6_Pendulum')
+sys.path.insert(1, '../Exp7_FitzHugh')
 sys.path.insert(1, '../../GSINDy')
 
 import os
@@ -26,9 +27,9 @@ path_Exp3 = os.path.join(os.getcwd(), '../Exp3_Brusselator/results/')
 path_Exp4 = os.path.join(os.getcwd(), '../Exp4_Van_der_Pol/results/')
 path_Exp5 = os.path.join(os.getcwd(), '../Exp5_Lorenz/results/')
 path_Exp6 = os.path.join(os.getcwd(), '../Exp6_Pendulum/results/')
+path_Exp7 = os.path.join(os.getcwd(), '../Exp7_FitzHugh/results/')
 
-
-exp_idx = 2 ###1,2,3,4,5,6
+exp_idx = 7 ###1,2,3,4,5,6,7
 
 if exp_idx == 1:
     import Lotka_constants as constants
@@ -253,6 +254,46 @@ elif exp_idx == 6:
     coeff_true_mix[:,1,[2,21]] = coeff_true_[:,[0,1]]
     
     coeff_true_mix[:,0,[2]] = [1]
+    
+   
+elif exp_idx == 7:
+    import FitzHugh_constants as constants
+    from FitzHugh_constants import get_basis_functions
+    
+    func_name = 'Exp7_FitzHugh'
+    path_data = path_Exp7
+    num_traj, num_feature = 6, 2
+    a_list = constants.a_list
+    
+    ########## poly basis functions ############
+    basis_type = 'poly'
+    basis, opt = get_basis_functions(basis_type, GSINDY=True)
+    suffix_poly = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
+    basis_function_name_poly = np.array(basis['names'])
+    num_basis_poly = basis_function_name_poly.shape[1]
+
+    ### true results
+    coeff_true_ = np.array(a_list)
+    coeff_true_poly = np.zeros([num_traj, num_feature, num_basis_poly])
+    coeff_true_poly[:,0,[0]] = coeff_true_[:,[3]]
+    coeff_true_poly[:,1,[0,1,2]] = coeff_true_[:,[2,0,1]]
+    
+    coeff_true_poly[:,0,[1,2,6]] = [1,1,-1/3]
+    
+    ########## mix basis functions ############
+    basis_type = 'mix'
+    basis, opt = get_basis_functions(basis_type, GSINDY=True)
+    suffix_mix = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
+    basis_function_name_mix = np.array(basis['names'])
+    num_basis_mix = basis_function_name_mix.shape[1]
+
+    ### true results
+    coeff_true_ = np.array(a_list)
+    coeff_true_mix = np.zeros([num_traj, num_feature, num_basis_mix])
+    coeff_true_mix[:,0,[0]] = coeff_true_[:,[3]]
+    coeff_true_mix[:,1,[0,1,2]] = coeff_true_[:,[2,0,1]]
+    
+    coeff_true_mix[:,0,[1,2,6]] = [1,1,-1/3]
     
     
 assert num_traj == len(a_list)
@@ -552,52 +593,52 @@ if __name__ == "__main__":
         
     
     
-    # ### plot real coefficients vs predicted 
-    # os.makedirs(os.path.join(path_base, 'figures'), exist_ok=True)
-    # for i in range(num_traj):
-    #     fig, ax = plt.subplots(3,num_feature,figsize=[10,8])
-    #     fig.suptitle(f'{func_name} {suffix_mix} with trajectory {i}')
-    #     basis_idx = np.arange(num_basis_mix)
-    #     for j in range(num_feature):
-    #         ax[0,j].scatter(basis_idx, coeff_true_mix[i,j,:], c='b', alpha=.3)
-    #         ax[0,j].scatter(basis_idx, coeff_gsindy_all_mix[i,j,:], c='r', alpha=.3)
-    #         ax[0,j].set_title(f'{j}th feature: True vs GS-SINDy all')
-    #         ax[0,j].set_xlabel('basis functions index')
+    ### plot real coefficients vs predicted 
+    os.makedirs(os.path.join(path_base, 'figures'), exist_ok=True)
+    for i in range(num_traj):
+        fig, ax = plt.subplots(3,num_feature,figsize=[10,8])
+        fig.suptitle(f'{func_name} {suffix_mix} with trajectory {i}')
+        basis_idx = np.arange(num_basis_mix)
+        for j in range(num_feature):
+            ax[0,j].scatter(basis_idx, coeff_true_mix[i,j,:], c='b', alpha=.3)
+            ax[0,j].scatter(basis_idx, coeff_gsindy_all_mix[i,j,:], c='r', alpha=.3)
+            ax[0,j].set_title(f'{j}th feature: True vs GS-SINDy all')
+            ax[0,j].set_xlabel('basis functions index')
             
-    #         ax[1,j].scatter(basis_idx, coeff_true_mix[i,j,:], c='b', alpha=.3)
-    #         ax[1,j].scatter(basis_idx, coeff_gsindy_one_mix[i,j,:], c='r', alpha=.3)
-    #         ax[1,j].set_title(f'{j}th feature: True vs GS-SINDy one')
+            ax[1,j].scatter(basis_idx, coeff_true_mix[i,j,:], c='b', alpha=.3)
+            ax[1,j].scatter(basis_idx, coeff_gsindy_one_mix[i,j,:], c='r', alpha=.3)
+            ax[1,j].set_title(f'{j}th feature: True vs GS-SINDy one')
         
-    #         ax[2,j].scatter(basis_idx, coeff_true_mix[i,j,:], c='b', alpha=.3)
-    #         ax[2,j].scatter(basis_idx, coeff_sindy_mix[i,j,:], c='r', alpha=.3)
-    #         ax[2,j].set_title(f'{j}th feature: True vs SINDy')
+            ax[2,j].scatter(basis_idx, coeff_true_mix[i,j,:], c='b', alpha=.3)
+            ax[2,j].scatter(basis_idx, coeff_sindy_mix[i,j,:], c='r', alpha=.3)
+            ax[2,j].set_title(f'{j}th feature: True vs SINDy')
             
-    #     fig.tight_layout()
-    #     # fig.subplots_adjust(top=0.88)
-    #     fig.savefig(os.path.join(path_base, f'figures/{func_name} {suffix_mix} with trajectory {i}'), dpi=100)
+        fig.tight_layout()
+        # fig.subplots_adjust(top=0.88)
+        fig.savefig(os.path.join(path_base, f'figures/{func_name} {suffix_mix} with trajectory {i}'), dpi=100)
         
         
-    #     if exp_idx!=6:
-    #         fig, ax = plt.subplots(3,num_feature,figsize=[10,8])
-    #         fig.suptitle(f'{func_name} {suffix_poly} with trajectory {i}')
-    #         basis_idx = np.arange(num_basis_poly)
-    #         for j in range(num_feature):
-    #             ax[0,j].scatter(basis_idx, coeff_true_poly[i,j,:], c='b', alpha=.3)
-    #             ax[0,j].scatter(basis_idx, coeff_gsindy_all_poly[i,j,:], c='r', alpha=.3)
-    #             ax[0,j].set_title(f'{j}th feature: True vs GS-SINDy all')
-    #             ax[0,j].set_xlabel('basis functions index')
+        if exp_idx!=6:
+            fig, ax = plt.subplots(3,num_feature,figsize=[10,8])
+            fig.suptitle(f'{func_name} {suffix_poly} with trajectory {i}')
+            basis_idx = np.arange(num_basis_poly)
+            for j in range(num_feature):
+                ax[0,j].scatter(basis_idx, coeff_true_poly[i,j,:], c='b', alpha=.3)
+                ax[0,j].scatter(basis_idx, coeff_gsindy_all_poly[i,j,:], c='r', alpha=.3)
+                ax[0,j].set_title(f'{j}th feature: True vs GS-SINDy all')
+                ax[0,j].set_xlabel('basis functions index')
                 
-    #             ax[1,j].scatter(basis_idx, coeff_true_poly[i,j,:], c='b', alpha=.3)
-    #             ax[1,j].scatter(basis_idx, coeff_gsindy_one_poly[i,j,:], c='r', alpha=.3)
-    #             ax[1,j].set_title(f'{j}th feature: True vs GS-SINDy one')
+                ax[1,j].scatter(basis_idx, coeff_true_poly[i,j,:], c='b', alpha=.3)
+                ax[1,j].scatter(basis_idx, coeff_gsindy_one_poly[i,j,:], c='r', alpha=.3)
+                ax[1,j].set_title(f'{j}th feature: True vs GS-SINDy one')
 
-    #             ax[2,j].scatter(basis_idx, coeff_true_poly[i,j,:], c='b', alpha=.3)
-    #             ax[2,j].scatter(basis_idx, coeff_sindy_poly[i,j,:], c='r', alpha=.3)
-    #             ax[2,j].set_title(f'{j}th feature: True vs SINDy')
+                ax[2,j].scatter(basis_idx, coeff_true_poly[i,j,:], c='b', alpha=.3)
+                ax[2,j].scatter(basis_idx, coeff_sindy_poly[i,j,:], c='r', alpha=.3)
+                ax[2,j].set_title(f'{j}th feature: True vs SINDy')
                 
 
-    #         fig.tight_layout()
-    #         # fig.subplots_adjust(top=0.88)
-    #         fig.savefig(os.path.join(path_base, f'figures/{func_name} {suffix_poly} with trajectory {i}'), dpi=200)
+            fig.tight_layout()
+            # fig.subplots_adjust(top=0.88)
+            fig.savefig(os.path.join(path_base, f'figures/{func_name} {suffix_poly} with trajectory {i}'), dpi=200)
         
         

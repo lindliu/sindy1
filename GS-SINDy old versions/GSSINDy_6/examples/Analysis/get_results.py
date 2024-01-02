@@ -12,6 +12,8 @@ sys.path.insert(1, '../Exp2_Modified_Lotka_Volterra')
 sys.path.insert(1, '../Exp3_Brusselator')
 sys.path.insert(1, '../Exp4_Van_der_Pol')
 sys.path.insert(1, '../Exp5_Lorenz')
+sys.path.insert(1, '../Exp6_Pendulum')
+sys.path.insert(1, '../Exp7_FitzHugh')
 sys.path.insert(1, '../../GSINDy')
 
 import os
@@ -24,9 +26,11 @@ path_Exp2 = os.path.join(os.getcwd(), '../Exp2_Modified_Lotka_Volterra/results/'
 path_Exp3 = os.path.join(os.getcwd(), '../Exp3_Brusselator/results/')
 path_Exp4 = os.path.join(os.getcwd(), '../Exp4_Van_der_Pol/results/')
 path_Exp5 = os.path.join(os.getcwd(), '../Exp5_Lorenz/results/')
+path_Exp6 = os.path.join(os.getcwd(), '../Exp6_Pendulum/results/')
+path_Exp7 = os.path.join(os.getcwd(), '../Exp7_FitzHugh/results/')
 
 
-exp_idx = 5 ###1,2,3,4,5
+exp_idx = 7 ###1,2,3,4,5
 
 if exp_idx == 1:
     import Lotka_constants as constants
@@ -228,6 +232,70 @@ elif exp_idx == 5:
     coeff_true_mix[:,2,[7]] = [1]
     
 
+elif exp_idx == 6:
+    import Pendulum_constants as constants
+    from Pendulum_constants import get_basis_functions
+    
+    func_name = 'Exp6_Pendulum'
+    path_data = path_Exp6
+    num_traj, num_feature = 6, 2
+    a_list = constants.a_list
+    
+    ########## mix basis functions ############
+    basis_type = 'mix'
+    basis, opt = get_basis_functions(basis_type, GSINDY=True)
+    suffix_mix = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
+    basis_function_name_mix = np.array(basis['names'])
+    num_basis_mix = basis_function_name_mix.shape[1]
+
+    ### true results
+    coeff_true_ = np.array(a_list)
+    coeff_true_mix = np.zeros([num_traj, num_feature, num_basis_mix])
+    coeff_true_mix[:,1,[2,21]] = coeff_true_[:,[0,1]]
+    
+    coeff_true_mix[:,0,[2]] = [1]
+    
+
+elif exp_idx == 7:
+    import FitzHugh_constants as constants
+    from FitzHugh_constants import get_basis_functions
+    
+    func_name = 'Exp7_FitzHugh'
+    path_data = path_Exp7
+    num_traj, num_feature = 6, 2
+    a_list = constants.a_list
+    
+    ########## poly basis functions ############
+    basis_type = 'poly'
+    basis, opt = get_basis_functions(basis_type, GSINDY=True)
+    suffix_poly = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
+    basis_function_name_poly = np.array(basis['names'])
+    num_basis_poly = basis_function_name_poly.shape[1]
+
+    ### true results
+    coeff_true_ = np.array(a_list)
+    coeff_true_poly = np.zeros([num_traj, num_feature, num_basis_poly])
+    coeff_true_poly[:,0,[0]] = coeff_true_[:,[3]]
+    coeff_true_poly[:,1,[0,1,2]] = coeff_true_[:,[2,0,1]]
+    
+    coeff_true_poly[:,0,[1,2,6]] = [1,1,-1/3]
+    
+    ########## mix basis functions ############
+    basis_type = 'mix'
+    basis, opt = get_basis_functions(basis_type, GSINDY=True)
+    suffix_mix = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
+    basis_function_name_mix = np.array(basis['names'])
+    num_basis_mix = basis_function_name_mix.shape[1]
+
+    ### true results
+    coeff_true_ = np.array(a_list)
+    coeff_true_mix = np.zeros([num_traj, num_feature, num_basis_mix])
+    coeff_true_mix[:,0,[0]] = coeff_true_[:,[3]]
+    coeff_true_mix[:,1,[0,1,2]] = coeff_true_[:,[2,0,1]]
+    
+    coeff_true_mix[:,0,[1,2,6]] = [1,1,-1/3]
+    
+    
 assert num_traj == len(a_list)
 if __name__ == "__main__":
     

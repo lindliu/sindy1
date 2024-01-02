@@ -1,0 +1,36 @@
+the coefficients will keep if its absolute value >= 0.001 
+columns: traj1(poly, mix), traj2(poly, mix), traj3(poly, mix), traj4(poly, mix), traj5(poly, mix), traj6(poly, mix)
+
+*************** sindy ***************
+&$RMSE$&3.83e+0&3.92e+0&4.07e+0&4.69e+0&4.35e+0&5.13e+0&inf&inf&inf&inf&inf&inf\\ 
+&$Mp$&0.36&0.29&0.22&1.&0.25&0.33&0.&0.&0.&0.&0.&0.\\ 
+&$Mr$&0.57&0.71&0.71&0.8&0.71&0.57&nan&nan&nan&nan&nan&nan\\ 
+
+*************** gsindy one ***************
+&$RMSE$&3.85e+0&3.80e+0&3.94e+0&4.69e+0&3.69e+0&5.13e+0&inf&inf&inf&inf&inf&inf\\ 
+&$Mp$&1.&1.&0.4&1.&1.&0.33&0.&0.&0.&0.&0.&0.\\ 
+&$Mr$&0.57&0.57&0.57&0.8&0.57&0.57&nan&nan&nan&nan&nan&nan\\ 
+
+*************** gsindy all ***************
+&$RMSE$&3.85e+0&3.80e+0&3.82e+0&4.69e+0&3.69e+0&4.67e+0&inf&inf&inf&inf&inf&inf\\ 
+&$Mp$&1.&1.&1.&1.&1.&1.&0.&0.&0.&0.&0.&0.\\ 
+&$Mr$&0.57&0.57&0.57&0.8&0.57&0.57&nan&nan&nan&nan&nan&nan\\ 
+
+
+
+*************** Polynomial basis functions ***************
+*************** sindy: mean of rmse, precision, recall ***************
+4.33e+00, 0.41, 0.68 
+*************** gsindy_one: mean of rmse, precision, recall ***************
+4.18e+00, 0.79, 0.61 
+*************** gsindy_all: mean of rmse, precision, recall ***************
+4.09e+00, 1.00, 0.61 
+
+
+*************** Mixed basis functions ***************
+*************** sindy: mean of rmse, precision, recall ***************
+inf, 0.00, nan 
+*************** gsindy_one: mean of rmse, precision, recall ***************
+inf, 0.00, nan 
+*************** gsindy_all: mean of rmse, precision, recall ***************
+inf, 0.00, nan 
