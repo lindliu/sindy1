@@ -1,36 +1,36 @@
 ***************result of trajectory 0 ***************
-coef of feature 0: [0.0999 0.9996 1.0000 -0.3333 0.0003] 
-basis of feature 0: ['1' 'x' 'y' 'x^3' 'sin(x)'] 
-coef of feature 1: [0.9000 -1.0000 -0.2000] 
+coef of feature 0: [0.4013 1.0027 -1.0023 -0.3342] 
+basis of feature 0: ['1' 'x' 'y' 'x^3'] 
+coef of feature 1: [0.0560 0.0800 -0.0640] 
 basis of feature 1: ['1' 'x' 'y'] 
 
 ***************result of trajectory 1 ***************
-coef of feature 0: [0.0497 0.9989 1.0000 -0.3333 0.0009 0.0002] 
-basis of feature 0: ['1' 'x' 'y' 'x^3' 'sin(x)' 'e^x'] 
-coef of feature 1: [0.9500 -0.9000 -0.1000] 
+coef of feature 0: [0.7145 0.9986 -1.0069 -0.3348] 
+basis of feature 0: ['1' 'x' 'y' 'x^3'] 
+coef of feature 1: [0.0318 0.0401 -0.0279] 
 basis of feature 1: ['1' 'x' 'y'] 
 
 ***************result of trajectory 2 ***************
-coef of feature 0: [0.0998 0.9992 1.0000 -0.3333 0.0006 0.0002] 
-basis of feature 0: ['1' 'x' 'y' 'x^3' 'sin(x)' 'e^x'] 
-coef of feature 1: [0.8000 -1.0000 -0.4000] 
-basis of feature 1: ['1' 'x' 'y'] 
-
-***************result of trajectory 3 ***************
-coef of feature 0: [0.5000 1.0000 1.0000 -0.3333] 
+coef of feature 0: [0.7626 0.9552 -1.0039 -0.3301] 
 basis of feature 0: ['1' 'x' 'y' 'x^3'] 
-coef of feature 1: [0.2000] 
+coef of feature 1: [0.0400] 
 basis of feature 1: ['x'] 
 
-***************result of trajectory 4 ***************
-coef of feature 0: [-0.5000 1.0000 1.0000 -0.3333] 
+***************result of trajectory 3 ***************
+coef of feature 0: [0.6029 1.0034 -1.0036 -0.3345] 
 basis of feature 0: ['1' 'x' 'y' 'x^3'] 
-coef of feature 1: [0.4000 1.2000 0.3000] 
+coef of feature 1: [0.0500 0.0600 -0.0600] 
+basis of feature 1: ['1' 'x' 'y'] 
+
+***************result of trajectory 4 ***************
+coef of feature 0: [0.7042 1.0038 -1.0044 -0.3347] 
+basis of feature 0: ['1' 'x' 'y' 'x^3'] 
+coef of feature 1: [0.0400 0.0600 -0.0480] 
 basis of feature 1: ['1' 'x' 'y'] 
 
 ***************result of trajectory 5 ***************
-coef of feature 0: [0.6000 1.0000 1.0000 -0.3333] 
+coef of feature 0: [0.7034 1.0035 -1.0037 -0.3346] 
 basis of feature 0: ['1' 'x' 'y' 'x^3'] 
-coef of feature 1: [0.1000 0.4000 0.3000] 
+coef of feature 1: [0.0420 0.0500 -0.0180] 
 basis of feature 1: ['1' 'x' 'y'] 
 

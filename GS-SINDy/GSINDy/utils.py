@@ -99,17 +99,18 @@ def func_Pendulum(x, t, a, b):
 def func_FitzHugh(x, t, a, b, c, d):
     """
     P272, differential equations, dynamical systems, and an introduction to chaos
+    wikipedia
     FitzHugh–Nagumo model
     
-    dxdt = x + y - 1/3*x^3 + d
-    dydt = a*x + by + c 
+    dxdt = x - y - 1/3*x^3 + d
+    dydt = a*x + b*y + c 
     
     0<3/2(1-a)<b<1
     x0, y0 = 1, -1
     """
     
     x1, x2 = x
-    dxdt = [x1 + x2 - 1/3*x1**3 + d, 
+    dxdt = [x1 - x2 - 1/3*x1**3 + d, 
             a*x1 + b*x2 + c]
     return dxdt
     
@@ -212,7 +213,18 @@ basis_functions_name_poly_4 = [lambda x,y: '1', \
         lambda x,y: 'x^2', lambda x,y: 'xy', lambda x,y: 'y^2', \
         lambda x,y: 'x^3', lambda x,y: 'x^2y', lambda x,y: 'xy^2', lambda x,y: 'y^3', \
         lambda x,y: 'x^4', lambda x,y: 'x^3y', lambda x,y: 'x^2y^2', lambda x,y: 'xy^3', lambda x,y: 'y^4']
-    
+############ polynomial basis functions(degree 3) 2d ################
+basis_functions_poly_3 = np.array([lambda x,y: 1, \
+        lambda x,y: x, lambda x,y: y, \
+        lambda x,y: x**2, lambda x,y: x*y, lambda x,y: y**2, \
+        lambda x,y: x**3, lambda x,y: x**2*y, lambda x,y: x*y**2, lambda x,y: y**3])
+
+basis_functions_name_poly_3 = [lambda x,y: '1', \
+        lambda x,y: 'x', lambda x,y: 'y', \
+        lambda x,y: 'x^2', lambda x,y: 'xy', lambda x,y: 'y^2', \
+        lambda x,y: 'x^3', lambda x,y: 'x^2y', lambda x,y: 'xy^2', lambda x,y: 'y^3']
+        
+        
     
 ############ trigonometric basis functions 2d ################
 basis_functions_trig = np.array([lambda x,y: 1, \

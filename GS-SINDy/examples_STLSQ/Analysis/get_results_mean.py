@@ -14,27 +14,28 @@ from glob import glob
 
 path_base = os.path.join('Results')
 
-mean_mix_all = np.zeros([9,6])
-for i in [1,2,3,4,5,6]:
-    path_mix = glob(os.path.join(path_base, 'average', f'mean_mix_Exp{i}*.npy'))[0]
-    mean_mix_all[:,i-1] = np.load(path_mix).flatten()
+mean_mix_all = np.zeros([9,7])
+for i, idx in enumerate([1,2,3,4,5,6,7]):
+    path_mix = glob(os.path.join(path_base, 'average', f'mean_mix_Exp{idx}*.npy'))[0]
+    mean_mix_all[:,i] = np.load(path_mix).flatten()
 
-mean_poly_all = np.zeros([9,5])
-for i in [1,2,3,4,5]:
-    path_poly = glob(os.path.join(path_base, 'average', f'mean_poly_Exp{i}*.npy'))[0]
-    mean_poly_all[:,i-1] = np.load(path_poly).flatten()
+mean_poly_all = np.zeros([9,6])
+for i, idx in enumerate([1,2,3,4,5,7]):
+    path_poly = glob(os.path.join(path_base, 'average', f'mean_poly_Exp{idx}*.npy'))[0]
+    mean_poly_all[:,i] = np.load(path_poly).flatten()
     
     
-mean_all = np.zeros([9,12],dtype=object)
+mean_all = np.zeros([9,14],dtype=object)
 mean_all[:,0] = ['$RMES$', '$Mp$', '$Mr$', '$RMES$', '$Mp$', '$Mr$', '$RMES$', '$Mp$', '$Mr$']
-mean_all[:,1:7] = mean_mix_all
-mean_all[:,7:] = mean_poly_all
+mean_all[:,1:8] = mean_mix_all
+mean_all[:,8:] = mean_poly_all
 
 mean_all = mean_all.T
 
-table_mean_all = np.zeros([12,10], dtype=object)
-table_mean_all[:,0] = ['Metric', 'Lotka-Volterra', 'Modified Lotka-Volterra', 'Brusselator','Van der Pol','Lorenz', 'Pendulum', \
-                      'Lotka-Volterra', 'Modified Lotka-Volterra', 'Brusselator','Van der Pol','Lorenz']
+table_mean_all = np.zeros([14,10], dtype=object)
+table_mean_all[:,0] = ['Metric', \
+                       'Lotka-Volterra', 'Modified Lotka-Volterra', 'Brusselator','Van der Pol','Lorenz', 'Pendulum', 'FitzHugh', \
+                       'Lotka-Volterra', 'Modified Lotka-Volterra', 'Brusselator','Van der Pol','Lorenz', 'FitzHugh']
 table_mean_all[:,1:] = mean_all
 
 def get_latex_line(input_list):
@@ -70,14 +71,14 @@ with open(save_path, "a") as file:
     line_first.append("\\\ \n")
     file.writelines(line_first)
     file.writelines(['\n', '\midrule', '\n','\n'])
-    file.write('\multirow{6}{*}{\\rotatebox[origin=c]{90}{Mixed}} \n')
-    for i in range(1,7):
+    file.write('\multirow{7}{*}{\\rotatebox[origin=c]{90}{Mixed}} \n')
+    for i in range(1,8):
         line_ = get_latex_line(table_mean_all[i,:])
         file.writelines(line_)
         
     file.writelines(['\n', '\midrule', '\n','\n'])
-    file.write('\multirow{5}{*}{\\rotatebox[origin=c]{90}{Polynomial}} \n')
-    for i in range(7,12):
+    file.write('\multirow{6}{*}{\\rotatebox[origin=c]{90}{Polynomial}} \n')
+    for i in range(8,14):
         line_ = get_latex_line(table_mean_all[i,:])
         file.writelines(line_)
             
