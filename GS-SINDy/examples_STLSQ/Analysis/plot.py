@@ -82,8 +82,6 @@ plt.ylabel('$\hat{y}(t)$')
 
 
 
-
-
 from mpl_toolkits.mplot3d import Axes3D
 
 start1, end1 = 0, 35
@@ -151,7 +149,5 @@ ax.get_proj = lambda: np.dot(Axes3D.get_proj(ax), np.diag([1, 0.5, 1, 1]))
 
 ax.view_init(elev=41, azim=-89)  # Adjust the angles as needed
 plt.savefig('demo.pdf')
-
-
 
 
