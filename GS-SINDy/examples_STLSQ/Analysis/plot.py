@@ -81,51 +81,76 @@ plt.ylabel('$\hat{y}(t)$')
 
 
 
+
+
+
+from mpl_toolkits.mplot3d import Axes3D
+
+start1, end1 = 0, 35
+start2, end2 = 20, 60
+start3, end3 = 45, 80
+ratio1 = .30
+ratio2 = .60
+ 
 ax = plt.figure(2).add_subplot(projection='3d')
-ax.plot(t[:56], 1*np.ones_like(t)[:56], sol_[:56,1], c='c', alpha=.7)
-ax.plot(t[12:68], 2*np.ones_like(t)[12:68], sol_[12:68,1], c='y', alpha=.7)
-ax.plot(t[24:80], 3*np.ones_like(t)[24:80], sol_[24:80,1], c='orange', alpha=.7)
-ax.plot(t, 4*np.ones_like(t), sol_[:,1], c='k')
+ax.plot(t[start1:end1], 0*np.zeros_like(t)[start1:end1], sol_[start1:end1,1], c='c', alpha=.5)
+ax.plot(t[start2:end2], 3*ratio1*np.ones_like(t)[start2:end2], sol_[start2:end2,1], c='orange', alpha=.5)
+ax.plot(t[start3:end3], 3*ratio2*np.ones_like(t)[start3:end3], sol_[start3:end3,1], c='r', alpha=.5)
+ax.plot(t, 3*np.ones_like(t), sol_[:,1], c='k')
 
 
-ax.plot(t[0]*np.ones(40), np.linspace(1, 4, 40), sol_[0,1]*np.ones(40), '--', c='c', alpha=.5)
-ax.plot(t[55]*np.ones(40), np.linspace(1, 4, 40), sol_[55,1]*np.ones(40), '--', c='c', alpha=.5)
+ax.plot(t[start1]*np.ones(40), np.linspace(0, 3, 40), sol_[start1,1]*np.ones(40), '--', c='c', alpha=.7)
+ax.plot(t[end1-1]*np.ones(40), np.linspace(0, 3, 40), sol_[end1-1,1]*np.ones(40), '--', c='c', alpha=.7)
 
-ax.plot(t[12]*np.ones(40), np.linspace(2, 4, 40), sol_[12,1]*np.ones(40), '--', c='y', alpha=.5)
-ax.plot(t[67]*np.ones(40), np.linspace(2, 4, 40), sol_[67,1]*np.ones(40), '--', c='y', alpha=.5)
+ax.plot(t[start2]*np.ones(40), np.linspace(3*ratio1, 3, 40), sol_[start2,1]*np.ones(40), '--', c='orange', alpha=.7)
+ax.plot(t[end2-1]*np.ones(40), np.linspace(3*ratio1, 3, 40), sol_[end2-1,1]*np.ones(40), '--', c='orange', alpha=.7)
 
-ax.plot(t[24]*np.ones(40), np.linspace(3, 4, 40), sol_[24,1]*np.ones(40), '--', c='orange', alpha=.5)
-ax.plot(t[79]*np.ones(40), np.linspace(3, 4, 40), sol_[79,1]*np.ones(40), '--', c='orange', alpha=.5)
+ax.plot(t[start3]*np.ones(40), np.linspace(3*ratio2, 3, 40), sol_[start3,1]*np.ones(40), '--', c='r', alpha=.7)
+ax.plot(t[end3-1]*np.ones(40), np.linspace(3*ratio2, 3, 40), sol_[end3-1,1]*np.ones(40), '--', c='r', alpha=.7)
 
 
-x = t[:56]
-y = np.linspace(1, 2)
+x = t[start1:end1]
+y = np.linspace(0, 3*ratio1)
 X, Y = np.meshgrid(x, y)
-zs = np.repeat(sol_[:56,1].reshape([-1,1]), y.shape[0], axis=1).T.flatten()
+zs = np.repeat(sol_[start1:end1,1].reshape([-1,1]), y.shape[0], axis=1).T.flatten()
 Z = zs.reshape(X.shape)
 ax.plot_surface(X, Y, Z, color='c', alpha=.3)
 
-x = t[12:68]
-y = np.linspace(2, 3)
+x = t[start2:end2]
+y = np.linspace(3*ratio1, 3*ratio2)
 X, Y = np.meshgrid(x, y)
-zs = np.repeat(sol_[12:68,1].reshape([-1,1]), y.shape[0], axis=1).T.flatten()
-Z = zs.reshape(X.shape)
-ax.plot_surface(X, Y, Z, color='y', alpha=.3)
-
-x = t[24:80]
-y = np.linspace(3, 4)
-X, Y = np.meshgrid(x, y)
-zs = np.repeat(sol_[24:80,1].reshape([-1,1]), y.shape[0], axis=1).T.flatten()
+zs = np.repeat(sol_[start2:end2,1].reshape([-1,1]), y.shape[0], axis=1).T.flatten()
 Z = zs.reshape(X.shape)
 ax.plot_surface(X, Y, Z, color='orange', alpha=.3)
 
+x = t[start3:end3]
+y = np.linspace(3*ratio2, 3)
+X, Y = np.meshgrid(x, y)
+zs = np.repeat(sol_[start3:end3,1].reshape([-1,1]), y.shape[0], axis=1).T.flatten()
+Z = zs.reshape(X.shape)
+ax.plot_surface(X, Y, Z, color='r', alpha=.3)
 
+
+ax.set_yticks(ticks=[0, 3*ratio1, 3*ratio2])
+ax.set_yticklabels([])
+ax.set_zticks(ticks=[1,2,3])
+
+
+ax.set_facecolor('white')  # Set background color to white
+ax.xaxis.pane.fill = False
+ax.yaxis.pane.fill = False
+ax.zaxis.pane.fill = False
+ax.grid(False)
 
 ax.set_xlabel('$Time$')
-ax.set_ylabel('$sub-series$')
+ax.set_ylabel('$i$', labelpad=-10)
 ax.set_zlabel('$\hat{x}$')
 
-plt.savefig('demo.png', transparent=True)
+ax.get_proj = lambda: np.dot(Axes3D.get_proj(ax), np.diag([1, 0.5, 1, 1]))
+
+
+ax.view_init(elev=41, azim=-89)  # Adjust the angles as needed
+plt.savefig('demo.pdf')
 
 
 
