@@ -60,7 +60,7 @@ threshold_sindy = .01
 ######################################################
 ################## get data ##########################
 ######################################################
-i = 2
+i = 3
 
 x0 = x0_list[i]
 a = a_list[i]
@@ -78,7 +78,7 @@ font = {'size': 15}
 matplotlib.rc('font', **font)
 
 ### plot data
-plt.figure(1, figsize=[4,5])
+plt.figure(1, figsize=[5,4])
 plt.plot(sol_[:,0], sol_[:,1])
 plt.xlabel('$\hat{x}(t)$',size=18)
 plt.ylabel('$\hat{y}(t)$',size=18)
