@@ -23,7 +23,6 @@ SSE = lambda x, y: ((x-y)**2).sum()
 import pysindy_ as ps
 from pysindy_.feature_library import GeneralizedLibrary, PolynomialLibrary, CustomLibrary
 from sklearn.linear_model import Lasso
-from sklearn.linear_model import Lasso
 
 def SINDy_by_pysindy(sol_, sol_deriv_, t_, basis, threshold_sindy, opt, ensemble, alpha=0.05):
     ### pysindy settings
