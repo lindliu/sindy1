@@ -1,0 +1,36 @@
+***************result of trajectory 0 split into 2 fragments***************
+coef of feature 0: [0.9999] 
+basis of feature 0: ['y'] 
+coef of feature 1: [-0.2502 -5.0009] 
+basis of feature 1: ['y' 'sin(x)'] 
+
+***************result of trajectory 1 split into 2 fragments***************
+coef of feature 0: [1.0000] 
+basis of feature 0: ['y'] 
+coef of feature 1: [-0.2007 -4.5013] 
+basis of feature 1: ['y' 'sin(x)'] 
+
+***************result of trajectory 2 split into 3 fragments***************
+coef of feature 0: [0.9998] 
+basis of feature 0: ['y'] 
+coef of feature 1: [-0.2499 -5.5002] 
+basis of feature 1: ['y' 'sin(x)'] 
+
+***************result of trajectory 3 split into 3 fragments***************
+coef of feature 0: [0.9999] 
+basis of feature 0: ['y'] 
+coef of feature 1: [-0.2300 -3.9992] 
+basis of feature 1: ['y' 'sin(x)'] 
+
+***************result of trajectory 4 split into 4 fragments***************
+coef of feature 0: [1.0001] 
+basis of feature 0: ['y'] 
+coef of feature 1: [-0.3001 -3.9995] 
+basis of feature 1: ['y' 'sin(x)'] 
+
+***************result of trajectory 5 split into 3 fragments***************
+coef of feature 0: [0.9999] 
+basis of feature 0: ['y'] 
+coef of feature 1: [-0.2001 -4.7985] 
+basis of feature 1: ['y' 'sin(x)'] 
+

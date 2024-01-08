@@ -1,0 +1,24 @@
+the coefficients will keep if its absolute value >= 0.001 
+columns: GS-SINDy all, GS-SINDy one, SINDy
+
+&Metric&$RMSE$&$Mp$&$Mr$&$RMSE$&$Mp$&$Mr$&$RMSE$&$Mp$&$Mr$\\ 
+
+\midrule
+
+\multirow{6}{*}{\rotatebox[origin=c]{90}{Polynomial}} 
+&traj. 1&2.90e-4&1.&1.&2.90e-4&1.&1.&9.40e-2&0.36&1.\\ 
+&traj. 2&1.76e-4&1.&1.&1.76e-4&1.&1.&9.87e-2&0.44&1.\\ 
+&traj. 3&2.54e-3&0.86&1.&1.04e-3&1.&1.&1.32e-2&0.3&1.\\ 
+&traj. 4&1.39e-2&0.67&1.&2.30e-3&1.&1.&7.35e-2&0.31&1.\\ 
+&traj. 5&1.72e-3&0.73&1.&5.30e-1&0.42&1.&4.82e-1&0.29&1.\\ 
+&traj. 6&1.69e-4&1.&1.&1.69e-4&1.&1.&1.69e-4&1.&1.\\ 
+
+
+
+*************** Polynomial basis functions ***************
+
+*************** gsindy_all: mean of rmse, precision, recall ***************
+3.13e-03, 0.88, 1.00 
+*************** gsindy_one: mean of rmse, precision, recall ***************
+8.90e-02, 0.90, 1.00 *************** sindy: mean of rmse, precision, recall ***************
+1.27e-01, 0.45, 1.00 
