@@ -1,0 +1,48 @@
+***************result of trajectory 0 ***************
+coef of feature 0: [-10.0000 10.0000] 
+basis of feature 0: ['x' 'y'] 
+coef of feature 1: [28.0000 -1.0000 -1.0000] 
+basis of feature 1: ['x' 'y' 'xz'] 
+coef of feature 2: [-2.6700 1.0000] 
+basis of feature 2: ['z' 'xy'] 
+
+***************result of trajectory 1 ***************
+coef of feature 0: [-9.0000 9.0000] 
+basis of feature 0: ['x' 'y'] 
+coef of feature 1: [29.9999 -1.0000 -1.0000] 
+basis of feature 1: ['x' 'y' 'xz'] 
+coef of feature 2: [-2.0000 1.0000] 
+basis of feature 2: ['z' 'xy'] 
+
+***************result of trajectory 2 ***************
+coef of feature 0: [-8.5000 8.5000] 
+basis of feature 0: ['x' 'y'] 
+coef of feature 1: [28.0000 -1.0000 -1.0000] 
+basis of feature 1: ['x' 'y' 'xz'] 
+coef of feature 2: [-2.6700 1.0000] 
+basis of feature 2: ['z' 'xy'] 
+
+***************result of trajectory 3 ***************
+coef of feature 0: [-10.0000 10.0000] 
+basis of feature 0: ['x' 'y'] 
+coef of feature 1: [27.0000 -1.0000 -1.0000] 
+basis of feature 1: ['x' 'y' 'xz'] 
+coef of feature 2: [-2.6700 1.0000] 
+basis of feature 2: ['z' 'xy'] 
+
+***************result of trajectory 4 ***************
+coef of feature 0: [-10.0000 10.0000] 
+basis of feature 0: ['x' 'y'] 
+coef of feature 1: [27.0000 -1.0000 -1.0000] 
+basis of feature 1: ['x' 'y' 'xz'] 
+coef of feature 2: [-3.0000 1.0000] 
+basis of feature 2: ['z' 'xy'] 
+
+***************result of trajectory 5 ***************
+coef of feature 0: [-10.0000 10.0000] 
+basis of feature 0: ['x' 'y'] 
+coef of feature 1: [29.0000 -1.0000 -1.0000] 
+basis of feature 1: ['x' 'y' 'xz'] 
+coef of feature 2: [-2.0000 1.0000] 
+basis of feature 2: ['z' 'xy'] 
+

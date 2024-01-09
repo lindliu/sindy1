@@ -29,7 +29,7 @@ path_Exp5 = os.path.join(os.getcwd(), '../Exp5_Lorenz/results/')
 path_Exp6 = os.path.join(os.getcwd(), '../Exp6_Pendulum/results/')
 path_Exp7 = os.path.join(os.getcwd(), '../Exp7_FitzHugh/results/')
 
-exp_idx = 7 ###1,2,3,4,5,6,7
+exp_idx = 1 ###1,2,3,4,5,6,7
 
 if exp_idx == 1:
     import Lotka_constants as constants
@@ -316,6 +316,11 @@ if __name__ == "__main__":
         path_ = os.path.join(path_data, f'coeff/sindy_{suffix_mix}_{i}.npy')
         coeff_sindy_mix[i,:,:] = np.load(path_)
             
+    # #### results from wsindy
+    # coeff_wsindy_mix = np.zeros([num_traj, num_feature, num_basis_mix])
+    # for i in range(num_traj):
+    #     path_ = os.path.join(path_data, f'coeff/wsindy_{suffix_mix}_{i}.npy')
+    #     coeff_wsindy_mix[i,:,:] = np.load(path_)
         
     if exp_idx!=6:
         #### results from gsindy all together
@@ -334,19 +339,12 @@ if __name__ == "__main__":
             path_ = os.path.join(path_data, f'coeff/sindy_{suffix_poly}_{i}.npy')
             coeff_sindy_poly[i,:,:] = np.load(path_)
             
-        
+        # #### results from wsindy
+        # coeff_wsindy_poly = np.zeros([num_traj, num_feature, num_basis_poly])
+        # for i in range(num_traj):
+        #     path_ = os.path.join(path_data, f'coeff/wsindy_{suffix_poly}_{i}.npy')
+        #     coeff_wsindy_poly[i,:,:] = np.load(path_)
 
-    # #### results from gsindy one by one
-    # max_split = max([int(os.path.split(path_)[1].split('_')[-2]) for path_ in \
-    #                  glob(os.path.join(path_data, f'coeff/gsindy_one_{suffix}*.npy'))])
-    # n_split = max_split-2+1   ##4
-    # coeff_gsindy_one_by_one = np.zeros([n_split, num_traj, num_feature, num_basis])
-    # for j in range(num_traj):
-    #     for k in range(n_split):
-    #         path_ = glob(os.path.join(path_data, f'coeff/gsindy_one_{suffix}_{k+2}_{j}.npy'))[0]
-    #         coeff_gsindy_one_by_one[k,j,:,:] = np.load(path_)
-            
-    
         
         
         
@@ -371,12 +369,14 @@ if __name__ == "__main__":
     coeff_gsindy_all_mix[np.abs(coeff_gsindy_all_mix)<bound] = 0 
     coeff_gsindy_one_mix[np.abs(coeff_gsindy_one_mix)<bound] = 0
     coeff_sindy_mix[np.abs(coeff_sindy_mix)<bound] = 0
-    
+    # coeff_wsindy_mix[np.abs(coeff_wsindy_mix)<bound] = 0
+
     if exp_idx!=6:
         coeff_gsindy_all_poly[np.abs(coeff_gsindy_all_poly)<bound] = 0 
         coeff_gsindy_one_poly[np.abs(coeff_gsindy_one_poly)<bound] = 0
         coeff_sindy_poly[np.abs(coeff_sindy_poly)<bound] = 0
-        
+        # coeff_wsindy_poly[np.abs(coeff_wsindy_poly)<bound] = 0
+
 
     
     
@@ -399,11 +399,73 @@ if __name__ == "__main__":
     rmse_gsindy_all_mix, mp_gsindy_all_mix, mr_gsindy_all_mix = get_rmse_mp_mr(coeff_true_mix, coeff_gsindy_all_mix)
     rmse_gsindy_one_mix, mp_gsindy_one_mix, mr_gsindy_one_mix = get_rmse_mp_mr(coeff_true_mix, coeff_gsindy_one_mix)
     rmse_sindy_mix, mp_sindy_mix, mr_sindy_mix = get_rmse_mp_mr(coeff_true_mix, coeff_sindy_mix)
+    # rmse_wsindy_mix, mp_wsindy_mix, mr_wsindy_mix = get_rmse_mp_mr(coeff_true_mix, coeff_wsindy_mix)
 
+    # ### record metrics: rmse precision and recal
+    # save_path = os.path.join(path_base, f'{func_name} metrics weak sindy.txt')
+    # open(save_path, 'w').close()
+    
+    # with open(save_path, "a") as file:
+    #     file.write('rmse row: gsindy_all, gsindy_one, sindy, weak sindy.\n')
+    #     file.write(str(rmse_gsindy_all_mix)+'\n')
+    #     file.write(str(rmse_gsindy_one_mix)+'\n')
+    #     file.write(str(rmse_sindy_mix)+'\n')
+    #     file.write(str(rmse_wsindy_mix)+'\n')
+    #     file.write('Mp row: gsindy_all, gsindy_one, sindy, weak sindy.\n')
+    #     file.write(str(mp_gsindy_all_mix)+'\n')
+    #     file.write(str(mp_gsindy_one_mix)+'\n')
+    #     file.write(str(mp_sindy_mix)+'\n')
+    #     file.write(str(mp_wsindy_mix)+'\n')
+    #     file.write('Mr row: gsindy_all, gsindy_one, sindy, weak sindy.\n')
+    #     file.write(str(mr_gsindy_all_mix)+'\n')
+    #     file.write(str(mr_gsindy_one_mix)+'\n')
+    #     file.write(str(mr_sindy_mix)+'\n')
+    #     file.write(str(mr_wsindy_mix)+'\n')
+        
+        
+    #     file.write('\n rmse mean: gsindy_all, gsindy_one, sindy, weak sindy.\n')
+    #     file.write(f'{rmse_gsindy_all_mix.mean():.2e}, {rmse_gsindy_one_mix.mean():.2e}, {rmse_sindy_mix.mean():.2e}, {rmse_wsindy_mix.mean():.2e}')
+    #     file.write('\n Mp mean: gsindy_all, gsindy_one, sindy, weak sindy.\n')
+    #     file.write(f'{mp_gsindy_all_mix.mean():.2f}, {mp_gsindy_one_mix.mean():.2f}, {mp_sindy_mix.mean():.2f}, {mp_wsindy_mix.mean():.2f}')
+    #     file.write('\n Mr mean: gsindy_all, gsindy_one, sindy, weak sindy.\n')
+    #     file.write(f'{mr_gsindy_all_mix.mean():.2f}, {mr_gsindy_one_mix.mean():.2f}, {mr_sindy_mix.mean():.2f}, {mr_wsindy_mix.mean():.2f}')
+        
+        
     if exp_idx!=6:
         rmse_gsindy_all_poly, mp_gsindy_all_poly, mr_gsindy_all_poly = get_rmse_mp_mr(coeff_true_poly, coeff_gsindy_all_poly)
         rmse_gsindy_one_poly, mp_gsindy_one_poly, mr_gsindy_one_poly = get_rmse_mp_mr(coeff_true_poly, coeff_gsindy_one_poly)
         rmse_sindy_poly, mp_sindy_poly, mr_sindy_poly = get_rmse_mp_mr(coeff_true_poly, coeff_sindy_poly)
+        # rmse_wsindy_poly, mp_wsindy_poly, mr_wsindy_poly = get_rmse_mp_mr(coeff_true_poly, coeff_wsindy_poly)
+
+        # ### record metrics: rmse precision and recal
+        # save_path = os.path.join(path_base, f'{func_name} metrics weak sindy.txt')
+        # open(save_path, 'w').close()
+        
+        # with open(save_path, "a") as file:
+        #     file.write('rmse row: gsindy_all, gsindy_one, sindy, weak sindy.\n')
+        #     file.write(str(rmse_gsindy_all_poly)+'\n')
+        #     file.write(str(rmse_gsindy_one_poly)+'\n')
+        #     file.write(str(rmse_sindy_poly)+'\n')
+        #     file.write(str(rmse_wsindy_poly)+'\n')
+        #     file.write('Mp row: gsindy_all, gsindy_one, sindy, weak sindy.\n')
+        #     file.write(str(mp_gsindy_all_poly)+'\n')
+        #     file.write(str(mp_gsindy_one_poly)+'\n')
+        #     file.write(str(mp_sindy_poly)+'\n')
+        #     file.write(str(mp_wsindy_poly)+'\n')
+        #     file.write('Mr row: gsindy_all, gsindy_one, sindy, weak sindy.\n')
+        #     file.write(str(mr_gsindy_all_poly)+'\n')
+        #     file.write(str(mr_gsindy_one_poly)+'\n')
+        #     file.write(str(mr_sindy_poly)+'\n')
+        #     file.write(str(mr_wsindy_poly)+'\n')
+            
+        #     file.write('\n rmse mean: gsindy_all, gsindy_one, sindy, weak sindy.\n')
+        #     file.write(f'{rmse_gsindy_all_poly.mean():.2e}, {rmse_gsindy_one_poly.mean():.2e}, {rmse_sindy_poly.mean():.2e}, {rmse_wsindy_poly.mean():.2e}')
+        #     file.write('\n Mp mean: gsindy_all, gsindy_one, sindy, weak sindy.\n')
+        #     file.write(f'{mp_gsindy_all_poly.mean():.2f}, {mp_gsindy_one_poly.mean():.2f}, {mp_sindy_poly.mean():.2f}, {mp_wsindy_poly.mean():.2f}')
+        #     file.write('\n Mr mean: gsindy_all, gsindy_one, sindy, weak sindy.\n')
+        #     file.write(f'{mr_gsindy_all_poly.mean():.2f}, {mr_gsindy_one_poly.mean():.2f}, {mr_sindy_poly.mean():.2f}, {mr_wsindy_poly.mean():.2f}')
+
+
 
 
     table_mix = np.zeros([num_traj+1, 9], dtype=object)

@@ -30,7 +30,7 @@ path_Exp6 = os.path.join(os.getcwd(), '../Exp6_Pendulum/results/')
 path_Exp7 = os.path.join(os.getcwd(), '../Exp7_FitzHugh/results/')
 
 
-exp_idx = 1 ###1,2,3,4,5,6,7
+exp_idx = 3 ###1,2,3,4,5,6,7
 
 if exp_idx == 1:
     import Lotka_constants as constants

@@ -134,7 +134,7 @@ for idx in range(6):
     diff = ps.SINDyDerivative(kind="spline", s=1e-2)
     
     model_set = []
-    for threshold_sindy in [0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1, 5, 10]:
+    for threshold_sindy in [0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1, 5, 10, 50, 100, 150, 200]:
     
         # Instantiate and fit the SINDy model with the integral of u_dot
         opt = ps.SR3(
