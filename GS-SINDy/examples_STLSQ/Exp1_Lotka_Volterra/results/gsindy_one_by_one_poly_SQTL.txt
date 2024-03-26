@@ -144,4 +144,3 @@ coef of feature 0: [1.3002 -1.0000]
 basis of feature 0: ['x' 'xy'] 
 coef of feature 1: [-0.9994 1.2995] 
 basis of feature 1: ['y' 'xy'] 
-
