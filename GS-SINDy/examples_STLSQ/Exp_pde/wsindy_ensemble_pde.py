@@ -36,20 +36,21 @@ integrator_keywords['atol'] = 1e-12
 
 ensemble = True
 
+precision = 1e-3
 K = 5000
 noise_l = 0.9
 threshold = 1e-1
-step = 5
+step = 1
 
 
-# # real = np.array([0,0,0,0,-1,0,0,0])
-# # order = 2
+real = np.array([0,0,0,0,-1,0,0,0])
+order = 2
 # real = np.array([0,0,0,0,0,-1,0,0,0,0,0])
 # order = 3
-# IB_1 = np.load('data/IB_1.npz')
-# t = np.ravel(IB_1['t'])[::step]
-# x = np.ravel(IB_1['x'])[::step]
-# u = np.real(IB_1['usol'])[::step,::step]
+IB_1 = np.load('data/IB_1.npz')
+t = np.ravel(IB_1['t'])[::step]
+x = np.ravel(IB_1['x'])[::step]
+u = np.real(IB_1['usol'])[::step,::step]
 
 
 # real = np.array([0,0,0,0,0,-.7,0,0,0,0,0])
@@ -60,12 +61,12 @@ step = 5
 # u = np.real(IB_2['usol'])[::step,::step]
 
 
-real = np.array([0,0,0,0,-1,-1,0,0,0,0,0])
-order = 3
-KDV_1 = np.load('data/KDV_1.npz')
-t = np.ravel(KDV_1['t'])[::step]
-x = np.ravel(KDV_1['x'])[::step]
-u = np.real(KDV_1['usol'])[::step,::step]
+# real = np.array([0,0,0,0,-1,-1,0,0,0,0,0])
+# order = 3
+# KDV_1 = np.load('data/KDV_1.npz')
+# t = np.ravel(KDV_1['t'])[::step]
+# x = np.ravel(KDV_1['x'])[::step]
+# u = np.real(KDV_1['usol'])[::step,::step]
 
 
 # real = np.array([0,0,0,0,-.7,-1.5,0,0,0,0,0])
@@ -110,7 +111,7 @@ for ii in range(20):
     )
     
     
-    optimizer = ps.STLSQ(threshold=threshold, alpha=1e-12, normalize_columns=False)
+    optimizer = ps.STLSQ(threshold=threshold, alpha=1e-12, normalize_columns=True)
     # optimizer = ps.SR3(threshold=threshold, thresholder="l0", tol=1e-8, normalize_columns=True, max_iter=1000)
     # np.random.seed(1)
     
@@ -123,7 +124,9 @@ for ii in range(20):
     # print(np.linalg.norm(model.coefficients()[0,...][mask]-real[mask])/np.linalg.norm(real[mask]))
     ###########################################################################
     
-    coeffs.append(model.coefficients()[0,...])
+    coef = model.coefficients()[0,...]
+    # coef[np.abs(coef)<precision] = 0
+    coeffs.append(coef)
 
 
     ################### print results ######################

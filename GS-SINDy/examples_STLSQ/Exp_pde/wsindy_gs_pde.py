@@ -195,6 +195,7 @@ def split(t, x, u, ratio=.95):
 threshold_group = 1e-2
 threshold_similarity = 1e-1
 
+precision = 1e-3
 K = 5000
 noise_l = 0.9
 threshold_sindy = 1e-1
@@ -319,7 +320,8 @@ for ii in range(20):
                     # deriv_spline=deriv_spline,
                     max_iter = 20, 
                     optimizer='SQTL', 
-                    ensemble=False)   
+                    ensemble=False,
+                    normalize_columns=True)   
     ### get sub-series for each trajectory
     _, gsindy.num_series, gsindy.length_series, gsindy.num_basis = theta0.shape
     gsindy.idx_basis = np.arange(gsindy.num_basis)
@@ -332,66 +334,68 @@ for ii in range(20):
                     
     all_basis = gsindy.all_basis
     
-    # Xi_final = gsindy.prediction([u,u], t, split_basis=True)
-    # Xi_final = gsindy.prediction(sol_org_list, t, split_basis=split_basis_)
     
     
     
     
-    # X, T = np.meshgrid(x, t_)
-    # XT = np.asarray([X, T]).T
+    X, T = np.meshgrid(x, t)
+    XT = np.asarray([X, T]).T
     
-    # library_functions = [lambda x: x, lambda x: x * x]
-    # library_function_names = [lambda x: x, lambda x: x + x]
-    # pde_lib = ps.WeakPDELibrary(
-    #     library_functions=library_functions,
-    #     function_names = library_function_names,
-    #     # function_library=ps.PolynomialLibrary(degree=2,include_bias=False),
-    #     derivative_order=order,
-    #     spatiotemporal_grid=XT,
-    #     is_uniform=True,
-    #     K=K,
-    #     include_bias=False
-    # )
+    library_functions = [lambda x: x, lambda x: x * x]
+    library_function_names = [lambda x: x, lambda x: x + x]
+    pde_lib = ps.WeakPDELibrary(
+        library_functions=library_functions,
+        function_names = library_function_names,
+        # function_library=ps.PolynomialLibrary(degree=2,include_bias=False),
+        derivative_order=order,
+        spatiotemporal_grid=XT,
+        is_uniform=True,
+        K=K,
+        include_bias=False
+    )
     
-    # pde_lib.fit(u_noised[:,:,np.newaxis])
-    # theta1 = pde_lib.transform(u_noised[:,:,np.newaxis])[:,gsindy.all_basis[0]]
+    pde_lib.fit(u_noised[:,:,np.newaxis])
+    theta1 = pde_lib.transform(u_noised[:,:,np.newaxis])[:,gsindy.all_basis[0]]
     
-    # from pysindy_.differentiation import FiniteDifference
-    # differentiation_method = FiniteDifference
+    from pysindy_.differentiation import FiniteDifference
+    differentiation_method = FiniteDifference
     
-    # # from typing import Sequence
-    # # from itertools import product
-    # # def _zip_like_sequence(x, t):
-    # #     """Create an iterable like zip(x, t), but works if t is scalar."""
-    # #     if isinstance(t, Sequence):
-    # #         return zip(x, t)
-    # #     else:
-    # #         return product(x, [t])
-    # # u_dot = [pde_lib.calc_trajectory(differentiation_method, xi, ti) for xi, ti in _zip_like_sequence([u], t)]
-    # u_dot = [pde_lib.calc_trajectory(differentiation_method, u_noised, t_)]
+    # from typing import Sequence
+    # from itertools import product
+    # def _zip_like_sequence(x, t):
+    #     """Create an iterable like zip(x, t), but works if t is scalar."""
+    #     if isinstance(t, Sequence):
+    #         return zip(x, t)
+    #     else:
+    #         return product(x, [t])
+    # u_dot = [pde_lib.calc_trajectory(differentiation_method, xi, ti) for xi, ti in _zip_like_sequence([u], t)]
+    u_dot = [pde_lib.calc_trajectory(differentiation_method, u_noised, t_)]
     
-    # optimizer = ps.STLSQ(threshold=threshold_sindy, alpha=1e-12, normalize_columns=False)
-    # Theta_ = Axes_transfer(theta1)
-    # lib_generalized = Shell_custom_theta(theta=Theta_)###此处Shell_custom_theta只是壳，方便带入Theta_，无实际意义
-    # model = ps.SINDy(feature_names=["x", "y"], feature_library=lib_generalized, optimizer=optimizer)
-    # model.fit(np.ones([1]), t=1, x_dot=u_dot[0]) 
+    optimizer = ps.STLSQ(threshold=threshold_sindy, alpha=1e-12, normalize_columns=False)
+    Theta_ = Axes_transfer(theta1)
+    lib_generalized = Shell_custom_theta(theta=Theta_)###此处Shell_custom_theta只是壳，方便带入Theta_，无实际意义
+    model = ps.SINDy(feature_names=["x", "y"], feature_library=lib_generalized, optimizer=optimizer)
+    model.fit(np.ones([1]), t=1, x_dot=u_dot[0]) 
     # print('WSINDy: ')
     # print(model.coefficients()[0,...])
-    # Xi_final = np.zeros_like(real,dtype=float)
-    # Xi_final[gsindy.all_basis[0]] = list(model.coefficients()[0,...])
+    Xi_final = np.zeros_like(real,dtype=float)
+    Xi_final[gsindy.all_basis[0]] = list(model.coefficients()[0,...])
+    
+    Xi_final = Xi_final.reshape(1,1,Xi_final.shape[0])
     # print(f'{ii}: ', np.linalg.norm(Xi_final-real)/np.linalg.norm(real))
 
 
     
-    theta_org1, sol_deriv_org1 = get_wsindy_theta_deriv(x,t,u_noised[...,np.newaxis])
-    theta_org_list, sol_deriv_org_list = [[theta_org1,theta_org1]], [[sol_deriv_org1,sol_deriv_org1]]
+    # theta_org1, sol_deriv_org1 = get_wsindy_theta_deriv(x,t,u_noised[...,np.newaxis])
+    # theta_org_list, sol_deriv_org_list = [[theta_org1,theta_org1]], [[sol_deriv_org1,sol_deriv_org1]]
     
-    Xi_final = prediction(gsindy, split_basis=True)
-    # print(Xi_final)
+    # Xi_final = prediction(gsindy, split_basis=True)
+    # # print(Xi_final)
     
-    # print(f'{ii}: ', np.linalg.norm(Xi_final[0,0][mask]-real[mask])/np.linalg.norm(real[mask]))
+    # # print(f'{ii}: ', np.linalg.norm(Xi_final[0,0][mask]-real[mask])/np.linalg.norm(real[mask]))
     
+    
+    # Xi_final[np.abs(Xi_final)<precision] = 0
     coeffs.append(Xi_final)  
     
     coeff_error = np.linalg.norm(np.c_[coeffs][:,0,0,:][:,mask]-real[mask], axis=1)/np.linalg.norm(real[mask])

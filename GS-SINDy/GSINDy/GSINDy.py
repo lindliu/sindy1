@@ -114,7 +114,7 @@ def Axes_transfer(theta_):
 class GSINDy():
     def __init__(self, basis, num_traj, num_feature, \
                      threshold_sindy=1e-2, threshold_group=1e-3, threshold_similarity=1e-2, \
-                     alpha=0.05, deriv_spline=True, max_iter=20, optimizer='Manually', ensemble=False):
+                     alpha=0.05, deriv_spline=True, max_iter=20, optimizer='Manually', ensemble=False, normalize_columns=False):
         basis_functions_list = basis['functions']
         basis_functions_name_list = basis['names']
         
@@ -154,7 +154,7 @@ class GSINDy():
         if optimizer=='Manually':
             self.optimizer = 'Manually'
         elif optimizer=='SQTL':
-            self.optimizer = ps.STLSQ(threshold=self.threshold_sindy, alpha=self.alpha)
+            self.optimizer = ps.STLSQ(threshold=self.threshold_sindy, alpha=self.alpha, normalize_columns=normalize_columns)
         elif optimizer=='LASSO':
             self.optimizer = Lasso(alpha=self.alpha, max_iter=5000, fit_intercept=False)
         elif optimizer=='SR3':
