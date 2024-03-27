@@ -7,9 +7,9 @@ Created on Sun Mar 24 10:44:01 2024
 """
 # https://pysindy.readthedocs.io/en/latest/examples/10_PDEFIND_examples/example.html
 import sys
-sys.path.insert(1, '../../GSINDy')
-sys.path.insert(1, '../..')
-sys.path.insert(1, '../tools')
+sys.path.insert(1, '../../../GSINDy')
+sys.path.insert(1, '../../..')
+sys.path.insert(1, '../../tools')
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -34,10 +34,10 @@ integrator_keywords['method'] = 'LSODA'
 integrator_keywords['atol'] = 1e-12
 
 K = 5000
-noise_l = .1
+noise_l = .9
 ensemble = True
-threshold = 1e-1
-step = 3
+threshold = 1e-2
+step = 5
 
 # # Load the data stored in a matlab .mat file
 # real = np.array([0,0,0,0,-1,-6,0,0,0,0,0])
@@ -71,14 +71,14 @@ step = 3
 
 
 
-# real = np.array([0,0,0,-1,0,-1,-1,0,0,0,0,0,0,0])
-# # real = np.array([0,0,0,-1,0,-1,0,-1,0,0,0,0,0,0,0,0,0])
-# order = 4
-# kdV = loadmat('data/KS.mat')
-# t = np.ravel(kdV['t'])[::step]
-# x = np.ravel(kdV['x'])[::step]
-# u_ = np.real(kdV['U_exact'])[0][0][::step,::step]
-# u = u_ + noise_l*np.mean(u_**2)**.5 * np.random.normal(0,1,u_.shape)
+real = np.array([0,0,0,-1,0,-1,-1,0,0,0,0,0,0,0])
+# real = np.array([0,0,0,-1,0,-1,0,-1,0,0,0,0,0,0,0,0,0])
+order = 4
+kdV = loadmat('data/KS.mat')
+t = np.ravel(kdV['t'])[::step]
+x = np.ravel(kdV['x'])[::step]
+u_ = np.real(kdV['U_exact'])[0][0][::step,::step]
+u = u_ + noise_l*np.mean(u_**2)**.5 * np.random.normal(0,1,u_.shape)
 
 
 
@@ -92,14 +92,14 @@ step = 3
 # u = u_ + noise_l*np.mean(u_**2)**.5 * np.random.normal(0,1,u_.shape)
 
 
-real = np.array([0,0,0,0,0,-.7,0,0,0,0,0])
-order = 3
-kdV = np.load('data/IB2.npz')
-t = np.ravel(kdV['t'])[::step]
-x = np.ravel(kdV['x'])[::step]
-u_ = np.real(kdV['usol'])[::step,::step]
-# u = u_
-u = u_ + noise_l*np.mean(u_**2)**.5 * np.random.normal(0,1,u_.shape)
+# real = np.array([0,0,0,0,0,-.7,0,0,0,0,0])
+# order = 3
+# kdV = np.load('data/IB2.npz')
+# t = np.ravel(kdV['t'])[::step]
+# x = np.ravel(kdV['x'])[::step]
+# u_ = np.real(kdV['usol'])[::step,::step]
+# # u = u_
+# u = u_ + noise_l*np.mean(u_**2)**.5 * np.random.normal(0,1,u_.shape)
 
 
 

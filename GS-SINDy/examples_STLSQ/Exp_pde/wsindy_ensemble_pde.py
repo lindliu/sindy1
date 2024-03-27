@@ -37,10 +37,9 @@ integrator_keywords['atol'] = 1e-12
 ensemble = True
 
 K = 5000
-noise_l = .9
-threshold = 5e-2
-step = 4
-
+noise_l = 0.9
+threshold = 1e-1
+step = 5
 
 
 # # real = np.array([0,0,0,0,-1,0,0,0])
@@ -53,28 +52,42 @@ step = 4
 # u = np.real(IB_1['usol'])[::step,::step]
 
 
-# real = np.array([0,0,0,0,-1,-1,0,0,0,0,0])
+# real = np.array([0,0,0,0,0,-.7,0,0,0,0,0])
 # order = 3
-# KDV_1 = np.load('data/KDV_1.npz')
-# t = np.ravel(KDV_1['t'])[::step]
-# x = np.ravel(KDV_1['x'])[::step]
-# u = np.real(KDV_1['usol'])[::step,::step]
+# IB_2 = np.load('data/IB_2.npz')
+# t = np.ravel(IB_2['t'])[::step]
+# x = np.ravel(IB_2['x'])[::step]
+# u = np.real(IB_2['usol'])[::step,::step]
 
 
-real = np.array([0,0,0,-1,0,-1,-1,0,0,0,0,0,0,0])
-order = 4
-KS_1 = np.load('data/KS_1.npz')
-t = np.ravel(KS_1['t'])[::step]
-x = np.ravel(KS_1['x'])[::step]
-u = np.real(KS_1['usol'])[::step,::step]
+real = np.array([0,0,0,0,-1,-1,0,0,0,0,0])
+order = 3
+KDV_1 = np.load('data/KDV_1.npz')
+t = np.ravel(KDV_1['t'])[::step]
+x = np.ravel(KDV_1['x'])[::step]
+u = np.real(KDV_1['usol'])[::step,::step]
 
 
+# real = np.array([0,0,0,0,-.7,-1.5,0,0,0,0,0])
+# order = 3
+# KDV_2 = np.load('data/KDV_2.npz')
+# t = np.ravel(KDV_2['t'])[::step]
+# x = np.ravel(KDV_2['x'])[::step]
+# u = np.real(KDV_2['usol'])[::step,::step]
 
+
+# real = np.array([0,0,0,-1,0,-1,-1,0,0,0,0,0,0,0])
+# order = 4
+# KS_1 = np.load('data/KS_1.npz')
+# t = np.ravel(KS_1['t'])[::step]
+# x = np.ravel(KS_1['x'])[::step]
+# u = np.real(KS_1['usol'])[::step,::step]
 
 
 mask = real!=0
 coeffs = []
 for ii in range(20):
+    
     u_noise = u + noise_l*np.mean(u**2)**.5 * np.random.normal(0,1,u.shape)
     u_noise = u_noise[:,:,np.newaxis]
 

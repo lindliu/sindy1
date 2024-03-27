@@ -27,11 +27,11 @@ import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
 K = 5000
-noise_l = .1
-threshold_sindy = 1e-1
+noise_l = .9
+threshold_sindy = 1e-2
 threshold_group = 1e-2
 threshold_similarity = 1e-1
-step = 3
+step = 5
 
 
 # real = np.array([0,0,0,0,-1,-6,0,0,0,0,0])
@@ -77,18 +77,18 @@ step = 3
 
 
 
-# real = np.array([0,0,0,-1,0,-1,-1,0,0,0,0,0,0,0])
-# order = 4
-# kdV = loadmat('data/KS.mat')
-# t_ = np.ravel(kdV['t'])[::step]
-# x = np.ravel(kdV['x'])[::step]
-# u1_ = np.real(kdV['U_exact'])[0][0][::step,::step]
-# u1_o = u1_ + noise_l*np.mean(u1_**2)**.5 * np.random.normal(0,1,u1_.shape)
-# # u1 = u1_o
+real = np.array([0,0,0,-1,0,-1,-1,0,0,0,0,0,0,0])
+order = 4
+kdV = loadmat('data/KS.mat')
+t_ = np.ravel(kdV['t'])[::step]
+x = np.ravel(kdV['x'])[::step]
+u1_ = np.real(kdV['U_exact'])[0][0][::step,::step]
+u1_o = u1_ + noise_l*np.mean(u1_**2)**.5 * np.random.normal(0,1,u1_.shape)
+# u1 = u1_o
 
-# u2 = u1_o[:,:220]
-# u1 = u1_o[:,-220:]
-# t = t_[:220]
+u2 = u1_o[:,:220]
+u1 = u1_o[:,-220:]
+t = t_[:220]
 
 
 # real = np.array([0,0,0,0,0,-1,0,0,0,0,0])
@@ -106,18 +106,18 @@ step = 3
 # t = t_[:350]
 
 
-real = np.array([0,0,0,0,0,-.7,0,0,0,0,0])
-order = 3
-kdV = np.load('data/IB2.npz')
-t_ = np.ravel(kdV['t'])[::step]
-x = np.ravel(kdV['x'])[::step]
-u2_ = np.real(kdV['usol'])[::step,::step]
-# u = u_
-u2_o = u2_ + noise_l*np.mean(u2_**2)**.5 * np.random.normal(0,1,u2_.shape)
+# real = np.array([0,0,0,0,0,-.7,0,0,0,0,0])
+# order = 3
+# kdV = np.load('data/IB2.npz')
+# t_ = np.ravel(kdV['t'])[::step]
+# x = np.ravel(kdV['x'])[::step]
+# u2_ = np.real(kdV['usol'])[::step,::step]
+# # u = u_
+# u2_o = u2_ + noise_l*np.mean(u2_**2)**.5 * np.random.normal(0,1,u2_.shape)
 
-u1 = u2_o[:,:350]
-u2 = u2_o[:,-350:]
-t = t_[:350]
+# u1 = u2_o[:,:350]
+# u2 = u2_o[:,-350:]
+# t = t_[:350]
 
 
 
@@ -204,14 +204,14 @@ mask = real!=0
 coeffs = []
 for ii in range(20):
 
-    u2_o = u2_ + noise_l*np.mean(u2_**2)**.5 * np.random.normal(0,1,u2_.shape)
-    u1_o = u2_o
-    u1 = u2_o[:,:350]
-    u2 = u2_o[:,-350:]
-    t = t_[:350]
-
-        
-        
+    u1_o = u1_ + noise_l*np.mean(u1_**2)**.5 * np.random.normal(0,1,u1_.shape)
+    # u1 = u1_o
+    
+    u2 = u1_o[:,:220]
+    u1 = u1_o[:,-220:]
+    t = t_[:220]
+            
+            
     
     
     u_list = [u1, u2]

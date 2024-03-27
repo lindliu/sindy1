@@ -181,8 +181,12 @@ def prediction(gsindy, split_basis=True):
 
 
 
+def split(t, x, u, ratio=.95):
+    cut = int(t.shape[0]*ratio)
+    u1 = u[:, :cut]
+    u2 = u[:, -cut:]
 
-
+    return u1, u2, t[:cut]
 
 
 
@@ -192,19 +196,10 @@ threshold_group = 1e-2
 threshold_similarity = 1e-1
 
 K = 5000
-noise_l = .9
-threshold_sindy = 5e-2
-step = 4
+noise_l = 0.9
+threshold_sindy = 1e-1
+step = 5
 
-
-
-
-def split(t, x, u, ratio=.8):
-    cut = int(x.shape[0]*ratio)
-    u1 = u[:, :cut]
-    u2 = u[:, -cut:]
-
-    return u1, u2, t[:cut]
 
 # real = np.array([0,0,0,0,0,-1,0,0,0,0,0])
 # order = 3
@@ -212,7 +207,14 @@ def split(t, x, u, ratio=.8):
 # t = np.ravel(IB_1['t'])[::step]
 # x = np.ravel(IB_1['x'])[::step]
 # u = np.real(IB_1['usol'])[::step,::step]
-# u1_o = u
+
+
+# real = np.array([0,0,0,0,0,-.7,0,0,0,0,0])
+# order = 3
+# IB_2 = np.load('data/IB_2.npz')
+# t = np.ravel(IB_2['t'])[::step]
+# x = np.ravel(IB_2['x'])[::step]
+# u = np.real(IB_2['usol'])[::step,::step]
 
 
 real = np.array([0,0,0,0,-1,-1,0,0,0,0,0])
@@ -221,7 +223,14 @@ KDV_1 = np.load('data/KDV_1.npz')
 t = np.ravel(KDV_1['t'])[::step]
 x = np.ravel(KDV_1['x'])[::step]
 u = np.real(KDV_1['usol'])[::step,::step]
-u1_o = u
+
+
+# real = np.array([0,0,0,0,-.7,-1.5,0,0,0,0,0])
+# order = 3
+# KDV_2 = np.load('data/KDV_2.npz')
+# t = np.ravel(KDV_2['t'])[::step]
+# x = np.ravel(KDV_2['x'])[::step]
+# u = np.real(KDV_2['usol'])[::step,::step]
 
 
 # real = np.array([0,0,0,-1,0,-1,-1,0,0,0,0,0,0,0])
@@ -230,7 +239,6 @@ u1_o = u
 # t = np.ravel(KS_1['t'])[::step]
 # x = np.ravel(KS_1['x'])[::step]
 # u = np.real(KS_1['usol'])[::step,::step]
-# u1_o = u
 
 
 mask = real!=0
@@ -384,7 +392,7 @@ for ii in range(20):
     
     # print(f'{ii}: ', np.linalg.norm(Xi_final[0,0][mask]-real[mask])/np.linalg.norm(real[mask]))
     
-    coeffs.append(Xi_final)  ##1.1672612389877404
+    coeffs.append(Xi_final)  
     
     coeff_error = np.linalg.norm(np.c_[coeffs][:,0,0,:][:,mask]-real[mask], axis=1)/np.linalg.norm(real[mask])
     print(f'{ii} average coeff error: ', f'{coeff_error.mean():.4f}')
