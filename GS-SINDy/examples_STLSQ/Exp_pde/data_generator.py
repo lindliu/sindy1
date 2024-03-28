@@ -184,3 +184,36 @@ np.savez('data/KS_1.npz', t=t[::5], x=x, usol=sol_ks.T[:,::5])
 
 
 
+
+
+
+########################### Burgers #######################
+def burger_init(x):
+    u = np.cos(x)*(1+np.sin(x/16))
+    return u
+
+def burger(u, t, L, c=[-5, .5]):
+    """Differential equations for the Kuramoto-Sivashinsky equation, discretized in x."""
+    # Compute the x derivatives using the pseudo-spectral method.
+    ux = psdiff(u, period=L)
+    uxx = psdiff(u, period=L, order=2)
+    
+    # Compute du/dt.    
+    dudt = c[0]*u*ux + c[1]*uxx
+    
+    return dudt
+
+L = 16
+x = np.linspace(L-24, L-8, 256+1)[1:]
+t = np.linspace(0, 2, 256+1)
+u0 = burger_init(x)
+# plt.plot(u0)
+    
+sol_burger = odeint(burger, u0, t, args=(L,), mxstep=5000)
+plt.imshow(sol_burger.T)
+    
+np.savez('data/Burger_1.npz', t=t, x=x, usol=sol_burger.T)
+#######################################################################
+
+
+
