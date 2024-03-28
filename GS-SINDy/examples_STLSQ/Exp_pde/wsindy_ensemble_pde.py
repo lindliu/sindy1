@@ -36,21 +36,21 @@ integrator_keywords['atol'] = 1e-12
 
 ensemble = True
 
-precision = 1e-3
-K = 5000
-noise_l = 0.9
-threshold = 1e-1
-step = 1
+precision = 1e-2
+K = 2000
+noise_l = 0.2
+threshold = 1e-2
+step = 5
 
 
-real = np.array([0,0,0,0,-1,0,0,0])
-order = 2
-# real = np.array([0,0,0,0,0,-1,0,0,0,0,0])
-# order = 3
-IB_1 = np.load('data/IB_1.npz')
-t = np.ravel(IB_1['t'])[::step]
-x = np.ravel(IB_1['x'])[::step]
-u = np.real(IB_1['usol'])[::step,::step]
+# real = np.array([0,0,0,0,-1,0,0,0])
+# order = 2
+# # real = np.array([0,0,0,0,0,-1,0,0,0,0,0])
+# # order = 3
+# IB_1 = np.load('data/IB_1.npz')
+# t = np.ravel(IB_1['t'])[::step]
+# x = np.ravel(IB_1['x'])[::step]
+# u = np.real(IB_1['usol'])[::step,::step]
 
 
 # real = np.array([0,0,0,0,0,-.7,0,0,0,0,0])
@@ -61,12 +61,12 @@ u = np.real(IB_1['usol'])[::step,::step]
 # u = np.real(IB_2['usol'])[::step,::step]
 
 
-# real = np.array([0,0,0,0,-1,-1,0,0,0,0,0])
-# order = 3
-# KDV_1 = np.load('data/KDV_1.npz')
-# t = np.ravel(KDV_1['t'])[::step]
-# x = np.ravel(KDV_1['x'])[::step]
-# u = np.real(KDV_1['usol'])[::step,::step]
+real = np.array([0,0,0,0,-1,-1,0,0,0,0,0])
+order = 3
+KDV_1 = np.load('data/KDV_1.npz')
+t = np.ravel(KDV_1['t'])[::step]
+x = np.ravel(KDV_1['x'])[::step]
+u = np.real(KDV_1['usol'])[::step,::step]
 
 
 # real = np.array([0,0,0,0,-.7,-1.5,0,0,0,0,0])
@@ -125,7 +125,7 @@ for ii in range(20):
     ###########################################################################
     
     coef = model.coefficients()[0,...]
-    # coef[np.abs(coef)<precision] = 0
+    coef[np.abs(coef)<precision] = 0
     coeffs.append(coef)
 
 
