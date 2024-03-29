@@ -164,5 +164,10 @@ for step_t in [1,2,3,4,5,6,7]:
 print(f'using {(time.time()-t1)/60:.1f} mins')
 
 # import pickle
-# with open('KDV_1_e.pickle', 'wb') as handle:
+# with open('KDV_1_e.pickle', 'wb') as file:
 #     pickle.dump(metric, handle)
+
+
+# with open("KDV_1_e.pickle", "rb") as file:
+#     metric = pickle.load(file)
+    

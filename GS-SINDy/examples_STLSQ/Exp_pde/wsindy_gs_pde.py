@@ -497,3 +497,8 @@ print(f'using {(time.time()-t1)/60:.1f} mins')
 # import pickle
 # with open('KDV_1_gs.pickle', 'wb') as handle:
 #     pickle.dump(metric_g, handle)
+
+
+# with open("KDV_1_gs.pickle", "rb") as file:
+#     metric = pickle.load(file)
+    
