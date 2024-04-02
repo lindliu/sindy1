@@ -11,7 +11,7 @@ from utils import func_Pendulum
 from utils import basis_functions_trig, basis_functions_name_trig
 
 ########## hyper parameters ###########
-ensemble = False
+ensemble = True
 precision = 1e-4  ### if precision is not bigger than threshold_sindy, does not influence results by Maunually optimizer
 deriv_spline = True#False#
 alpha = .05

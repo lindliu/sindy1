@@ -54,7 +54,58 @@ def SINDy_by_pysindy(sol_, sol_deriv_, t_, basis, threshold_sindy, opt, ensemble
     
     return model
 
-def SINDy_by_coeff(sol_, sol_deriv_, t_, basis, threshold_sindy, alpha):
+
+
+def SINDy_by_coeff_mix(sol_, sol_deriv_, t_, basis, threshold_sindy, opt, ensemble, alpha):
+    basis_functions_list = basis['functions']
+    basis_functions_name_list = basis['names']
+    
+    # assert (basis_functions_list[0]==basis_functions_list[1]).all(), 'pysindy does not support different features with different basis functions'
+
+    if opt=='SQTL' or opt=='Manually':
+        optimizer = ps.STLSQ(threshold=threshold_sindy, alpha=alpha)
+    elif opt=='LASSO':
+        optimizer = Lasso(alpha=alpha, max_iter=5000, fit_intercept=False)
+    elif opt=='SR3':
+        optimizer = ps.SR3(threshold=threshold_sindy, nu=.1)
+    
+    ######### first feature ###########
+    basis_functions = basis_functions_list[0]
+    basis_functions_name = basis_functions_name_list[0]
+    lib_custom = CustomLibrary(library_functions=basis_functions, function_names=basis_functions_name)
+    lib_generalized = GeneralizedLibrary([lib_custom])
+    
+    model = ps.SINDy(feature_names=["x", "y"], feature_library=lib_generalized, optimizer=optimizer)
+    model.fit(sol_[:,0], t=t_, x_dot=sol_deriv_[:,0], u=sol_[:,[1,2]], ensemble=ensemble, quiet=True)
+    Xi_0 = model.coefficients()
+    
+    ######### second feature ###########
+    basis_functions = basis_functions_list[1]
+    basis_functions_name = basis_functions_name_list[1]
+    lib_custom = CustomLibrary(library_functions=basis_functions, function_names=basis_functions_name)
+    lib_generalized = GeneralizedLibrary([lib_custom])
+    
+    model = ps.SINDy(feature_names=["x", "y"], feature_library=lib_generalized, optimizer=optimizer)
+    model.fit(sol_[:,1], t=t_, x_dot=sol_deriv_[:,1], u=sol_[:,[0,2]], ensemble=ensemble, quiet=True)
+    # model.print()
+    Xi_1 = model.coefficients()
+
+    ######### third feature ###########
+    basis_functions = basis_functions_list[2]
+    basis_functions_name = basis_functions_name_list[2]
+    lib_custom = CustomLibrary(library_functions=basis_functions, function_names=basis_functions_name)
+    lib_generalized = GeneralizedLibrary([lib_custom])
+    
+    model = ps.SINDy(feature_names=["x", "y"], feature_library=lib_generalized, optimizer=optimizer)
+    model.fit(sol_[:,2], t=t_, x_dot=sol_deriv_[:,2], u=sol_[:,[0,1]], ensemble=ensemble, quiet=True)
+    # model.print()
+    Xi_2 = model.coefficients()
+    
+    Xi = np.r_[Xi_0,Xi_1,Xi_2]
+    return Xi
+
+
+def SINDy_by_coeff(sol_, sol_deriv_, t_, basis, threshold_sindy, opt, ensemble, alpha):
     basis_functions_list = basis['functions']
     # basis_functions_name_list = basis['names']
     
@@ -85,8 +136,9 @@ def fit_sindy_3d(sol_, sol_deriv_, t_, real_list, basis, alpha, opt, deriv_splin
             model = SINDy_by_pysindy(sol_, sol_deriv_, t_, basis, threshold_sindy, opt, ensemble, alpha)
             
         elif opt == 'Manually':
-            model = SINDy_by_coeff(sol_, sol_deriv_, t_, basis, threshold_sindy, alpha)
-        
+            # model = SINDy_by_coeff(sol_, sol_deriv_, t_, basis, threshold_sindy, opt, ensemble, alpha)
+            model = SINDy_by_coeff_mix(sol_, sol_deriv_, t_, basis, threshold_sindy, opt, ensemble, alpha)
+            
         model_set.append(model)
         
     return model_set
@@ -156,11 +208,11 @@ def model_selection_coeff_3d(model_set_, sol_, x0_, t_, a, real_list, basis):
         
         dx2dt = 0
         for par,f in zip(param[1][mask1], basis_functions_list[1][mask1]):
-            dx2dt = dx2dt+par*f(x1,x2,x3)
+            dx2dt = dx2dt+par*f(x2,x1,x3)
             
         dx3dt = 0
         for par,f in zip(param[2][mask2], basis_functions_list[2][mask2]):
-            dx3dt = dx3dt+par*f(x1,x2,x3)
+            dx3dt = dx3dt+par*f(x3,x1,x2)
             
         dxdt = [dx1dt, dx2dt, dx3dt]
         return dxdt

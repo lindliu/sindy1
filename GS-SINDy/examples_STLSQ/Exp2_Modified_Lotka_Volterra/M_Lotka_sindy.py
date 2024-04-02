@@ -41,6 +41,7 @@ basis, opt = get_basis_functions(basis_type=basis_type, GSINDY=False)
 
 path_base = os.path.join(os.getcwd(), 'results')
 suffix = f'{basis_type}_SQTL' if opt=='Manually' else f'{basis_type}_{opt}'
+suffix = f'{suffix}_e' if ensemble else suffix
 if __name__ == "__main__":
     
     from sindy_2d_train import sindy_2d_train

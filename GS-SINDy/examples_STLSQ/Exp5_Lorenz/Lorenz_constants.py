@@ -14,7 +14,7 @@ from utils import basis_functions_mix0_3d, basis_functions_mix1_3d, basis_functi
                 basis_functions_poly_3d, basis_functions_poly_name_3d
 
 ########## hyper parameters ###########
-ensemble = False
+ensemble = True
 precision = 1e-4
 deriv_spline = True#False#
 alpha = .05
@@ -36,7 +36,7 @@ real_list = [real0, real1, real2]
 
 
 ########## basis functions and optimizer ###########
-basis_type = 'poly'##'mix_diff'  ##'mix_same' ## 
+basis_type = 'poly'##'mix_same' ## 'mix_diff'  ##
 
 def get_basis_functions(basis_type, GSINDY=True):
     if GSINDY:

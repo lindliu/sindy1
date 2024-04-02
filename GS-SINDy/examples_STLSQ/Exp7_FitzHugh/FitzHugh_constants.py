@@ -13,7 +13,7 @@ from utils import basis_functions_mix0, basis_functions_mix1, basis_functions_na
     basis_functions_poly_3, basis_functions_name_poly_3
 
 ########## hyper parameters ###########
-ensemble = False
+ensemble = True
 precision = 1e-4  ### if precision is not bigger than threshold_sindy, does not influence results by Maunually optimizer
 deriv_spline = True#False#
 alpha = .05
@@ -39,7 +39,7 @@ real1 = "y' = a*x + b*y + c"
 real_list = [real0, real1]
 
 ########## basis functions and optimizer ###########
-basis_type = 'poly'##'mix'##
+basis_type = 'mix'##'poly'##
 
 def get_basis_functions(basis_type, GSINDY=True):
     if GSINDY:
