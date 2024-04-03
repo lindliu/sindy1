@@ -17,7 +17,39 @@ from utils import get_deriv, get_theta
 # MSE = lambda x: (np.array(x)**2).mean()
 # MSE = lambda x: np.linalg.norm(x)
 
-    
+
+# import scipy
+# def SLS(Theta, DXdt, threshold, alpha=.05):
+#     n_feature = DXdt.shape[1]
+#     Xi = ridge_regression(scipy.sparse.coo_matrix(Theta),DXdt, alpha=alpha).T
+#     # Xi = np.linalg.lstsq(Theta,DXdt, rcond=None)[0]
+#     # Xi = solve_minnonzero(Theta,DXdt)
+#     Xi[np.abs(Xi)<threshold] = 0
+#     # print(Xi)
+#     for _ in range(20):
+#         smallinds = np.abs(Xi)<threshold
+#         Xi[smallinds] = 0
+#         for ind in range(n_feature):
+            
+#             if Xi[:,ind].sum()==0:
+#                 break
+            
+#             biginds = ~smallinds[:,ind]
+            
+#             Xi[biginds,ind] = ridge_regression(scipy.sparse.coo_matrix(Theta[:,biginds]), DXdt[:,ind], alpha=alpha).T
+#             # Xi[biginds,ind] = np.linalg.lstsq(Theta[:,biginds],DXdt[:,ind], rcond=None)[0]
+#             # Xi[biginds,ind] = solve_minnonzero(Theta[:,biginds],DXdt[:,ind])
+        
+#     reg = LinearRegression(fit_intercept=False)
+#     ind_ = np.abs(Xi.T) > 1e-14
+#     coef = np.zeros((DXdt.shape[1], Theta.shape[1]))
+#     for i in range(ind_.shape[0]):
+#         if np.any(ind_[i]):
+#             coef[i, ind_[i]] = reg.fit(scipy.sparse.coo_matrix(Theta[:, ind_[i]]), DXdt[:, i]).coef_
+#     Xi = coef.T
+
+#     return Xi
+
 def SLS(Theta, DXdt, threshold, alpha=.05):
     n_feature = DXdt.shape[1]
     Xi = ridge_regression(Theta,DXdt, alpha=alpha).T

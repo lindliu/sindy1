@@ -10,6 +10,7 @@ sys.path.insert(1, '../../GSINDy')
 sys.path.insert(1, '../..')
 sys.path.insert(1, '..')
 
+import time
 import numpy as np
 import matplotlib.pyplot as plt
 from GSINDy import *
@@ -115,13 +116,15 @@ def fit_sindy_2d(sol_, sol_deriv_, t_, real_list, basis, alpha, opt, deriv_splin
     ### sindy 
     model_set = []
     for threshold_sindy in threshold_sindy_list:
+        t1 = time.time()
         if opt in ['SQTL', 'LASSO', 'SR3']:
             model = SINDy_by_pysindy(sol_, sol_deriv_, t_, basis, threshold_sindy, opt, ensemble, alpha)
             
         elif opt == 'Manually':
             # model = SINDy_by_coeff(sol_, sol_deriv_, t_, basis, threshold_sindy, opt, ensemble, alpha)
             model = SINDy_by_coeff_mix(sol_, sol_deriv_, t_, basis, threshold_sindy, opt, ensemble, alpha)
-
+            
+        print(f'sindy cost: {time.time()-t1:.3f} seconds')
         model_set.append(model)
         
     return model_set

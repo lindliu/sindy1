@@ -10,6 +10,7 @@ import sys
 sys.path.insert(1, '../../GSINDy')
 sys.path.insert(1, '../..')
 
+import time
 import numpy as np
 from GSINDy import *
 
@@ -37,6 +38,8 @@ def fit_gsindy_2d(sol_org_list, num_traj, t, num, real_list, \
     for threshold_sindy in threshold_sindy_list:
         for threshold_group in threshold_group_list:
             for threshold_similarity in threshold_similarity_list:
+                
+                t1 = time.time()
                 ### initilization
                 gsindy = GSINDy(basis = basis, 
                                 num_traj = num_traj, 
@@ -84,7 +87,10 @@ def fit_gsindy_2d(sol_org_list, num_traj, t, num, real_list, \
                         print(f'feature 0 with different basis {basis_functions_name_list[0][diff_basis[0]]}: \n {Xi_final[:,0,all_basis[0]]} \n {basis_functions_name_list[0][all_basis[0]]}')
                         print(f'real1: {real_list[1]}')
                         print(f'feature 1 with different basis {basis_functions_name_list[1][diff_basis[1]]}: \n {Xi_final[:,1,all_basis[1]]} \n {basis_functions_name_list[1][all_basis[1]]}')
-
+                
+                t2 = time.time()
+                print(f'gsindy cost: {t2-t1:.1f} seconds')
+                
     return model_set, diff0_basis_list, diff1_basis_list, same0_basis_list, same1_basis_list, parameter_list
 
 #%% 

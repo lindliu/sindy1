@@ -10,6 +10,7 @@ import numpy as np
 from utils import func_Brusselator
 from utils import basis_functions_mix0, basis_functions_mix1, basis_functions_name_mix0, basis_functions_name_mix1, \
     basis_functions_poly_5, basis_functions_name_poly_5
+np.random.seed(42)
 
 ########## hyper parameters ###########
 ensemble = False

@@ -12,6 +12,7 @@ from utils import basis_functions_mix0_3d, basis_functions_mix1_3d, basis_functi
                 basis_functions_name_mix0_3d, basis_functions_name_mix1_3d, basis_functions_name_mix2_3d, \
                 basis_functions_3d, basis_functions_name_3d,\
                 basis_functions_poly_3d, basis_functions_poly_name_3d
+np.random.seed(42)
 
 ########## hyper parameters ###########
 ensemble = True

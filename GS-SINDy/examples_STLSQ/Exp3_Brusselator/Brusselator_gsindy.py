@@ -22,7 +22,7 @@ np.set_printoptions(formatter={'float': lambda x: "{0:.4f}".format(x)})
 
 
 ########## hyper parameters ###########
-ensemble = constants.ensemble
+ensemble = False
 precision = constants.precision
 deriv_spline = constants.deriv_spline
 alpha = constants.alpha

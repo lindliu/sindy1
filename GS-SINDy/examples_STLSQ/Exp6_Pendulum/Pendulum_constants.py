@@ -9,6 +9,7 @@ Created on Wed Dec 20 20:28:19 2023
 import numpy as np
 from utils import func_Pendulum
 from utils import basis_functions_trig, basis_functions_name_trig
+np.random.seed(42)
 
 ########## hyper parameters ###########
 ensemble = True
