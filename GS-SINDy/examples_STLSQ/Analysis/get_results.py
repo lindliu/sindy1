@@ -29,7 +29,7 @@ path_Exp5 = os.path.join(os.getcwd(), '../Exp5_Lorenz/results/')
 path_Exp6 = os.path.join(os.getcwd(), '../Exp6_Pendulum/results/')
 path_Exp7 = os.path.join(os.getcwd(), '../Exp7_FitzHugh/results/')
 
-exp_idx = 1 ###1,2,3,4,5,6,7
+exp_idx = 7 ###1,2,3,4,5,6,7
 
 if exp_idx == 1:
     import Lotka_constants as constants
@@ -315,7 +315,13 @@ if __name__ == "__main__":
     for i in range(num_traj):
         path_ = os.path.join(path_data, f'coeff/sindy_{suffix_mix}_{i}.npy')
         coeff_sindy_mix[i,:,:] = np.load(path_)
-            
+    
+    #### results from E-sindy
+    coeff_esindy_mix = np.zeros([num_traj, num_feature, num_basis_mix])
+    for i in range(num_traj):
+        path_ = os.path.join(path_data, f'coeff/sindy_{suffix_mix}_e_{i}.npy')
+        coeff_esindy_mix[i,:,:] = np.load(path_)
+        
     # #### results from wsindy
     # coeff_wsindy_mix = np.zeros([num_traj, num_feature, num_basis_mix])
     # for i in range(num_traj):
@@ -338,6 +344,12 @@ if __name__ == "__main__":
         for i in range(num_traj):
             path_ = os.path.join(path_data, f'coeff/sindy_{suffix_poly}_{i}.npy')
             coeff_sindy_poly[i,:,:] = np.load(path_)
+        
+        #### results from esindy
+        coeff_esindy_poly = np.zeros([num_traj, num_feature, num_basis_poly])
+        for i in range(num_traj):
+            path_ = os.path.join(path_data, f'coeff/sindy_{suffix_poly}_e_{i}.npy')
+            coeff_esindy_poly[i,:,:] = np.load(path_)
             
         # #### results from wsindy
         # coeff_wsindy_poly = np.zeros([num_traj, num_feature, num_basis_poly])
@@ -349,12 +361,14 @@ if __name__ == "__main__":
         
         
     # coeff_sindy_poly
+    # coeff_esindy_poly
     # coeff_gsindy_one_poly
     # coeff_gsindy_all_poly
     # coeff_true_poly
     
     
     # coeff_sindy_mix
+    # coeff_esindy_mix
     # coeff_gsindy_one_mix
     # coeff_gsindy_all_mix
     # coeff_true_mix
@@ -369,12 +383,14 @@ if __name__ == "__main__":
     coeff_gsindy_all_mix[np.abs(coeff_gsindy_all_mix)<bound] = 0 
     coeff_gsindy_one_mix[np.abs(coeff_gsindy_one_mix)<bound] = 0
     coeff_sindy_mix[np.abs(coeff_sindy_mix)<bound] = 0
+    coeff_esindy_mix[np.abs(coeff_esindy_mix)<bound] = 0
     # coeff_wsindy_mix[np.abs(coeff_wsindy_mix)<bound] = 0
 
     if exp_idx!=6:
         coeff_gsindy_all_poly[np.abs(coeff_gsindy_all_poly)<bound] = 0 
         coeff_gsindy_one_poly[np.abs(coeff_gsindy_one_poly)<bound] = 0
         coeff_sindy_poly[np.abs(coeff_sindy_poly)<bound] = 0
+        coeff_esindy_poly[np.abs(coeff_esindy_poly)<bound] = 0
         # coeff_wsindy_poly[np.abs(coeff_wsindy_poly)<bound] = 0
 
 
@@ -390,7 +406,13 @@ if __name__ == "__main__":
     def get_rmse_mp_mr(real, pred):
         ## get rmse, precision and recall
         ## dimension of both inputs: num_traj, num_feature, num_basis
-        rmse = np.linalg.norm(real-pred, axis=(1,2)) / np.linalg.norm(real, axis=(1,2))
+        # rmse = np.linalg.norm(real-pred, axis=(1,2)) / np.linalg.norm(real, axis=(1,2))
+        rmse = []
+        for i in range(real.shape[0]):
+            mask = real[i]!=0
+            rmse.append(np.linalg.norm(real[i][mask]-pred[i][mask]) / np.linalg.norm(real[i][mask]))
+        rmse = np.array(rmse)
+        
         mp = ((real*pred)!=0).sum(axis=(1,2)) / (pred!=0).sum(axis=(1,2))
         mr = ((real*pred)!=0).sum(axis=(1,2)) / (real!=0).sum(axis=(1,2))
         
@@ -399,6 +421,7 @@ if __name__ == "__main__":
     rmse_gsindy_all_mix, mp_gsindy_all_mix, mr_gsindy_all_mix = get_rmse_mp_mr(coeff_true_mix, coeff_gsindy_all_mix)
     rmse_gsindy_one_mix, mp_gsindy_one_mix, mr_gsindy_one_mix = get_rmse_mp_mr(coeff_true_mix, coeff_gsindy_one_mix)
     rmse_sindy_mix, mp_sindy_mix, mr_sindy_mix = get_rmse_mp_mr(coeff_true_mix, coeff_sindy_mix)
+    rmse_esindy_mix, mp_esindy_mix, mr_esindy_mix = get_rmse_mp_mr(coeff_true_mix, coeff_esindy_mix)
     # rmse_wsindy_mix, mp_wsindy_mix, mr_wsindy_mix = get_rmse_mp_mr(coeff_true_mix, coeff_wsindy_mix)
 
     # ### record metrics: rmse precision and recal
@@ -435,6 +458,7 @@ if __name__ == "__main__":
         rmse_gsindy_all_poly, mp_gsindy_all_poly, mr_gsindy_all_poly = get_rmse_mp_mr(coeff_true_poly, coeff_gsindy_all_poly)
         rmse_gsindy_one_poly, mp_gsindy_one_poly, mr_gsindy_one_poly = get_rmse_mp_mr(coeff_true_poly, coeff_gsindy_one_poly)
         rmse_sindy_poly, mp_sindy_poly, mr_sindy_poly = get_rmse_mp_mr(coeff_true_poly, coeff_sindy_poly)
+        rmse_esindy_poly, mp_esindy_poly, mr_esindy_poly = get_rmse_mp_mr(coeff_true_poly, coeff_esindy_poly)
         # rmse_wsindy_poly, mp_wsindy_poly, mr_wsindy_poly = get_rmse_mp_mr(coeff_true_poly, coeff_wsindy_poly)
 
         # ### record metrics: rmse precision and recal
@@ -468,31 +492,33 @@ if __name__ == "__main__":
 
 
 
-    table_mix = np.zeros([num_traj+1, 9], dtype=object)
-    table_mix[0,:] = ['$RMSE$', '$Mp$', '$Mr$', '$RMSE$', '$Mp$', '$Mr$', '$RMSE$', '$Mp$', '$Mr$']
+    table_mix = np.zeros([num_traj+1, 12], dtype=object)
+    table_mix[0,:] = ['$RMSE$', '$Mp$', '$Mr$', '$RMSE$', '$Mp$', '$Mr$', '$RMSE$', '$Mp$', '$Mr$', '$RMSE$', '$Mp$', '$Mr$']
     table_mix[1:,:3] = np.c_[rmse_gsindy_all_mix, mp_gsindy_all_mix, mr_gsindy_all_mix]
     table_mix[1:,3:6] = np.c_[rmse_gsindy_one_mix, mp_gsindy_one_mix, mr_gsindy_one_mix]
-    table_mix[1:,6:9] = np.c_[rmse_sindy_mix, mp_sindy_mix, mr_sindy_mix]
+    table_mix[1:,6:9] = np.c_[rmse_esindy_mix, mp_esindy_mix, mr_esindy_mix]    
+    table_mix[1:,9:12] = np.c_[rmse_sindy_mix, mp_sindy_mix, mr_sindy_mix]
 
 
     if exp_idx!=6:
-        table_poly = np.zeros([num_traj, 9], dtype=object)
+        table_poly = np.zeros([num_traj, 12], dtype=object)
         table_poly[:,:3] = np.c_[rmse_gsindy_all_poly, mp_gsindy_all_poly, mr_gsindy_all_poly]
         table_poly[:,3:6] = np.c_[rmse_gsindy_one_poly, mp_gsindy_one_poly, mr_gsindy_one_poly]
-        table_poly[:,6:9] = np.c_[rmse_sindy_poly, mp_sindy_poly, mr_sindy_poly]
+        table_poly[:,6:9] = np.c_[rmse_esindy_poly, mp_esindy_poly, mr_esindy_poly]
+        table_poly[:,9:12] = np.c_[rmse_sindy_poly, mp_sindy_poly, mr_sindy_poly]
     
-        table_metrics = np.zeros([13,10], dtype=object)
+        table_metrics = np.zeros([13,13], dtype=object)
         table_metrics[:,0] = ['Metric', 'traj. 1', 'traj. 2', 'traj. 3','traj. 4','traj. 5','traj. 6', \
                               'traj. 1', 'traj. 2', 'traj. 3','traj. 4','traj. 5','traj. 6']
         table_metrics[:,1:] = np.r_[table_mix, table_poly]
     else:
-        table_metrics = np.zeros([7,10], dtype=object)
+        table_metrics = np.zeros([7,13], dtype=object)
         table_metrics[:,0] = ['Metric', 'traj. 1', 'traj. 2', 'traj. 3','traj. 4','traj. 5','traj. 6']
         table_metrics[:,1:] = table_mix
 
         
     def get_latex_line(input_list):
-        print_type = ['.2e', '.2f', '.2f', '.2e', '.2f', '.2f', '.2e', '.2f', '.2f']
+        print_type = ['.2e', '.2f', '.2f', '.2e', '.2f', '.2f', '.2e', '.2f', '.2f', '.2e', '.2f', '.2f']
         
         line = ['&']
         line.append(input_list[0])
@@ -543,11 +569,14 @@ if __name__ == "__main__":
         file.write(f'{rmse_gsindy_all_mix.mean():.2e}, {mp_gsindy_all_mix.mean():.2f}, {mr_gsindy_all_mix.mean():.2f} ')
         file.writelines(['\n', '*'*15, ' gsindy_one: mean of rmse, precision, recall ', '*'*15, '\n'])
         file.write(f'{rmse_gsindy_one_mix.mean():.2e}, {mp_gsindy_one_mix.mean():.2f}, {mr_gsindy_one_mix.mean():.2f} ')
+        file.writelines(['*'*15, ' E-sindy: mean of rmse, precision, recall ', '*'*15, '\n'])
+        file.write(f'{rmse_esindy_mix.mean():.2e}, {mp_esindy_mix.mean():.2f}, {mr_esindy_mix.mean():.2f} ')
         file.writelines(['*'*15, ' sindy: mean of rmse, precision, recall ', '*'*15, '\n'])
         file.write(f'{rmse_sindy_mix.mean():.2e}, {mp_sindy_mix.mean():.2f}, {mr_sindy_mix.mean():.2f} ')
 
         Mean_mix = np.array([[rmse_gsindy_all_mix.mean(), mp_gsindy_all_mix.mean(), mr_gsindy_all_mix.mean()],
                              [rmse_gsindy_one_mix.mean(), mp_gsindy_one_mix.mean(), mr_gsindy_one_mix.mean()],
+                             [rmse_esindy_mix.mean(), mp_esindy_mix.mean(), mr_esindy_mix.mean()],
                              [rmse_sindy_mix.mean(), mp_sindy_mix.mean(), mr_sindy_mix.mean()]])
         np.save(os.path.join(f'{directory}/average', f'mean_mix_{func_name}.npy'), Mean_mix)
 
@@ -557,17 +586,23 @@ if __name__ == "__main__":
             file.write(f'{rmse_gsindy_all_poly.mean():.2e}, {mp_gsindy_all_poly.mean():.2f}, {mr_gsindy_all_poly.mean():.2f} ')
             file.writelines(['\n', '*'*15, ' gsindy_one: mean of rmse, precision, recall ', '*'*15, '\n'])
             file.write(f'{rmse_gsindy_one_poly.mean():.2e}, {mp_gsindy_one_poly.mean():.2f}, {mr_gsindy_one_poly.mean():.2f} ')
+            file.writelines(['*'*15, ' E-sindy: mean of rmse, precision, recall ', '*'*15, '\n'])
+            file.write(f'{rmse_esindy_poly.mean():.2e}, {mp_esindy_poly.mean():.2f}, {mr_esindy_poly.mean():.2f} ')
             file.writelines(['*'*15, ' sindy: mean of rmse, precision, recall ', '*'*15, '\n'])
             file.write(f'{rmse_sindy_poly.mean():.2e}, {mp_sindy_poly.mean():.2f}, {mr_sindy_poly.mean():.2f} ')
         
             os.makedirs(os.path.join(f'{directory}/average'), exist_ok=True)
             Mean_poly = np.array([[rmse_gsindy_all_poly.mean(), mp_gsindy_all_poly.mean(), mr_gsindy_all_poly.mean()],
                                   [rmse_gsindy_one_poly.mean(), mp_gsindy_one_poly.mean(), mr_gsindy_one_poly.mean()],
+                                  [rmse_esindy_poly.mean(), mp_esindy_poly.mean(), mr_esindy_poly.mean()],
                                   [rmse_sindy_poly.mean(), mp_sindy_poly.mean(), mr_sindy_poly.mean()]])
             np.save(os.path.join(f'{directory}/average', f'mean_poly_{func_name}.npy'), Mean_poly)
 
         
         
+        
+    
+    
     
     ########################################################
     ############# generate coefficients table###############
@@ -658,7 +693,7 @@ if __name__ == "__main__":
     # ### plot real coefficients vs predicted 
     # os.makedirs(os.path.join(path_base, 'figures'), exist_ok=True)
     # for i in range(num_traj):
-    #     fig, ax = plt.subplots(3,num_feature,figsize=[10,8])
+    #     fig, ax = plt.subplots(4,num_feature,figsize=[10,8])
     #     fig.suptitle(f'{func_name} {suffix_mix} with trajectory {i}')
     #     basis_idx = np.arange(num_basis_mix)
     #     for j in range(num_feature):
@@ -670,10 +705,14 @@ if __name__ == "__main__":
     #         ax[1,j].scatter(basis_idx, coeff_true_mix[i,j,:], c='b', alpha=.3)
     #         ax[1,j].scatter(basis_idx, coeff_gsindy_one_mix[i,j,:], c='r', alpha=.3)
     #         ax[1,j].set_title(f'{j}th feature: True vs GS-SINDy one')
-        
+            
     #         ax[2,j].scatter(basis_idx, coeff_true_mix[i,j,:], c='b', alpha=.3)
-    #         ax[2,j].scatter(basis_idx, coeff_sindy_mix[i,j,:], c='r', alpha=.3)
-    #         ax[2,j].set_title(f'{j}th feature: True vs SINDy')
+    #         ax[2,j].scatter(basis_idx, coeff_esindy_mix[i,j,:], c='r', alpha=.3)
+    #         ax[2,j].set_title(f'{j}th feature: True vs E-SINDy')
+            
+    #         ax[3,j].scatter(basis_idx, coeff_true_mix[i,j,:], c='b', alpha=.3)
+    #         ax[3,j].scatter(basis_idx, coeff_sindy_mix[i,j,:], c='r', alpha=.3)
+    #         ax[3,j].set_title(f'{j}th feature: True vs SINDy')
             
     #     fig.tight_layout()
     #     # fig.subplots_adjust(top=0.88)
@@ -681,7 +720,7 @@ if __name__ == "__main__":
         
         
     #     if exp_idx!=6:
-    #         fig, ax = plt.subplots(3,num_feature,figsize=[10,8])
+    #         fig, ax = plt.subplots(4,num_feature,figsize=[10,8])
     #         fig.suptitle(f'{func_name} {suffix_poly} with trajectory {i}')
     #         basis_idx = np.arange(num_basis_poly)
     #         for j in range(num_feature):
@@ -695,9 +734,12 @@ if __name__ == "__main__":
     #             ax[1,j].set_title(f'{j}th feature: True vs GS-SINDy one')
 
     #             ax[2,j].scatter(basis_idx, coeff_true_poly[i,j,:], c='b', alpha=.3)
-    #             ax[2,j].scatter(basis_idx, coeff_sindy_poly[i,j,:], c='r', alpha=.3)
-    #             ax[2,j].set_title(f'{j}th feature: True vs SINDy')
+    #             ax[2,j].scatter(basis_idx, coeff_esindy_poly[i,j,:], c='r', alpha=.3)
+    #             ax[2,j].set_title(f'{j}th feature: True vs E-SINDy')
                 
+    #             ax[3,j].scatter(basis_idx, coeff_true_poly[i,j,:], c='b', alpha=.3)
+    #             ax[3,j].scatter(basis_idx, coeff_sindy_poly[i,j,:], c='r', alpha=.3)
+    #             ax[3,j].set_title(f'{j}th feature: True vs SINDy')
 
     #         fig.tight_layout()
     #         # fig.subplots_adjust(top=0.88)

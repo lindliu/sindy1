@@ -14,32 +14,32 @@ from glob import glob
 
 path_base = os.path.join('Results')
 
-mean_mix_all = np.zeros([9,7])
+mean_mix_all = np.zeros([12,7])
 for i, idx in enumerate([1,2,3,4,5,6,7]):
     path_mix = glob(os.path.join(path_base, 'average', f'mean_mix_Exp{idx}*.npy'))[0]
     mean_mix_all[:,i] = np.load(path_mix).flatten()
 
-mean_poly_all = np.zeros([9,6])
+mean_poly_all = np.zeros([12,6])
 for i, idx in enumerate([1,2,3,4,5,7]):
     path_poly = glob(os.path.join(path_base, 'average', f'mean_poly_Exp{idx}*.npy'))[0]
     mean_poly_all[:,i] = np.load(path_poly).flatten()
     
     
-mean_all = np.zeros([9,14],dtype=object)
-mean_all[:,0] = ['$RMES$', '$Mp$', '$Mr$', '$RMES$', '$Mp$', '$Mr$', '$RMES$', '$Mp$', '$Mr$']
+mean_all = np.zeros([12,14],dtype=object)
+mean_all[:,0] = ['$RMES$', '$Mp$', '$Mr$', '$RMES$', '$Mp$', '$Mr$', '$RMES$', '$Mp$', '$Mr$', '$RMES$', '$Mp$', '$Mr$']
 mean_all[:,1:8] = mean_mix_all
 mean_all[:,8:] = mean_poly_all
 
 mean_all = mean_all.T
 
-table_mean_all = np.zeros([14,10], dtype=object)
+table_mean_all = np.zeros([14,13], dtype=object)
 table_mean_all[:,0] = ['Metric', \
                        'Lotka-Volterra', 'Modified Lotka-Volterra', 'Brusselator','Van der Pol','Lorenz', 'Pendulum', 'FitzHugh', \
                        'Lotka-Volterra', 'Modified Lotka-Volterra', 'Brusselator','Van der Pol','Lorenz', 'FitzHugh']
 table_mean_all[:,1:] = mean_all
 
 def get_latex_line(input_list):
-    print_type = ['.2e', '.2f', '.2f', '.2e', '.2f', '.2f', '.2e', '.2f', '.2f']
+    print_type = ['.2e', '.2f', '.2f', '.2e', '.2f', '.2f', '.2e', '.2f', '.2f', '.2e', '.2f', '.2f']
     
     line = ['&']
     line.append(input_list[0])
