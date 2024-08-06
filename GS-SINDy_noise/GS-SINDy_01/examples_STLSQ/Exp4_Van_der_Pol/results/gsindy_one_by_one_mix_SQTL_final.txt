@@ -1,0 +1,41 @@
+***************result of trajectory 0 split into 4 fragments***************
+coef of feature 0: [-0.8763 -0.0635 -3.8100 -0.1891 -0.2900 1.7621 2.7824 -0.4432 0.7170
+ 0.3533] 
+basis of feature 0: ['1' 'x' 'y' 'y^2' 'x^3' 'x^2y' 'xy^2' 'y^3' 'cos(x)' 'e^x'] 
+coef of feature 1: [0.1999] 
+basis of feature 1: ['x'] 
+
+***************result of trajectory 1 split into 3 fragments***************
+coef of feature 0: [2.8634 9.2100 -5.9277 -6.9682 -0.1004 -3.3081 1.4027 2.2957 1.5497
+ -14.6616 -8.5631 5.7083] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'y^2' 'x^3' 'x^2y' 'xy^2' 'y^3' 'sin(x)' 'cos(x)' 'e^x'] 
+coef of feature 1: [-1.2778 0.2065 0.0913 0.0956 0.3803 0.4647 0.9576] 
+basis of feature 1: ['1' 'x' 'x^2' 'xy' 'y^2' 'y^4' 'cos(y)'] 
+
+***************result of trajectory 2 split into 4 fragments***************
+coef of feature 0: [-4.4851 -5.9162 -5.9974 11.2250 0.0988 0.5022 3.3719 1.4353 1.8212 1.2542
+ 17.4950 13.3842 -9.2779] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'xy' 'y^2' 'x^3' 'x^2y' 'xy^2' 'y^3' 'sin(x)' 'cos(x)'
+ 'e^x'] 
+coef of feature 1: [0.2975 0.1715 -0.0814] 
+basis of feature 1: ['x' 'y^3' 'sin(y)'] 
+
+***************result of trajectory 3 split into 3 fragments***************
+coef of feature 0: [-1.3656 1.4496 -4.5053 1.7025 0.0802 0.5754 0.9690 0.9880 2.7176 -1.1454] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'x^3' 'x^2y' 'xy^2' 'sin(x)' 'cos(x)' 'e^x'] 
+coef of feature 1: [0.3003] 
+basis of feature 1: ['x'] 
+
+***************result of trajectory 4 split into 5 fragments***************
+coef of feature 0: [3.3381 -15.8481 -3.9350 -10.5865 -1.5254 0.6249 1.0448 -1.1380 10.1256
+ -12.4839 9.0727] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'x^3' 'x^2y' 'xy^2' 'y^3' 'sin(x)' 'cos(x)' 'e^x'] 
+coef of feature 1: [0.4145 0.1259 -0.1314] 
+basis of feature 1: ['x' 'y^3' 'sin(y)'] 
+
+***************result of trajectory 5 split into 4 fragments***************
+coef of feature 0: [22.6996 -4.1830 -3.7534 1.8059 3.1815 -0.5364 -22.3684] 
+basis of feature 0: ['x' 'y' 'x^3' 'x^2y' 'xy^2' 'y^3' 'sin(x)'] 
+coef of feature 1: [0.4078 0.3999 -0.1417 -0.1942 -0.3989 -1.0873 0.3096] 
+basis of feature 1: ['x' 'y^2' 'x^2y' 'xy^2' 'y^3' 'y^4' 'sin(y)'] 
+

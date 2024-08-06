@@ -1,0 +1,45 @@
+***************result of trajectory 0 ***************
+coef of feature 0: [5.5886 -14.2572 -1.8995 5.4435 -0.0398 0.1329 7.1280 0.7613 -0.0183
+ -3.2386 -2.1839 0.0154 0.0755 0.7383 0.0492] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'xy' 'y^2' 'x^2y' 'xy^2' 'x^4' 'x^3y' 'x^2y^2' 'xy^3'
+ 'x^4y' 'x^3y^2' 'x^2y^3'] 
+coef of feature 1: [0.0404 1.7066 0.1256 -0.0846 -0.7159 -0.2700 -0.3779 1.4689 -0.1649
+ -0.4129 -0.0760] 
+basis of feature 1: ['1' 'x' 'y' 'xy' 'x^3' 'x^2y' 'x^4' 'x^3y' 'x^2y^2' 'x^4y' 'x^3y^2'] 
+
+***************result of trajectory 1 ***************
+coef of feature 0: [-0.5823 0.1992] 
+basis of feature 0: ['x' 'xy'] 
+coef of feature 1: [1.3478 1.8428 14.1149 -9.9118 -24.6935 9.4007 2.7470 35.6877 -16.5427
+ -0.2874 -15.2628 5.4849 0.4820] 
+basis of feature 1: ['1' 'x' 'x^2' 'xy' 'x^3' 'x^2y' 'xy^2' 'x^4' 'x^3y' 'xy^3' 'x^5' 'x^4y'
+ 'x^3y^2'] 
+
+***************result of trajectory 2 ***************
+coef of feature 0: [] 
+basis of feature 0: [] 
+coef of feature 1: [0.6385 -1.5635] 
+basis of feature 1: ['1' 'x'] 
+
+***************result of trajectory 3 ***************
+coef of feature 0: [2.2041 -7.3663 -0.6265 3.9701 0.6816 0.0333 0.4529 -0.1530 0.5994 -0.6593
+ -0.3703 0.2179] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'xy' 'x^3' 'xy^2' 'x^4' 'x^3y' 'x^2y^2' 'x^4y' 'x^3y^2'] 
+coef of feature 1: [-0.3764 1.9926 -7.8055 3.8530 0.0942 65.5250 -14.9311 -0.9055 -0.0135
+ -63.3958 1.1600 2.6573 0.0177 14.6974 5.0029 -1.6439 0.0617] 
+basis of feature 1: ['1' 'x' 'x^2' 'xy' 'y^2' 'x^3' 'x^2y' 'xy^2' 'y^3' 'x^4' 'x^3y' 'x^2y^2'
+ 'xy^3' 'x^5' 'x^4y' 'x^3y^2' 'x^2y^3'] 
+
+***************result of trajectory 4 ***************
+coef of feature 0: [] 
+basis of feature 0: [] 
+coef of feature 1: [0.3939 -0.4757] 
+basis of feature 1: ['1' 'x'] 
+
+***************result of trajectory 5 ***************
+coef of feature 0: [0.1104 -0.7670 0.1388 -0.1914 0.0687 0.1502 -0.0081] 
+basis of feature 0: ['1' 'xy' 'xy^2' 'x^4' 'x^3y' 'x^5' 'x^4y'] 
+coef of feature 1: [0.2794 0.7480 -0.5219 -0.0717 0.0554 -1.9411 2.6606 -0.3391 0.7693
+ -0.9886] 
+basis of feature 1: ['1' 'x' 'x^3' 'x^2y' 'xy^2' 'x^4' 'x^3y' 'x^2y^2' 'x^5' 'x^4y'] 
+

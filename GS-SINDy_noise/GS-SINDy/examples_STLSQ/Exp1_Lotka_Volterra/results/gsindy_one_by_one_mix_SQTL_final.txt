@@ -1,0 +1,36 @@
+***************result of trajectory 0 split into 2 fragments***************
+coef of feature 0: [-1.3044 0.2192 0.4559 -0.8000 -0.0559 0.2640 1.0952 0.2102] 
+basis of feature 0: ['1' 'x' 'x^2' 'xy' 'x^4' 'sin(x)' 'cos(x)' 'e^x'] 
+coef of feature 1: [-0.8000 0.6999] 
+basis of feature 1: ['y' 'xy'] 
+
+***************result of trajectory 1 split into 5 fragments***************
+coef of feature 0: [1.0001 -0.9999] 
+basis of feature 0: ['x' 'xy'] 
+coef of feature 1: [-0.9999 0.9997] 
+basis of feature 1: ['y' 'xy'] 
+
+***************result of trajectory 2 split into 2 fragments***************
+coef of feature 0: [0.5001 -0.6000] 
+basis of feature 0: ['x' 'xy'] 
+coef of feature 1: [-0.6000 0.5000] 
+basis of feature 1: ['y' 'xy'] 
+
+***************result of trajectory 3 split into 4 fragments***************
+coef of feature 0: [1.5020 -1.5004] 
+basis of feature 0: ['x' 'xy'] 
+coef of feature 1: [-1.4989 1.4987] 
+basis of feature 1: ['y' 'xy'] 
+
+***************result of trajectory 4 split into 5 fragments***************
+coef of feature 0: [1.2005 -1.5000] 
+basis of feature 0: ['x' 'xy'] 
+coef of feature 1: [-1.4994 1.1994] 
+basis of feature 1: ['y' 'xy'] 
+
+***************result of trajectory 5 split into 2 fragments***************
+coef of feature 0: [1.3004 -1.0000] 
+basis of feature 0: ['x' 'xy'] 
+coef of feature 1: [-0.9995 1.2995] 
+basis of feature 1: ['y' 'xy'] 
+

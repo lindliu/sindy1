@@ -1,0 +1,42 @@
+***************result of trajectory 0 ***************
+coef of feature 0: [-0.7396 0.6445 -1.1641 0.1670 -0.1556 -1.2025 0.9013 0.1891 0.9988 0.2975
+ -0.7324 0.2538 -0.2693] 
+basis of feature 0: ['x' 'y' 'x^2' 'xy' 'y^2' 'xy^2' 'x^4' 'x^3y' 'x^2y^2' 'xy^3' 'x^4y'
+ 'x^3y^2' 'x^2y^3'] 
+coef of feature 1: [1.1266 -0.2431 -1.0446 0.0277 -0.8804 2.8182 0.3145 -0.8623 -0.4298
+ 0.2358] 
+basis of feature 1: ['1' 'y' 'xy' 'y^2' 'x^3' 'x^2y' 'xy^2' 'x^2y^2' 'x^4y' 'x^3y^2'] 
+
+***************result of trajectory 1 ***************
+coef of feature 0: [0.3957 -2.5740 1.2624 0.4943 -0.7371] 
+basis of feature 0: ['1' 'x' 'x^2y' 'x^4' 'x^3y'] 
+coef of feature 1: [0.0936 10.0679 -24.4552 15.5955 3.4915 -0.4169 -3.3967 -1.4262] 
+basis of feature 1: ['y' 'x^2' 'x^3' 'x^4' 'x^3y' 'x^2y^2' 'x^5' 'x^4y'] 
+
+***************result of trajectory 2 ***************
+coef of feature 0: [] 
+basis of feature 0: [] 
+coef of feature 1: [0.6323 -1.5262] 
+basis of feature 1: ['1' 'x'] 
+
+***************result of trajectory 3 ***************
+coef of feature 0: [3.5371 -13.8250 -1.3868 13.3167 4.2273 0.1033 -5.2538 -4.8972 0.8150
+ 3.1268 -0.0968 -0.7350] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'xy' 'y^2' 'x^3' 'x^2y' 'x^4' 'x^3y' 'x^2y^2' 'x^4y'] 
+coef of feature 1: [-2.3508 6.4502 1.2878 1.5078 1.1813 -0.1574 44.9323 -16.5740 -0.7106
+ -51.1207 4.7996 2.8269 0.0625 12.5166 3.5378 -1.6224] 
+basis of feature 1: ['1' 'x' 'y' 'x^2' 'xy' 'y^2' 'x^3' 'x^2y' 'xy^2' 'x^4' 'x^3y' 'x^2y^2'
+ 'xy^3' 'x^5' 'x^4y' 'x^3y^2'] 
+
+***************result of trajectory 4 ***************
+coef of feature 0: [] 
+basis of feature 0: [] 
+coef of feature 1: [0.3157] 
+basis of feature 1: ['1'] 
+
+***************result of trajectory 5 ***************
+coef of feature 0: [-0.0861 -0.4337 -1.6924 0.1050 1.8174 -0.4458] 
+basis of feature 0: ['x' 'xy' 'x^3' 'xy^2' 'x^4' 'x^5'] 
+coef of feature 1: [0.4162 -2.1419 1.4194 0.6682 1.0110 -0.3193 -0.1290 -0.5117] 
+basis of feature 1: ['1' 'x^3' 'x^2y' 'x^4' 'x^3y' 'x^2y^2' 'x^5' 'x^4y'] 
+

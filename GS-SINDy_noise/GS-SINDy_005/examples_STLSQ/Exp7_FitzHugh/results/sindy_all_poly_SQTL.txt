@@ -1,0 +1,44 @@
+***************result of trajectory 0 ***************
+coef of feature 0: [0.6282 0.6999 0.8888 -0.4466 -0.7264 -0.3762 -0.2643 -0.7462 -1.3078
+ -1.3921 0.1125 0.3955 0.7702 1.1758 0.4469] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'xy' 'y^2' 'x^3' 'x^2y' 'xy^2' 'y^3' 'x^4' 'x^3y'
+ 'x^2y^2' 'xy^3' 'y^4'] 
+coef of feature 1: [0.0807 0.1032 -0.0976] 
+basis of feature 1: ['x' 'y^2' 'y^3'] 
+
+***************result of trajectory 1 ***************
+coef of feature 0: [] 
+basis of feature 0: [] 
+coef of feature 1: [] 
+basis of feature 1: [] 
+
+***************result of trajectory 2 ***************
+coef of feature 0: [62.4130 -60.6250 -28.9208 14.7082 17.9892 -7.6460 -1.1463 4.4025 4.1836
+ -0.3830 -1.2684] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'xy' 'y^2' 'x^2y' 'xy^2' 'y^3' 'x^3y' 'xy^3'] 
+coef of feature 1: [0.1430 -0.0548 0.0095 -0.0069 -0.0165] 
+basis of feature 1: ['y' 'xy' 'x^3' 'y^3' 'xy^3'] 
+
+***************result of trajectory 3 ***************
+coef of feature 0: [-7.7470 1.1334 2.0482 4.1416 4.3423 7.4296 -0.9898 -3.7565 -5.7715
+ -4.7518 -0.2031 0.5137 0.8626 1.7455 0.6402] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'xy' 'y^2' 'x^3' 'x^2y' 'xy^2' 'y^3' 'x^4' 'x^3y'
+ 'x^2y^2' 'xy^3' 'y^4'] 
+coef of feature 1: [0.0350 0.1373 -0.0617 -0.0232 -0.0182] 
+basis of feature 1: ['1' 'x' 'y' 'xy' 'x^3'] 
+
+***************result of trajectory 4 ***************
+coef of feature 0: [11.1172 -5.2863 -11.3915 -1.9056 6.8323 -1.8604 0.6025 0.3202 -0.6396
+ 2.7390 0.1387 -0.4961 0.8541 -1.0135 0.0470] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'xy' 'y^2' 'x^3' 'x^2y' 'xy^2' 'y^3' 'x^4' 'x^3y'
+ 'x^2y^2' 'xy^3' 'y^4'] 
+coef of feature 1: [0.0504 0.0533 0.1114 -0.0340 -0.0292 -0.0682 0.0220] 
+basis of feature 1: ['1' 'x' 'y' 'xy' 'x^2y' 'y^3' 'xy^3'] 
+
+***************result of trajectory 5 ***************
+coef of feature 0: [-0.0098 0.3070 0.0453 -0.1152 -0.3013 -0.1035 -0.3696 0.0831 0.1200
+ 0.2111] 
+basis of feature 0: ['1' 'x' 'x^2' 'xy' 'y^2' 'x^3' 'y^3' 'x^2y^2' 'xy^3' 'y^4'] 
+coef of feature 1: [0.0714] 
+basis of feature 1: ['1'] 
+

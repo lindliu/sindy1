@@ -1,0 +1,42 @@
+***************result of trajectory 0 ***************
+coef of feature 0: [-0.7189 0.6650 -1.2934 0.1645 -0.1619 -1.1988 0.9026 0.3441 0.9538 0.2997
+ -0.7803 0.2528 -0.2656] 
+basis of feature 0: ['x' 'y' 'x^2' 'xy' 'y^2' 'xy^2' 'x^4' 'x^3y' 'x^2y^2' 'xy^3' 'x^4y'
+ 'x^3y^2' 'x^2y^3'] 
+coef of feature 1: [1.4878 -0.7057 -3.0564 0.4824 0.1140 2.0328 1.5625 -0.8014 0.6473 -0.5518
+ -0.5323 0.1029] 
+basis of feature 1: ['1' 'y' 'x^2' 'xy' 'y^2' 'x^3' 'x^2y' 'x^4' 'x^3y' 'x^2y^2' 'x^4y'
+ 'x^3y^2'] 
+
+***************result of trajectory 1 ***************
+coef of feature 0: [0.3977 -2.5473 1.2430 0.4847 -0.7233] 
+basis of feature 0: ['1' 'x' 'x^2y' 'x^4' 'x^3y'] 
+coef of feature 1: [7.7995 -7.6261 1.3646 -1.8853 1.2413] 
+basis of feature 1: ['x^2' 'x^3' 'x^4' 'x^3y' 'x^4y'] 
+
+***************result of trajectory 2 ***************
+coef of feature 0: [0.0496 -0.4639 0.0520] 
+basis of feature 0: ['1' 'x' 'xy'] 
+coef of feature 1: [1.7616 -19.4764 -0.0373 101.0287 0.0459 -213.3406 -14.9334 116.3704
+ -1.5869 -11.0092 0.2545] 
+basis of feature 1: ['1' 'x' 'y' 'x^2' 'y^2' 'x^3' 'x^2y' 'x^3y' 'x^2y^2' 'x^3y^2' 'x^2y^3'] 
+
+***************result of trajectory 3 ***************
+coef of feature 0: [1.6394 -8.2062 -0.4371 5.5645 2.3408 -1.9839 -0.4158 0.4628] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'xy' 'x^2y' 'x^4' 'x^3y'] 
+coef of feature 1: [0.9339 2.6917 -21.4628 0.2848 61.0601 4.8391 -1.1367 -48.6571 -10.6479
+ 0.1837 10.6905 5.3887] 
+basis of feature 1: ['1' 'x' 'x^2' 'xy' 'x^3' 'x^2y' 'xy^2' 'x^4' 'x^3y' 'xy^3' 'x^5' 'x^4y'] 
+
+***************result of trajectory 4 ***************
+coef of feature 0: [] 
+basis of feature 0: [] 
+coef of feature 1: [0.3133] 
+basis of feature 1: ['1'] 
+
+***************result of trajectory 5 ***************
+coef of feature 0: [-0.8257 0.2632] 
+basis of feature 0: ['x' 'xy'] 
+coef of feature 1: [0.3360 1.1881 5.5282 -1.1836 -6.5476 0.5963 1.7579] 
+basis of feature 1: ['1' 'x' 'x^3' 'x^2y' 'x^4' 'x^3y' 'x^5'] 
+

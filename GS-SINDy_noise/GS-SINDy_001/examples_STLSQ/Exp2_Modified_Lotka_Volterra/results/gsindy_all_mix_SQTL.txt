@@ -1,0 +1,38 @@
+***************result of trajectory 0 ***************
+coef of feature 0: [1.0004 -1.0000 -0.9997 -0.9995 -0.0009] 
+basis of feature 0: ['x' 'y' 'x^3' 'xy^2' 'sin(x)'] 
+coef of feature 1: [0.9999 1.0007 0.0001 -1.0000 0.0001 -1.0001 -0.0007] 
+basis of feature 1: ['x' 'y' 'x^3' 'x^2y' 'xy^2' 'y^3' 'sin(y)'] 
+
+***************result of trajectory 1 ***************
+coef of feature 0: [0.2949 -0.8000 -0.7153 0.0001 -0.6998 -0.0950] 
+basis of feature 0: ['x' 'y' 'x^3' 'x^2y' 'xy^2' 'sin(x)'] 
+coef of feature 1: [0.7999 0.2200 0.0002 -0.6997 0.0003 -0.7030 -0.0002 -0.0201] 
+basis of feature 1: ['x' 'y' 'x^3' 'x^2y' 'xy^2' 'y^3' 'y^4' 'sin(y)'] 
+
+***************result of trajectory 2 ***************
+coef of feature 0: [-0.0002 -1.0001 -0.9984 0.0030 -0.9986] 
+basis of feature 0: ['x' 'y' 'x^3' 'x^2y' 'xy^2'] 
+coef of feature 1: [1.0000 4.4119 -8.0174 -0.0001 -1.0013 -0.0002 -4.4011 0.0066 -12.4285
+ -8.0164 8.0164] 
+basis of feature 1: ['x' 'y' 'y^2' 'x^3' 'x^2y' 'xy^2' 'y^3' 'y^4' 'sin(y)' 'cos(y)' 'e^y'] 
+
+***************result of trajectory 3 ***************
+coef of feature 0: [-7.9503 -1.0001 0.2985 0.0046 -0.9981 -0.0002 7.8504] 
+basis of feature 0: ['x' 'y' 'x^3' 'x^2y' 'xy^2' 'y^3' 'sin(x)'] 
+coef of feature 1: [1.0001 -1.5245 -1.4237 0.0005 -1.0019 -0.0053 -1.2375 -0.0131 -1.4245
+ 1.4245] 
+basis of feature 1: ['x' 'y' 'y^2' 'x^3' 'x^2y' 'xy^2' 'y^3' 'y^4' 'cos(y)' 'e^y'] 
+
+***************result of trajectory 4 ***************
+coef of feature 0: [1.0006 -0.6999 -0.9996 -0.9994 -0.0012] 
+basis of feature 0: ['x' 'y' 'x^3' 'xy^2' 'sin(x)'] 
+coef of feature 1: [0.6997 1.0004 0.0003 -1.0000 0.0003 -1.0001 -0.0004] 
+basis of feature 1: ['x' 'y' 'x^3' 'x^2y' 'xy^2' 'y^3' 'sin(y)'] 
+
+***************result of trajectory 5 ***************
+coef of feature 0: [0.6026 -1.0000 -0.8002 -0.7998 -0.0028] 
+basis of feature 0: ['x' 'y' 'x^3' 'xy^2' 'sin(x)'] 
+coef of feature 1: [0.9999 0.6006 0.0188 -0.7999 -0.7938 0.0182 0.0188 -0.0188] 
+basis of feature 1: ['x' 'y' 'y^2' 'x^2y' 'y^3' 'sin(y)' 'cos(y)' 'e^y'] 
+

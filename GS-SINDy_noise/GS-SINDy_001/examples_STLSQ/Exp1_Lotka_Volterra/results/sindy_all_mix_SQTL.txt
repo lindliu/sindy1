@@ -1,0 +1,44 @@
+***************result of trajectory 0 ***************
+coef of feature 0: [0.3114 -0.6872 -0.0086 -0.0426 0.3149 -0.0731 0.0555] 
+basis of feature 0: ['x' 'xy' 'x^3' 'xy^2' 'sin(x)' 'cos(x)' 'e^x'] 
+coef of feature 1: [1.2333 -0.5616 0.1693 0.1216 -1.5810] 
+basis of feature 1: ['y' 'y^2' 'x^2y' 'xy^2' 'sin(y)'] 
+
+***************result of trajectory 1 ***************
+coef of feature 0: [1.0073 -1.0033] 
+basis of feature 0: ['x' 'xy'] 
+coef of feature 1: [-0.0533 -0.4935 0.0530 0.1348 0.2577 0.2458 0.0500 -0.2433] 
+basis of feature 1: ['x^2' 'y^2' 'x^3' 'x^2y' 'xy^2' 'y^3' '1/y' 'e^y'] 
+
+***************result of trajectory 2 ***************
+coef of feature 0: [1370.2009 1091.3461 -0.3842 -459.2375 2.3577 -0.1443 -138.3705 -1.5726
+ -0.3768 79.0909 -887.9982 -1160.5384 -208.9271] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'xy' 'y^2' 'x^3' 'x^2y' 'xy^2' 'x^4' 'sin(x)' 'cos(x)'
+ 'e^x'] 
+coef of feature 1: [-1821.5164 -1.6464 -1340.5655 0.3269 0.2361 577.5053 0.0510 0.0224 0.2229
+ 164.5546 -104.9055 0.4042 1051.1036 1517.2109 301.7368] 
+basis of feature 1: ['1' 'x' 'y' 'x^2' 'xy' 'y^2' 'x^3' 'x^2y' 'xy^2' 'y^3' 'y^4' '1/y'
+ 'sin(y)' 'cos(y)' 'e^y'] 
+
+***************result of trajectory 3 ***************
+coef of feature 0: [1.4600 0.0228 -1.4978 -0.0131] 
+basis of feature 0: ['x' 'x^2' 'xy' 'sin(x)'] 
+coef of feature 1: [-1.4930 1.4869] 
+basis of feature 1: ['y' 'xy'] 
+
+***************result of trajectory 4 ***************
+coef of feature 0: [1.2248 -0.0085 -1.5012 -0.0228] 
+basis of feature 0: ['x' 'x^2' 'xy' 'sin(x)'] 
+coef of feature 1: [159.6492 -266.6807 1.1982 80.1651 349.9866 -75.7362 -83.9488] 
+basis of feature 1: ['1' 'y' 'xy' 'y^3' 'sin(y)' 'cos(y)' 'e^y'] 
+
+***************result of trajectory 5 ***************
+coef of feature 0: [0.9576 -57.2094 0.1904 -2.4609 -1.5920 -0.0921 14.0042 0.1186 0.0863
+ 0.0153 -2.0689 60.7330 -1.0997] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'xy' 'y^2' 'x^3' 'x^2y' 'xy^2' 'y^3' 'x^4' 'sin(x)'
+ 'e^x'] 
+coef of feature 1: [-0.4525 57.2049 0.3196 1.4167 12.3292 -0.0569 -0.0248 -0.0179 -17.1352
+ 3.0110 -0.0764 -60.6907 3.9563 -2.7015] 
+basis of feature 1: ['x' 'y' 'x^2' 'xy' 'y^2' 'x^3' 'x^2y' 'xy^2' 'y^3' 'y^4' '1/y' 'sin(y)'
+ 'cos(y)' 'e^y'] 
+

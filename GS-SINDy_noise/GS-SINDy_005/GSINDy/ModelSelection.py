@@ -1,0 +1,104 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Dec 10 17:50:04 2023
+
+@author: dliu
+"""
+
+import numpy as np
+import os
+
+class ModelSelection:
+	def __init__(self, model_set = None, n = None):
+		self.model_set = model_set
+		self.n = n
+
+		if model_set is not None:
+			self.num_models = len(self.model_set)
+
+			self.k = np.zeros(self.num_models)
+			self.SSE = np.zeros(self.num_models)
+
+			self.AIC = np.zeros(self.num_models)
+			self.Delta_AIC = np.zeros(self.num_models)
+			self.like = np.zeros(self.num_models)
+			self.AIC_weights = np.zeros(self.num_models)
+			self.AIC_evid_ratio = np.zeros(self.num_models)
+
+			self.AICc = np.zeros(self.num_models)
+			self.Delta_AICc = np.zeros(self.num_models)
+			self.likec = np.zeros(self.num_models)
+			self.AICc_weights = np.zeros(self.num_models)
+			self.AICc_evid_ratio = np.zeros(self.num_models)
+
+			self.BIC = np.zeros(self.num_models)
+			self.Delta_BIC = np.zeros(self.num_models)
+			self.BIC_prob = np.zeros(self.num_models)
+
+	def compute_k_gsindy(self):
+		for model_id, model in enumerate(self.model_set):
+			self.k[model_id] = np.count_nonzero(np.absolute(model) >= 5.0e-4)
+    
+	def compute_k_sindy(self):
+		for model_id, model in enumerate(self.model_set):
+			self.k[model_id] = np.count_nonzero(np.absolute(model.coefficients()) >= 5.0e-4)
+
+	def compute_SSE(self, target, predicted):
+		squared_errors = (target - predicted)**2.0
+		return np.sum(squared_errors)
+
+	def set_model_SSE(self, model_id, SSE):
+		self.SSE[model_id] = SSE
+
+	def compute_AIC(self):
+		self.AIC = self.n*np.log(self.SSE/self.n) + 2.0*self.k
+		AICmin = np.amin(self.AIC)
+		self.Delta_AIC = self.AIC - AICmin
+		self.like = np.exp(-0.5*self.Delta_AIC)
+		likesum = np.sum(self.like)
+		self.AIC_weights = self.like/likesum
+		self.best_AIC_model = np.argmax(self.AIC_weights)
+		self.AIC_evid_ratio = self.AIC_weights[self.best_AIC_model]/self.AIC_weights
+		return self.best_AIC_model
+
+	def compute_AICc(self):
+		self.AICc = self.n*np.log(self.SSE/self.n) + 2.0*self.k  + (2.0*self.k*(self.k + 1.0))/(self.n - self.k - 1.0)
+		AICcmin = np.amin(self.AICc)
+		self.Delta_AICc = self.AICc - AICcmin
+		self.likec = np.exp(-0.5*self.Delta_AICc)
+		likecsum = np.sum(self.likec)
+		self.AICc_weights = self.likec/likecsum
+		self.best_AICc_model = np.argmax(self.AICc_weights)
+		self.AICc_evid_ratio = self.AICc_weights[self.best_AICc_model]/self.AICc_weights
+		return self.best_AICc_model
+
+	def compute_BIC(self):
+		self.BIC = self.n*np.log(self.SSE/self.n) + self.k*np.log(self.n)
+		BICmin = np.amin(self.BIC)
+		self.Delta_BIC = self.BIC - BICmin
+		BICsum = np.sum(np.exp(-0.5*self.Delta_BIC))
+		self.BIC_prob = np.exp(-0.5*self.Delta_BIC)/BICsum
+		self.best_BIC_model = np.argmax(self.BIC_prob)
+		return self.best_BIC_model
+
+	def compute_HQIC(self):
+		self.HQIC = self.n*np.log(self.SSE/self.n) + 2.0*self.k*np.log(np.log(self.n))
+		HQICmin = np.amin(self.HQIC)
+		self.Delta_HQIC = self.HQIC - HQICmin
+		self.like = np.exp(-0.5*self.Delta_HQIC)
+		likesum = np.sum(self.like)
+		self.HQIC_weights = self.like/likesum
+		self.best_HQIC_model = np.argmax(self.HQIC_weights)
+		self.HQIC_evid_ratio = self.HQIC_weights[self.best_HQIC_model]/self.HQIC_weights
+		return self.best_HQIC_model
+    
+	def compute_BIC_custom(self):
+		self.BICc = self.n*np.log(self.SSE/self.n) + self.k*np.log(self.n)/np.log(1.5)
+		BICcmin = np.amin(self.BICc)
+		self.Delta_BICc = self.BICc - BICcmin
+		BICcsum = np.sum(np.exp(-0.5*self.Delta_BICc))
+		self.BICc_prob = np.exp(-0.5*self.Delta_BICc)/BICcsum
+		self.best_BICc_model = np.argmax(self.BICc_prob)
+		return self.best_BICc_model
+    

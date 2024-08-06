@@ -1,0 +1,54 @@
+***************result of trajectory 0 split into 2 fragments***************
+coef of feature 0: [-9.9936 9.9884] 
+basis of feature 0: ['x' 'y'] 
+coef of feature 1: [28.0281 -1.0337 -1.0003 -0.1224] 
+basis of feature 1: ['x' 'y' 'xz' 'sin(y)'] 
+
+coef of feature 2: [-1.0676 -2.6395 0.9972 11.0154 -0.2580] 
+basis of feature 2: ['1' 'z' 'xy' '1/z' 'cos(z)'] 
+
+***************result of trajectory 1 split into 4 fragments***************
+coef of feature 0: [-8.9971 8.9997] 
+basis of feature 0: ['x' 'y'] 
+coef of feature 1: [30.3815 -1.1158 -1.0091 0.3003] 
+basis of feature 1: ['x' 'y' 'xz' 'sin(y)'] 
+
+coef of feature 2: [-0.2730 -1.9961 1.0023 2.4809] 
+basis of feature 2: ['1' 'z' 'xy' '1/z'] 
+
+***************result of trajectory 2 split into 3 fragments***************
+coef of feature 0: [-8.4914 8.4879] 
+basis of feature 0: ['x' 'y'] 
+coef of feature 1: [27.9199 -1.0176 -0.9971] 
+basis of feature 1: ['x' 'y' 'xz'] 
+
+coef of feature 2: [-2.6613 0.9971] 
+basis of feature 2: ['z' 'xy'] 
+
+***************result of trajectory 3 split into 2 fragments***************
+coef of feature 0: [-9.9861 9.9914 0.0197] 
+basis of feature 0: ['x' 'y' 'cos(x)'] 
+coef of feature 1: [26.9875 -1.0249 -0.9980 -0.0797 -0.0493] 
+basis of feature 1: ['x' 'y' 'xz' 'sin(y)' 'cos(y)'] 
+
+coef of feature 2: [-0.2157 -2.6566 0.9979 1.6721 0.0787 -0.1770] 
+basis of feature 2: ['1' 'z' 'xy' '1/z' 'sin(z)' 'cos(z)'] 
+
+***************result of trajectory 4 split into 2 fragments***************
+coef of feature 0: [-9.9821 9.9871] 
+basis of feature 0: ['x' 'y'] 
+coef of feature 1: [26.9533 -1.0199 -0.9971 -0.2251] 
+basis of feature 1: ['x' 'y' 'xz' 'sin(y)'] 
+
+coef of feature 2: [-2.9886 0.9977] 
+basis of feature 2: ['z' 'xy'] 
+
+***************result of trajectory 5 split into 4 fragments***************
+coef of feature 0: [-9.9816 9.9826] 
+basis of feature 0: ['x' 'y'] 
+coef of feature 1: [29.0573 -1.0485 -1.0000] 
+basis of feature 1: ['x' 'y' 'xz'] 
+
+coef of feature 2: [-1.9939 0.9973] 
+basis of feature 2: ['z' 'xy'] 
+

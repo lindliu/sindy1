@@ -1,0 +1,43 @@
+***************result of trajectory 0 split into 5 fragments***************
+coef of feature 0: [0.0248 0.9153 -1.1910 -0.4621 -0.5081 0.0923 0.0374 -0.0030 -0.5667
+ 0.0641 0.5912] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'x^3' 'x^2y' 'xy^2' 'y^3' 'sin(x)' 'cos(x)' 'e^x'] 
+coef of feature 1: [0.0586 0.0803 -0.0676] 
+basis of feature 1: ['1' 'x' 'y'] 
+
+***************result of trajectory 1 split into 5 fragments***************
+coef of feature 0: [-0.0360 -0.0112] 
+basis of feature 0: ['y' 'y^2'] 
+coef of feature 1: [-0.0162 0.0496 -0.0556] 
+basis of feature 1: ['x' 'x^2' 'cos(y)'] 
+
+***************result of trajectory 2 split into 4 fragments***************
+coef of feature 0: [-0.2708 0.2901 0.0593 -0.1345] 
+basis of feature 0: ['y' 'y^2' 'x^2y' 'xy^2'] 
+coef of feature 1: [0.0457 -0.0118] 
+basis of feature 1: ['x' 'cos(y)'] 
+
+***************result of trajectory 3 split into 2 fragments***************
+coef of feature 0: [4.7075 -0.6693 -0.8877 0.2595 -0.1582 -0.1074 0.7310 0.0661 0.0973 0.1885
+ 4.1267 -1.6526 -2.4068] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'xy' 'y^2' 'x^3' 'x^2y' 'xy^2' 'x^4' 'sin(x)' 'cos(x)'
+ 'e^x'] 
+coef of feature 1: [0.0390 0.0576 -0.0732 0.0201] 
+basis of feature 1: ['1' 'x' 'sin(y)' 'cos(y)'] 
+
+***************result of trajectory 4 split into 4 fragments***************
+coef of feature 0: [25.1514 -3.0923 -1.0346 -1.4282 0.0469 0.1333 3.9357 0.0163 -0.0057
+ 1.0330 14.8801 -13.7917 -10.8981] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'xy' 'y^2' 'x^3' 'xy^2' 'y^3' 'x^4' 'sin(x)' 'cos(x)'
+ 'e^x'] 
+coef of feature 1: [0.0419 0.0594 -0.0500] 
+basis of feature 1: ['1' 'x' 'y'] 
+
+***************result of trajectory 5 split into 2 fragments***************
+coef of feature 0: [-11.7484 2.5869 -1.0213 2.8235 0.0150 0.0124 -1.6772 0.0142 0.0155
+ -0.4743 -5.0002 9.0552 3.3330] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'xy' 'y^2' 'x^3' 'xy^2' 'y^3' 'x^4' 'sin(x)' 'cos(x)'
+ 'e^x'] 
+coef of feature 1: [0.0411 0.0503 -0.0146 0.0065 -0.0103] 
+basis of feature 1: ['1' 'x' 'y^3' 'y^4' 'sin(y)'] 
+

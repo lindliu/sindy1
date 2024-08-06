@@ -1,0 +1,154 @@
+***************result of trajectory 0 split into 2 pieces***************
+coef of feature 0: [0.8753 0.3508 0.0683 -0.5671 -0.6469 -0.7428 -0.1259 -0.1895 -0.3534
+ -0.4430 0.1016 0.2152 0.4718 0.5939 0.2027] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'xy' 'y^2' 'x^3' 'x^2y' 'xy^2' 'y^3' 'x^4' 'x^3y'
+ 'x^2y^2' 'xy^3' 'y^4'] 
+coef of feature 1: [0.0549 0.0832 0.0348 -0.0839 -0.1177 -0.0144 0.1130] 
+basis of feature 1: ['1' 'x' 'xy' 'y^2' 'y^3' 'x^3y' 'y^4'] 
+
+***************result of trajectory 1 split into 2 pieces***************
+coef of feature 0: [0.2699 -0.0057 -0.7306 -0.0011 0.6011 -0.1583 -0.0128] 
+basis of feature 0: ['y' 'x^2' 'xy' 'x^3' 'x^2y' 'x^3y' 'y^4'] 
+coef of feature 1: [0.0562 -0.0155] 
+basis of feature 1: ['x' 'xy'] 
+
+***************result of trajectory 2 split into 2 pieces***************
+coef of feature 0: [-0.0069 -2.3943 0.8998 2.4006 -0.5713 -0.6064 0.0654] 
+basis of feature 0: ['x^2' 'xy' 'y^2' 'x^2y' 'xy^2' 'x^3y' 'x^2y^2'] 
+coef of feature 1: [0.0401 -0.0093 -0.0069 0.0112] 
+basis of feature 1: ['x^2' 'x^3' 'xy^2' 'y^4'] 
+
+***************result of trajectory 3 split into 2 pieces***************
+coef of feature 0: [-0.1270] 
+basis of feature 0: ['1'] 
+coef of feature 1: [] 
+basis of feature 1: [] 
+
+***************result of trajectory 4 split into 2 pieces***************
+coef of feature 0: [2.2807 -0.8487 -2.5983 -0.3188 2.5004 -0.3766 -0.0156 -0.5376 -1.1964
+ 0.0942 0.0495 -0.0573 0.6585 0.2932] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'xy' 'y^2' 'x^3' 'x^2y' 'xy^2' 'y^3' 'x^4' 'x^3y'
+ 'x^2y^2' 'y^4'] 
+coef of feature 1: [-0.2727 -0.7012 0.5980 0.2711 -0.1384 0.1361 -0.0237 0.3764 -0.2313
+ -0.0239 -0.1262 0.0319] 
+basis of feature 1: ['1' 'x' 'y' 'x^2' 'xy' 'x^3' 'x^2y' 'xy^2' 'y^3' 'x^4' 'x^2y^2' 'y^4'] 
+
+***************result of trajectory 5 split into 2 pieces***************
+coef of feature 0: [0.5308 -0.2927 0.0666 -0.0774 -0.2371 -0.4616 0.0723 0.1705 0.1793] 
+basis of feature 0: ['1' 'x' 'y' 'xy' 'y^2' 'y^3' 'x^2y^2' 'xy^3' 'y^4'] 
+coef of feature 1: [0.0630] 
+basis of feature 1: ['x'] 
+
+***************result of trajectory 0 split into 3 pieces***************
+coef of feature 0: [-0.1334 -0.0857 -0.2449 0.0536 0.2250] 
+basis of feature 0: ['xy' 'y^2' 'y^3' 'x^2y^2' 'xy^3'] 
+coef of feature 1: [0.0737 0.0732 -0.0637] 
+basis of feature 1: ['x' 'xy^2' 'xy^3'] 
+
+***************result of trajectory 1 split into 3 pieces***************
+coef of feature 0: [-0.0403 -0.0679 0.0182 0.0426] 
+basis of feature 0: ['x^3' 'xy^2' 'x^4' 'x^2y^2'] 
+coef of feature 1: [0.3411 3.6575 -5.8931 2.9406 0.0640 -0.2426 -0.4694 0.1471 -0.0833] 
+basis of feature 1: ['1' 'x' 'x^2' 'x^3' 'xy^2' 'y^3' 'x^4' 'xy^3' 'y^4'] 
+
+***************result of trajectory 2 split into 3 pieces***************
+coef of feature 0: [] 
+basis of feature 0: [] 
+coef of feature 1: [] 
+basis of feature 1: [] 
+
+***************result of trajectory 3 split into 3 pieces***************
+coef of feature 0: [-6.6528 0.3328 -0.4024 4.1792 6.1204 8.5708 -1.1444 -4.3117 -6.6059
+ -4.4977 -0.1030 0.6861 1.0977 1.6558 0.5644] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'xy' 'y^2' 'x^3' 'x^2y' 'xy^2' 'y^3' 'x^4' 'x^3y'
+ 'x^2y^2' 'xy^3' 'y^4'] 
+coef of feature 1: [0.5362 0.1469 -0.1931 -0.0823 -0.4877 -0.0638 -0.1798 -0.1785 0.0389
+ 0.0969 0.2114 0.0995 0.1049] 
+basis of feature 1: ['1' 'x' 'x^2' 'xy' 'y^2' 'x^3' 'x^2y' 'xy^2' 'x^4' 'x^3y' 'x^2y^2' 'xy^3'
+ 'y^4'] 
+
+***************result of trajectory 4 split into 3 pieces***************
+coef of feature 0: [-0.1772] 
+basis of feature 0: ['y'] 
+coef of feature 1: [] 
+basis of feature 1: [] 
+
+***************result of trajectory 5 split into 3 pieces***************
+coef of feature 0: [1.4546 -0.5956 0.1289 -0.0750 -0.1470 -1.9210 0.5796 0.0391 0.1698
+ -0.0569 0.3361] 
+basis of feature 0: ['1' 'x' 'y' 'x^2' 'xy' 'y^2' 'xy^2' 'y^3' 'x^2y^2' 'xy^3' 'y^4'] 
+coef of feature 1: [0.3793 0.0759 -0.1379 -0.0948 -0.1694 0.1570 0.0353 -0.0176 -0.0556] 
+basis of feature 1: ['1' 'x' 'y' 'x^2' 'y^2' 'y^3' 'x^2y^2' 'xy^3' 'y^4'] 
+
+***************result of trajectory 0 split into 4 pieces***************
+coef of feature 0: [-0.2276 0.2680 -0.2013] 
+basis of feature 0: ['xy' 'xy^3' 'y^4'] 
+coef of feature 1: [] 
+basis of feature 1: [] 
+
+***************result of trajectory 1 split into 4 pieces***************
+coef of feature 0: [] 
+basis of feature 0: [] 
+coef of feature 1: [] 
+basis of feature 1: [] 
+
+***************result of trajectory 2 split into 4 pieces***************
+coef of feature 0: [] 
+basis of feature 0: [] 
+coef of feature 1: [] 
+basis of feature 1: [] 
+
+***************result of trajectory 3 split into 4 pieces***************
+coef of feature 0: [0.4715 -0.4091 -0.0730 0.2673 -0.5811 0.3355] 
+basis of feature 0: ['1' 'y^2' 'x^3' 'xy^2' 'y^3' 'y^4'] 
+coef of feature 1: [0.0696] 
+basis of feature 1: ['x'] 
+
+***************result of trajectory 4 split into 4 pieces***************
+coef of feature 0: [] 
+basis of feature 0: [] 
+coef of feature 1: [] 
+basis of feature 1: [] 
+
+***************result of trajectory 5 split into 4 pieces***************
+coef of feature 0: [-0.1142 0.4746 -0.2502] 
+basis of feature 0: ['1' 'y^2' 'y^4'] 
+coef of feature 1: [] 
+basis of feature 1: [] 
+
+***************result of trajectory 0 split into 5 pieces***************
+coef of feature 0: [0.1702 -0.3504 -0.0592 -0.1876 0.1020 -0.2145 0.0567 0.2792] 
+basis of feature 0: ['1' 'y' 'x^2' 'xy' 'x^2y' 'y^3' 'x^2y^2' 'xy^3'] 
+coef of feature 1: [0.0596 0.0820 -0.0690] 
+basis of feature 1: ['1' 'x' 'y'] 
+
+***************result of trajectory 1 split into 5 pieces***************
+coef of feature 0: [] 
+basis of feature 0: [] 
+coef of feature 1: [] 
+basis of feature 1: [] 
+
+***************result of trajectory 2 split into 5 pieces***************
+coef of feature 0: [] 
+basis of feature 0: [] 
+coef of feature 1: [] 
+basis of feature 1: [] 
+
+***************result of trajectory 3 split into 5 pieces***************
+coef of feature 0: [-0.1719] 
+basis of feature 0: ['y'] 
+coef of feature 1: [] 
+basis of feature 1: [] 
+
+***************result of trajectory 4 split into 5 pieces***************
+coef of feature 0: [-0.1785] 
+basis of feature 0: ['y'] 
+coef of feature 1: [] 
+basis of feature 1: [] 
+
+***************result of trajectory 5 split into 5 pieces***************
+coef of feature 0: [] 
+basis of feature 0: [] 
+coef of feature 1: [] 
+basis of feature 1: [] 
+

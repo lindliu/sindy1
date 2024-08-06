@@ -1,0 +1,37 @@
+***************result of trajectory 0 split into 5 fragments***************
+coef of feature 0: [0.3188 -1.3288 -1.2877] 
+basis of feature 0: ['y' 'x^2y' 'y^3'] 
+coef of feature 1: [0.8150 -0.2790 1.7759 0.3506 0.1785 0.2406 0.2788 -1.8312 -1.6825 -0.3684] 
+basis of feature 1: ['x' 'x^2' 'xy' 'y^2' 'x^3' 'xy^2' 'x^4' 'x^3y' 'xy^3' 'y^4'] 
+
+***************result of trajectory 1 split into 3 fragments***************
+coef of feature 0: [-0.8004 -0.1002 -0.1493 0.1598 -0.2706] 
+basis of feature 0: ['y' 'x^3' 'xy^2' 'x^4' 'xy^3'] 
+coef of feature 1: [0.1069 0.7877 -0.5327 0.0646 -0.2063 -0.0639 -0.1190 0.6554 -0.0520
+ -0.2144 -0.2722] 
+basis of feature 1: ['1' 'x' 'x^2' 'xy' 'y^2' 'x^2y' 'y^3' 'x^4' 'x^2y^2' 'xy^3' 'y^4'] 
+
+***************result of trajectory 2 split into 5 fragments***************
+coef of feature 0: [-0.0178 -0.9867 0.0034 -0.0166 -0.8902 -1.1422 0.3671] 
+basis of feature 0: ['x' 'y' 'x^2' 'xy' 'x^3' 'xy^2' 'xy^3'] 
+coef of feature 1: [1.0102 -0.0001 0.0659 -0.9163 -0.8669 -0.0312 0.1259 -0.1287] 
+basis of feature 1: ['x' 'y' 'xy' 'x^2y' 'y^3' 'x^2y^2' 'xy^3' 'y^4'] 
+
+***************result of trajectory 3 split into 5 fragments***************
+coef of feature 0: [-0.1152 -0.9724 0.0510 -0.0586 -0.6689 -1.5879 -0.2779 0.6899 0.3536] 
+basis of feature 0: ['x' 'y' 'x^2' 'y^2' 'x^3' 'xy^2' 'y^3' 'xy^3' 'y^4'] 
+coef of feature 1: [1.0162 -0.1641 0.2905 0.1185 0.5604 -1.4581] 
+basis of feature 1: ['x' 'y' 'xy' 'y^2' 'xy^3' 'y^4'] 
+
+***************result of trajectory 4 split into 2 fragments***************
+coef of feature 0: [-0.5415 -0.1612 -0.1568] 
+basis of feature 0: ['y' 'x^2y' 'y^3'] 
+coef of feature 1: [0.3534 0.5676 -0.3499 0.1321 0.1337 -0.3759 -0.3497] 
+basis of feature 1: ['1' 'x' 'x^2' 'x^3' 'xy^2' 'x^2y^2' 'y^4'] 
+
+***************result of trajectory 5 split into 5 fragments***************
+coef of feature 0: [0.9357 -1.0140 -1.2594 -1.2086] 
+basis of feature 0: ['x' 'y' 'x^3' 'xy^2'] 
+coef of feature 1: [0.2495 0.9992 -0.3350 -0.3459 -0.4509] 
+basis of feature 1: ['1' 'x' 'x^2' 'x^2y^2' 'y^4'] 
+
