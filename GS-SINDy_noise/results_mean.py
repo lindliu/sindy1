@@ -31,7 +31,7 @@ for j, file in enumerate(file_noise):
     
     
 
-fig, ax = plt.subplots(2,6,figsize=[15,6], sharex='col')
+fig, ax = plt.subplots(3,6,figsize=[15,8], sharex='col')
 
 
 idx = 0  ### rmse
@@ -58,7 +58,7 @@ ax[idx,1].plot(np.log(mean_mix_all[:,idx+6, exp]), color='green', linestyle='das
 ax[idx,1].plot(np.log(mean_mix_all[:,idx+9, exp]), color='pink', linestyle='dashed',
                  marker = 'o', markerfacecolor = 'pink', markersize = 5)
 ax[idx,1].set_xticks([0,1,2,3])
-ax[idx,1].set_yticklabels([-2,0,2,4,6,8,10,12])
+# ax[idx,1].set_yticklabels([-2,0,2,4,6,8,10,12])
 
 exp = 3  ### example number
 ax[idx,2].plot(np.log(mean_mix_all[:,idx,   exp]), color='r', linestyle='dashed',
@@ -77,7 +77,7 @@ ax[idx,3].plot(np.log(mean_mix_all[:,idx,   exp]), color='r', linestyle='dashed'
 ax[idx,3].plot(np.log(mean_mix_all[:,idx+3, exp]), color='tab:blue', linestyle='dashed',
                  marker = 'o', markerfacecolor = 'tab:blue', markersize = 5)
 ax[idx,3].plot(np.log(mean_mix_all[:,idx+6, exp]), color='green', linestyle='dashed',
-                 marker = 'o', markerfacecolor = 'green', markersize = 5)
+                 marker = 'o', markerfacecolor = 'green', markersize = 6)
 ax[idx,3].plot(np.log(mean_mix_all[:,idx+9, exp]), color='pink', linestyle='dashed',
                  marker = 'o', markerfacecolor = 'pink', markersize = 5)
 ax[idx,3].set_xticks([0,1,2,3])
@@ -184,15 +184,97 @@ ax[idx,5].plot(mean_mix_all[:,idx+9, exp], color='pink', linestyle='dashed',
 ax[idx,5].set_xticks([0,1,2,3])
 ax[idx,5].set_xticklabels(['0','$10^{-2}$',r'$5\times 10^{-2}$','$10^{-1}$'], fontsize=9)
 
+
+
+
+idx = 2  ### Mr
+
+exp = 0  ### example number
+ax[idx,0].plot(mean_mix_all[:,idx,   exp], color='r', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'r', markersize = 5, label='M1')
+ax[idx,0].plot(mean_mix_all[:,idx+3, exp], color='tab:blue', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'tab:blue', markersize = 5, label='M2')
+ax[idx,0].plot(mean_mix_all[:,idx+6, exp], color='green', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'green', markersize = 5, label='M3')
+ax[idx,0].plot(mean_mix_all[:,idx+9, exp], color='pink', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'pink', markersize = 5, label='M4')
+ax[idx,0].set_yticks([0,0.2,0.4,0.6,0.8,1.0])
+ax[idx,0].set_xticks([0,1,2,3])
+ax[idx,0].set_xticklabels(['0','$10^{-2}$',r'$5\times 10^{-2}$','$10^{-1}$'], fontsize=9)
+ax[idx,0].legend()
+
+exp = 2  ### example number
+ax[idx,1].plot(mean_mix_all[:,idx,   exp], color='r', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'r', markersize = 5)
+ax[idx,1].plot(mean_mix_all[:,idx+3, exp], color='tab:blue', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'tab:blue', markersize = 5)
+ax[idx,1].plot(mean_mix_all[:,idx+6, exp], color='green', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'green', markersize = 5)
+ax[idx,1].plot(mean_mix_all[:,idx+9, exp], color='pink', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'pink', markersize = 5)
+ax[idx,1].set_xticks([0,1,2,3])
+ax[idx,1].set_xticklabels(['0','$10^{-2}$',r'$5\times 10^{-2}$','$10^{-1}$'], fontsize=9)
+
+exp = 3  ### example number
+ax[idx,2].plot(mean_mix_all[:,idx,   exp], color='r', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'r', markersize = 6)
+ax[idx,2].plot(mean_mix_all[:,idx+3, exp], color='tab:blue', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'tab:blue', markersize = 5)
+ax[idx,2].plot(mean_mix_all[:,idx+6, exp], color='green', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'green', markersize = 5)
+ax[idx,2].plot(mean_mix_all[:,idx+9, exp], color='pink', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'pink', markersize = 5)
+ax[idx,2].set_xticks([0,1,2,3])
+ax[idx,2].set_xticklabels(['0','$10^{-2}$',r'$5\times 10^{-2}$','$10^{-1}$'], fontsize=9)
+
+exp = 4  ### example number
+ax[idx,3].plot(mean_mix_all[:,idx,   exp], color='r', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'r', markersize = 6)
+ax[idx,3].plot(mean_mix_all[:,idx+3, exp], color='tab:blue', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'tab:blue', markersize = 5)
+ax[idx,3].plot(mean_mix_all[:,idx+6, exp], color='green', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'green', markersize = 6)
+ax[idx,3].plot(mean_mix_all[:,idx+9, exp], color='pink', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'pink', markersize = 5)
+ax[idx,3].set_xticks([0,1,2,3])
+ax[idx,3].set_xticklabels(['0','$10^{-2}$',r'$5\times 10^{-2}$','$10^{-1}$'], fontsize=9)
+
+exp = 1  ### example number
+ax[idx,4].plot(mean_mix_all[:,idx,   exp], color='r', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'r', markersize = 5)
+ax[idx,4].plot(mean_mix_all[:,idx+3, exp], color='tab:blue', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'tab:blue', markersize = 5)
+ax[idx,4].plot(mean_mix_all[:,idx+6, exp], color='green', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'green', markersize = 5)
+ax[idx,4].plot(mean_mix_all[:,idx+9, exp], color='pink', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'pink', markersize = 5)
+ax[idx,4].set_xticks([0,1,2,3])
+ax[idx,4].set_xticklabels(['0','$10^{-2}$',r'$5\times 10^{-2}$','$10^{-1}$'], fontsize=9)
+
+exp = 5  ### example number
+ax[idx,5].plot(mean_mix_all[:,idx,   exp], color='r', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'r', markersize = 5)
+ax[idx,5].plot(mean_mix_all[:,idx+3, exp], color='tab:blue', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'tab:blue', markersize = 5)
+ax[idx,5].plot(mean_mix_all[:,idx+6, exp], color='green', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'green', markersize = 5)
+ax[idx,5].plot(mean_mix_all[:,idx+9, exp], color='pink', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'pink', markersize = 5)
+ax[idx,5].set_xticks([0,1,2,3])
+ax[idx,5].set_xticklabels(['0','$10^{-2}$',r'$5\times 10^{-2}$','$10^{-1}$'], fontsize=9)
+
+
 for a in ax[1,1:]:
     a.sharey(ax[1,0])
-    
+
+for a in ax[2,1:]:
+    a.sharey(ax[2,0])
 
 plt.subplots_adjust(wspace=.25, hspace=.1)
 
 pad = 5
 # rows = ['Mexico\n(estimated cases)', 'South Africa\n(estimated cases)', 'South Korea\n(estimated cases)']
-rows = ['RMSE (log)', 'Mp']
+rows = ['RMSE (log)', 'Mp', 'Mr']
 for ax_, row in zip(ax[:,0], rows):
     ax_.annotate(row, xy=(0, 0.5), xytext=(-ax_.yaxis.labelpad - pad, 0),
                 xycoords=ax_.yaxis.label, textcoords='offset points',
@@ -216,7 +298,7 @@ fig.savefig(f'./noise_level_mix.png', bbox_inches='tight', dpi=300)
 
 
 
-fig, ax = plt.subplots(2,6,figsize=[15,6], sharex='col')
+fig, ax = plt.subplots(3,6,figsize=[15,8], sharex='col')
 
 
 idx = 0  ### rmse
@@ -243,7 +325,7 @@ ax[idx,1].plot(np.log(mean_poly_all[:,idx+6, exp]), color='green', linestyle='da
 ax[idx,1].plot(np.log(mean_poly_all[:,idx+9, exp]), color='pink', linestyle='dashed',
                  marker = 'o', markerfacecolor = 'pink', markersize = 5)
 ax[idx,1].set_xticks([0,1,2,3])
-ax[idx,1].set_yticklabels([-2,0,2,4,6,8,10,12])
+# ax[idx,1].set_yticklabels([-2,0,2,4,6,8,10,12])
 
 exp = 3  ### example number
 ax[idx,2].plot(np.log(mean_poly_all[:,idx,   exp]), color='r', linestyle='dashed',
@@ -369,15 +451,100 @@ ax[idx,5].plot(mean_poly_all[:,idx+9, exp], color='pink', linestyle='dashed',
 ax[idx,5].set_xticks([0,1,2,3])
 ax[idx,5].set_xticklabels(['0','$10^{-2}$',r'$5\times 10^{-2}$','$10^{-1}$'], fontsize=9)
 
+
+
+
+
+idx = 2  ### Mr
+
+exp = 0  ### example number
+ax[idx,0].plot(mean_poly_all[:,idx,   exp], color='r', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'r', markersize = 5, label='M1')
+ax[idx,0].plot(mean_poly_all[:,idx+3, exp], color='tab:blue', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'tab:blue', markersize = 5, label='M2')
+ax[idx,0].plot(mean_poly_all[:,idx+6, exp], color='green', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'green', markersize = 5, label='M3')
+ax[idx,0].plot(mean_poly_all[:,idx+9, exp], color='pink', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'pink', markersize = 5, label='M4')
+ax[idx,0].set_yticks([0,0.2,0.4,0.6,0.8,1.0])
+ax[idx,0].set_xticks([0,1,2,3])
+ax[idx,0].set_xticklabels(['0','$10^{-2}$',r'$5\times 10^{-2}$','$10^{-1}$'], fontsize=9)
+ax[idx,0].legend()
+
+exp = 2  ### example number
+ax[idx,1].plot(mean_poly_all[:,idx,   exp], color='r', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'r', markersize = 5)
+ax[idx,1].plot(mean_poly_all[:,idx+3, exp], color='tab:blue', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'tab:blue', markersize = 5)
+ax[idx,1].plot(mean_poly_all[:,idx+6, exp], color='green', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'green', markersize = 5)
+ax[idx,1].plot(mean_poly_all[:,idx+9, exp], color='pink', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'pink', markersize = 5)
+ax[idx,1].set_xticks([0,1,2,3])
+ax[idx,1].set_xticklabels(['0','$10^{-2}$',r'$5\times 10^{-2}$','$10^{-1}$'], fontsize=9)
+
+exp = 3  ### example number
+ax[idx,2].plot(mean_poly_all[:,idx,   exp], color='r', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'r', markersize = 5)
+ax[idx,2].plot(mean_poly_all[:,idx+3, exp], color='tab:blue', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'tab:blue', markersize = 5)
+ax[idx,2].plot(mean_poly_all[:,idx+6, exp], color='green', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'green', markersize = 5)
+ax[idx,2].plot(mean_poly_all[:,idx+9, exp], color='pink', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'pink', markersize = 5)
+ax[idx,2].set_xticks([0,1,2,3])
+ax[idx,2].set_xticklabels(['0','$10^{-2}$',r'$5\times 10^{-2}$','$10^{-1}$'], fontsize=9)
+
+exp = 4  ### example number
+ax[idx,3].plot(mean_poly_all[:,idx,   exp], color='r', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'r', markersize = 6)
+ax[idx,3].plot(mean_poly_all[:,idx+3, exp], color='tab:blue', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'tab:blue', markersize = 5)
+ax[idx,3].plot(mean_poly_all[:,idx+6, exp], color='green', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'green', markersize = 6)
+ax[idx,3].plot(mean_poly_all[:,idx+9, exp], color='pink', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'pink', markersize = 5)
+ax[idx,3].set_xticks([0,1,2,3])
+ax[idx,3].set_xticklabels(['0','$10^{-2}$',r'$5\times 10^{-2}$','$10^{-1}$'], fontsize=9)
+
+exp = 1  ### example number
+ax[idx,4].plot(mean_poly_all[:,idx,   exp], color='r', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'r', markersize = 6)
+ax[idx,4].plot(mean_poly_all[:,idx+3, exp], color='tab:blue', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'tab:blue', markersize = 5)
+ax[idx,4].plot(mean_poly_all[:,idx+6, exp], color='green', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'green', markersize = 5)
+ax[idx,4].plot(mean_poly_all[:,idx+9, exp], color='pink', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'pink', markersize = 5)
+ax[idx,4].set_xticks([0,1,2,3])
+ax[idx,4].set_xticklabels(['0','$10^{-2}$',r'$5\times 10^{-2}$','$10^{-1}$'], fontsize=9)
+
+exp = 5  ### example number
+ax[idx,5].plot(mean_poly_all[:,idx,   exp], color='r', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'r', markersize = 5)
+ax[idx,5].plot(mean_poly_all[:,idx+3, exp], color='tab:blue', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'tab:blue', markersize = 5)
+ax[idx,5].plot(mean_poly_all[:,idx+6, exp], color='green', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'green', markersize = 5)
+ax[idx,5].plot(mean_poly_all[:,idx+9, exp], color='pink', linestyle='dashed',
+                 marker = 'o', markerfacecolor = 'pink', markersize = 5)
+ax[idx,5].set_xticks([0,1,2,3])
+ax[idx,5].set_xticklabels(['0','$10^{-2}$',r'$5\times 10^{-2}$','$10^{-1}$'], fontsize=9)
+
+
 for a in ax[1,1:]:
     a.sharey(ax[1,0])
+
+for a in ax[2,1:]:
+    a.sharey(ax[2,0])
+    
     
 
 plt.subplots_adjust(wspace=.25, hspace=.1)
 
 pad = 5
 # rows = ['Mexico\n(estimated cases)', 'South Africa\n(estimated cases)', 'South Korea\n(estimated cases)']
-rows = ['RMSE (log)', 'Mp']
+rows = ['RMSE (log)', 'Mp', 'Mr']
 for ax_, row in zip(ax[:,0], rows):
     ax_.annotate(row, xy=(0, 0.5), xytext=(-ax_.yaxis.labelpad - pad, 0),
                 xycoords=ax_.yaxis.label, textcoords='offset points',
