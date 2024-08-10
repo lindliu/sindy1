@@ -409,7 +409,7 @@ if __name__ == "__main__":
         # rmse = np.linalg.norm(real-pred, axis=(1,2)) / np.linalg.norm(real, axis=(1,2))
         rmse = []
         for i in range(real.shape[0]):
-            mask = real[i]!=0
+            mask = np.ones_like(real[i], dtype=bool) #real[i]!=0 #
             rmse.append(np.linalg.norm(real[i][mask]-pred[i][mask]) / np.linalg.norm(real[i][mask]))
         rmse = np.array(rmse)
         

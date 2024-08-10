@@ -29,7 +29,7 @@ path_Exp5 = os.path.join(os.getcwd(), '../Exp5_Lorenz/results/')
 path_Exp6 = os.path.join(os.getcwd(), '../Exp6_Pendulum/results/')
 path_Exp7 = os.path.join(os.getcwd(), '../Exp7_FitzHugh/results/')
 
-exp_idx = 2 ###1,2,3,4,5,6,7
+exp_idx = 7 ###1,2,3,4,5,6,7
 
 if exp_idx == 1:
     import Lotka_constants as constants
@@ -409,7 +409,7 @@ if __name__ == "__main__":
         # rmse = np.linalg.norm(real-pred, axis=(1,2)) / np.linalg.norm(real, axis=(1,2))
         rmse = []
         for i in range(real.shape[0]):
-            mask = real[i]!=0
+            mask = np.ones_like(real[i], dtype=bool) #real[i]!=0 #
             rmse.append(np.linalg.norm(real[i][mask]-pred[i][mask]) / np.linalg.norm(real[i][mask]))
         rmse = np.array(rmse)
         
